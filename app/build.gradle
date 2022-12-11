@@ -8,7 +8,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.contacts"
+        applicationId "com.example.messenger"
         minSdk 30
         targetSdk 33
         versionCode 1
@@ -60,7 +60,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.9.1'
 
 
-
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation "io.coil-kt:coil-compose:2.0.0-rc01"
     implementation 'com.puculek.pulltorefresh:pull-to-refresh-compose:1.0.6'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
