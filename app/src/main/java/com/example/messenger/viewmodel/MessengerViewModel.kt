@@ -1,20 +1,39 @@
 package com.example.messenger.viewmodel
 
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.messenger.data.api.SignInViewModel
+import com.example.messenger.data.api.SocialNetworkApi
 import com.example.messenger.viewmodel.data.ConvoListData
 import com.example.messenger.viewmodel.data.Messages
+import kotlinx.coroutines.launch
 
-class MessengerViewModel {
+class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
     private var currentUserSelected: String = "";
     private val login = Login();
     private val convoListClass = ConvoList();
     private val convoClass = Convo();
 
+    var isAuth: Boolean = false;
+
+
+
+    val isAuthenticated = mutableStateOf(false)
+
+    fun signIn(email: String, password: String){
+        viewModelScope.launch {
+            isAuthenticated.value = api.signIn(email, password)
+        }
+    }
+
+
 
 
     fun getCurrentUser(): ConvoListData {
-        return convoListClass.getUser(currentUserSelected);
+        return convoListClass.getUser(currentUserSelected)
     }
 
     fun selectUser(uid: String){
@@ -22,12 +41,12 @@ class MessengerViewModel {
     }
 
 
-    private var _convosMessages: MutableList<Messages> = mutableListOf()
-    val convosMessages: MutableList<Messages>
+    private var _convosMessages: MutableList<Messages> = mutableStateListOf()
+    val convosMessages: List<Messages>
         get() = _convosMessages
 
 
-    fun getMessages(): MutableList<Messages> {
+    fun getMessages(): List<Messages> {
         val tt = convoClass.getConvo()
         tt.messages.forEach{
             _convosMessages.add(it)
@@ -37,7 +56,7 @@ class MessengerViewModel {
 
     fun pushMessage(message: String){
         _convosMessages.add(Messages(true, message))
-        print("f")
+        print(_convosMessages)
     }
 
 

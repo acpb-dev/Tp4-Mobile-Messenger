@@ -1,7 +1,5 @@
 package com.example.messenger.individualConversation
 
-import android.util.Log
-import android.widget.ImageButton
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,8 +14,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.*
 import androidx.compose.material3.Icon
@@ -26,21 +22,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.DarkGray
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.messenger.conversationsScreen.ConversationListComponent
 import com.example.messenger.conversationsScreen.isOnline
 import com.example.messenger.viewmodel.MessengerViewModel
 import com.example.messenger.viewmodel.SearchWidget
@@ -51,9 +43,10 @@ import androidx.compose.material3.Button as Button1
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun individualConversation(navController: NavController, messengerViewModel: MessengerViewModel) {
-    messengerViewModel.getMessages();
+    // messengerViewModel.getMessages();
 
-    val convo = remember { mutableStateOf(messengerViewModel.convosMessages) }
+    val convo = remember { messengerViewModel.convosMessages }
+
 
     Scaffold(topBar = {
         MainAppBar(
@@ -66,7 +59,7 @@ fun individualConversation(navController: NavController, messengerViewModel: Mes
         content = { padding ->
             Row(Modifier.background(Black)) {
                 MessageList(
-                    messages = convo.value,
+                    messages = convo,
                     user = messengerViewModel.getCurrentUser(),
                     messengerViewModel = messengerViewModel
                 )
@@ -76,14 +69,15 @@ fun individualConversation(navController: NavController, messengerViewModel: Mes
 
 
 @Composable
-fun MessageList(messages: MutableList<Messages>, user: ConvoListData, messengerViewModel: MessengerViewModel) {
+fun MessageList(messages: List<Messages>, user: ConvoListData, messengerViewModel: MessengerViewModel) {
+    val reverse: List<Messages> = messages.reversed();
     Box(
         contentAlignment = Alignment.Center
     ) {
         LazyColumn(
             reverseLayout = true
         ) {
-            itemsIndexed(messages) { index, message ->
+            itemsIndexed(reverse) { index, message ->
                 if(index == 0){
                     MessageInput(messengerViewModel, user)
                 }

@@ -15,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.DarkGray
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
@@ -26,15 +25,29 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.messenger.data.api.SignInViewModel
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.MessengerViewModel
 
 @Composable
-fun LoginScreen(navController: NavController, messengerViewModel: MessengerViewModel) {
+fun LoginScreen(
+    navController: NavController,
+    messengerViewModel: MessengerViewModel
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
+    val isAuthenticated by remember { messengerViewModel.isAuthenticated }
+    val context = LocalContext.current
+
+    LaunchedEffect(isAuthenticated){
+        if (isAuthenticated){
+            navController.navigate(Routes.ConversationsScreen.route)
+        }else{
+            Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     Column(
         Modifier
@@ -93,13 +106,8 @@ fun LoginScreen(navController: NavController, messengerViewModel: MessengerViewM
                     }
                 }
             )
-            val context = LocalContext.current
             Button(onClick = {
-                if(messengerViewModel.loginVerification(email, password)){
-                    navController.navigate(Routes.ConversationsScreen.route)
-                }else{
-                    Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
-                }
+                messengerViewModel.signIn(email, password)
             },
                 colors = ButtonDefaults.buttonColors(backgroundColor = DarkGray))
 
