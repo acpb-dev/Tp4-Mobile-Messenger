@@ -1,4 +1,4 @@
-package com.example.messenger.conversationsScreen
+package com.example.messenger.composable.menu
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

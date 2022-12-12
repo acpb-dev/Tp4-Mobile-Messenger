@@ -1,4 +1,4 @@
-package com.example.messenger.presentation.login
+package com.example.messenger.composable.login
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -41,18 +41,18 @@ fun LoginScreen(
     val isAuthenticated by remember { messengerViewModel.isAuthenticated }
     val context = LocalContext.current
 
-    LaunchedEffect(isAuthenticated){
-        if (isAuthenticated){
-            navController.navigate(Routes.ConversationsScreen.route)
-        }else{
+    LaunchedEffect(isAuthenticated) {
+        if (isAuthenticated) {
+            navController.navigate(Routes.Menu.route)
+        } else {
             Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
         }
     }
-
     Column(
         Modifier
             .background(color = Color.Black)
-            .fillMaxSize()) {
+            .fillMaxSize()
+    ) {
 
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -71,22 +71,22 @@ fun LoginScreen(
 
             TextField(
                 value = email,
-                onValueChange = {email = it},
+                onValueChange = { email = it },
                 label = { Text("email") },
                 modifier = Modifier
                     .padding(top = 50.dp, bottom = 10.dp),
                 shape = RoundedCornerShape(8.dp),
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = White,
-                    focusedIndicatorColor =  Color.Transparent, //hide the indicator
-                    unfocusedIndicatorColor = White)
+                    focusedIndicatorColor = Color.Transparent, //hide the indicator
+                    unfocusedIndicatorColor = White
+                )
             )
 
             TextField(
                 value = password,
-                onValueChange = {password = it},
+                onValueChange = { password = it },
                 label = { Text("Password") },
-
                 modifier = Modifier
                     .padding(vertical = 4.dp),
                 shape = RoundedCornerShape(8.dp),
@@ -94,27 +94,31 @@ fun LoginScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = White,
-                    focusedIndicatorColor =  Color.Transparent, //hide the indicator
-                    unfocusedIndicatorColor = White),
+                    focusedIndicatorColor = Color.Transparent, //hide the indicator
+                    unfocusedIndicatorColor = White
+                ),
                 trailingIcon = {
                     val image = if (passwordVisible)
                         Icons.Filled.Visibility
                     else Icons.Filled.VisibilityOff
                     val description = if (passwordVisible) "Hide password" else "Show password"
-                    IconButton(onClick = {passwordVisible = !passwordVisible}){
-                        Icon(imageVector  = image, description)
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(imageVector = image, description)
                     }
                 }
             )
-            Button(onClick = {
-                messengerViewModel.signIn(email, password)
-            },
-                colors = ButtonDefaults.buttonColors(backgroundColor = DarkGray))
+            Button(
+                onClick = {
+                    messengerViewModel.signIn(email, password)
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = DarkGray)
+            )
 
             {
-                Text(text = "Login",color = White)
+                Text(text = "Login", color = White)
             }
         }
     }
+
 }
 

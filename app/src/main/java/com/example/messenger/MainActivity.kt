@@ -12,11 +12,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.messenger.conversationsScreen.ConversationsScreen
-import com.example.messenger.data.api.SignInViewModel
+import com.example.messenger.composable.menu.ConversationsScreen
 import com.example.messenger.data.api.SocialNetworkApiImpl
-import com.example.messenger.individualConversation.individualConversation
-import com.example.messenger.presentation.login.LoginScreen
+import com.example.messenger.composable.feed.individualConversation
+import com.example.messenger.composable.friendList.myFriends
+import com.example.messenger.composable.login.LoginScreen
+import com.example.messenger.composable.profile.profileScreen
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.MessengerViewModel
 
@@ -48,15 +49,26 @@ fun MainScreen(messengerViewModel: MessengerViewModel) {
         }
 
         composable(
-            route = Routes.ConversationsScreen.route
+            route = Routes.Menu.route
         ){
             ConversationsScreen(navController, messengerViewModel)
         }
 
         composable(
-            route = Routes.ConversationIndividual.route
+            route = Routes.Feed.route
         ){
             individualConversation(navController, messengerViewModel)
+        }
+
+        composable(
+            route = Routes.FriendList.route
+        ){
+            myFriends()
+        }
+        composable(
+            route = Routes.MyProfile.route
+        ){
+            profileScreen()
         }
 
     }

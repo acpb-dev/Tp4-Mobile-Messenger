@@ -1,4 +1,4 @@
-package com.example.messenger.individualConversation
+package com.example.messenger.composable.feed
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,24 +33,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.messenger.conversationsScreen.isOnline
+import com.example.messenger.composable.menu.isOnline
 import com.example.messenger.viewmodel.MessengerViewModel
 import com.example.messenger.viewmodel.SearchWidget
-import com.example.messenger.viewmodel.data.ConvoListData
-import com.example.messenger.viewmodel.data.Messages
+import com.example.messenger.viewmodel.data.Users
+import com.example.messenger.viewmodel.data.feedItem
+import com.example.messenger.viewmodel.data.feedList
+import java.time.LocalDateTime
 import androidx.compose.material3.Button as Button1
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun individualConversation(navController: NavController, messengerViewModel: MessengerViewModel) {
     // messengerViewModel.getMessages();
+    messengerViewModel.feed()
+    messengerViewModel.getUsers();
 
-    val convo = remember { messengerViewModel.convosMessages }
+    val feed by remember { messengerViewModel.feed }
+    val users by remember { messengerViewModel.userList }
+    print(messengerViewModel.feed);
+
+//    val convo = remember { messengerViewModel.convosMessages }
 
 
     Scaffold(topBar = {
         MainAppBar(
-            messengerViewModel = messengerViewModel,
             onSearchTriggered = {
                 messengerViewModel.updateSearchWidgetState(newValue = SearchWidget.SearchWidgetState.OPENED)
             }
@@ -59,27 +66,37 @@ fun individualConversation(navController: NavController, messengerViewModel: Mes
         content = { padding ->
             Row(Modifier.background(Black)) {
                 MessageList(
-                    messages = convo,
-                    user = messengerViewModel.getCurrentUser(),
+                    feedList = feed,
+                    user = users,
                     messengerViewModel = messengerViewModel
                 )
             }
         })
 }
 
+fun getName(uid: String, users: Users): String{
+    users.forEach{
+        print(uid + "\n" + it.id + "\n\n")
+        if (uid == it.id){
+            return it.firstname + " " + it.lastname
+        }
+    }
+    return "Deleted User"
+}
+
 
 @Composable
-fun MessageList(messages: List<Messages>, user: ConvoListData, messengerViewModel: MessengerViewModel) {
-    val reverse: List<Messages> = messages.reversed();
+fun MessageList(feedList: feedList, user: Users, messengerViewModel: MessengerViewModel) {
+    val reverse: List<feedItem> = feedList.reversed();
     Box(
         contentAlignment = Alignment.Center
     ) {
         LazyColumn(
             reverseLayout = true
         ) {
-            itemsIndexed(reverse) { index, message ->
+            itemsIndexed(feedList) { index, message ->
                 if(index == 0){
-                    MessageInput(messengerViewModel, user)
+                    MessageInput(messengerViewModel)
                 }
                 MessageCard1(message, user)
             }
@@ -88,54 +105,65 @@ fun MessageList(messages: List<Messages>, user: ConvoListData, messengerViewMode
 }
 
 @Composable
-fun MessageCard1(messageItem: Messages, user: ConvoListData) {
+fun MessageCard1(feedPost: feedItem, user: Users) {
+    val localDateTime = LocalDateTime.parse(feedPost.createdAt)
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 4.dp),
         horizontalAlignment = when { // 2
-            messageItem.isMine -> Alignment.End
+            false -> Alignment.End
             else -> Alignment.Start
         },
     ) {
         Card(
             modifier = Modifier.widthIn(max = 340.dp),
-            shape = cardShapeFor1(messageItem), // 3
+            shape = cardShapeFor1(feedPost), // 3
             backgroundColor = when {
-                messageItem.isMine -> MaterialTheme.colors.primary
+                false -> MaterialTheme.colors.primary
                 else -> DarkGray
             },
         ) {
             Text(
                 modifier = Modifier.padding(8.dp),
-                text = messageItem.messages,
+                text = feedPost.text,
                 color = when {
-                    messageItem.isMine -> MaterialTheme.colors.onPrimary
+                    false -> MaterialTheme.colors.onPrimary
                     else -> White
                 },
             )
         }
         Text( // 4
             text = when {
-                messageItem.isMine -> "Me"
-                else -> user.user.firstName},
+                false -> "Me"
+                else -> getName(feedPost.user, user)
+            },
             color = White,
             fontSize = 12.sp,
+        )
+        Text( // 4
+            text = formatTime(localDateTime),
+            color = White,
+            fontSize = 8.sp,
         )
     }
 }
 
+fun formatTime(time: LocalDateTime): String{
+    return time.hour.toString() + ":" + time.minute.toString().padStart(2, '0') + " " + time.dayOfMonth.toString() + " " + time.month.toString() + " " + time.year
+}
+
 @Composable
-fun cardShapeFor1(messageItem: Messages): Shape {
+fun cardShapeFor1(messageItem: feedItem): Shape {
     val roundedCorners = RoundedCornerShape(16.dp)
     return when {
-        messageItem.isMine -> roundedCorners.copy(bottomEnd = CornerSize(0))
+        false -> roundedCorners.copy(bottomEnd = CornerSize(0))
         else -> roundedCorners.copy(bottomStart = CornerSize(0))
     }
 }
 
 @Composable
-fun MessageInput(messengerViewModel: MessengerViewModel, user: ConvoListData) {
+fun MessageInput(messengerViewModel: MessengerViewModel) {
     var inputValue by remember { mutableStateOf("") } // 2
 
     fun sendMessage() {
@@ -169,23 +197,19 @@ fun MessageInput(messengerViewModel: MessengerViewModel, user: ConvoListData) {
 
 @Composable
 fun MainAppBar(
-    messengerViewModel: MessengerViewModel,
     onSearchTriggered: () -> Unit
 ) {
-    val user = messengerViewModel.getCurrentUser();
     DefaultAppBar1(
-        messengerViewModel = messengerViewModel,
         onSearchClicked = onSearchTriggered,
-        user = user,
     )
 }
 
 @Composable
-fun DefaultAppBar1(messengerViewModel: MessengerViewModel, onSearchClicked: () -> Unit, user : ConvoListData) {
+fun DefaultAppBar1(onSearchClicked: () -> Unit) {
     TopAppBar(
         title = {
             Text(
-                text = user.user.firstName + " " + user.user.lastName, color = Color.White
+                text = "Feed", color = Color.White
             )
         },
         backgroundColor = Color.DarkGray,
@@ -194,12 +218,12 @@ fun DefaultAppBar1(messengerViewModel: MessengerViewModel, onSearchClicked: () -
                 onClick = { onSearchClicked() }
             ) {
                 Image(
-                    painter = rememberAsyncImagePainter(user.user.imgUrl),
+                    painter = rememberAsyncImagePainter("https://cdn.discordapp.com/avatars/305770707239829504/a_dab45062e55791a8d483a9f7d7373c66.gif?size=256"),
                     contentDescription = null,
                     modifier = Modifier
                         .size(50.dp)
                         .clip(CircleShape)
-                        .border(2.dp, isOnline(user.user.online), CircleShape)
+                        .border(2.dp, isOnline(true), CircleShape)
                 )
             }
         }

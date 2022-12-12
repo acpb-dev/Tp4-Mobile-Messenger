@@ -60,6 +60,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.9.1'
 
 
+    implementation 'com.google.code.gson:gson:2.8.5'
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation "io.coil-kt:coil-compose:2.0.0-rc01"
     implementation 'com.puculek.pulltorefresh:pull-to-refresh-compose:1.0.6'

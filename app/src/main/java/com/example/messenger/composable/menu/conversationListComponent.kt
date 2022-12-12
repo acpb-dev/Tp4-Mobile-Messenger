@@ -1,4 +1,4 @@
-package com.example.messenger.conversationsScreen
+package com.example.messenger.composable.menu
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize

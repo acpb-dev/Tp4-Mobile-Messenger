@@ -9,6 +9,8 @@ import com.example.messenger.data.api.SignInViewModel
 import com.example.messenger.data.api.SocialNetworkApi
 import com.example.messenger.viewmodel.data.ConvoListData
 import com.example.messenger.viewmodel.data.Messages
+import com.example.messenger.viewmodel.data.Users
+import com.example.messenger.viewmodel.data.feedList
 import kotlinx.coroutines.launch
 
 class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
@@ -20,16 +22,41 @@ class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
     var isAuth: Boolean = false;
 
 
-
+    var firstEntry: Boolean? = null;
     val isAuthenticated = mutableStateOf(false)
+    private val usernameStored = mutableStateOf("")
+    private val passwordStored = mutableStateOf("")
+    val feed = mutableStateOf(feedList())
+    val userList = mutableStateOf(Users())
 
     fun signIn(email: String, password: String){
+        usernameStored.value = email
+        passwordStored.value = password
         viewModelScope.launch {
             isAuthenticated.value = api.signIn(email, password)
         }
     }
 
+    fun feed(){
+        viewModelScope.launch {
+            val tempfeed = api.feed(usernameStored.value, passwordStored.value)
+            if (tempfeed != null){
+                feed.value = tempfeed
+            }
+        }
+    }
 
+    fun getUsers(){
+        viewModelScope.launch {
+            val tempfeed = api.getUsers(usernameStored.value, passwordStored.value)
+            if (tempfeed != null){
+                userList.value = tempfeed
+            }
+        }
+    }
+
+    val convoList: Map<String, ConvoListData>
+        get() = convoListClass.convoList
 
 
     fun getCurrentUser(): ConvoListData {
@@ -65,28 +92,10 @@ class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
 
 
 
-    // TODO: Convo List
-    val convoList: Map<String, ConvoListData>
-        get() = convoListClass.convoList
-
-    fun getUser(uid: String): ConvoListData {
-        return convoListClass.getUser(uid);
-    }
-
-    //TODO: Send message
-    fun sendMessage(toUid: String, message: String){
-
-    }
 
 
 
 
-
-
-    //TODO: Credentials
-    fun loginVerification(email: String, password: String): Boolean{
-        return login.CheckCredentials(email, password)
-    }
 
     //TODO: Search Widget
     private val searchWidget = SearchWidget();
