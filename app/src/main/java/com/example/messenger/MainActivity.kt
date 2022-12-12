@@ -48,7 +48,7 @@ fun MainScreen(messengerViewModel: MessengerViewModel) {
         composable(
             route = Routes.ConversationIndividual.route
         ){
-            individualConversation(navController, messengerViewModel, messengerViewModel.getUser("1"))
+            individualConversation(navController, messengerViewModel)
         }
 
     }

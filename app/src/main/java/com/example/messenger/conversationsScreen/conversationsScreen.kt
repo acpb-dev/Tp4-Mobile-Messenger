@@ -43,7 +43,7 @@ fun ConversationsScreen(navController: NavController, messengerViewModel: Messen
 
     val navigateToConvoSelected: (convoListData: ConvoListData) -> Unit = {
             individualConvo ->
-//        messengerViewModel.getConversation(individualConvo.user.uid);
+            messengerViewModel.selectUser(individualConvo.user.uid)
         navController.navigate(Routes.ConversationIndividual.route)
     }
 

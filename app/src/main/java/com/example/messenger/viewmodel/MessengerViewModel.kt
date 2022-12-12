@@ -6,9 +6,20 @@ import com.example.messenger.viewmodel.data.ConvoListData
 import com.example.messenger.viewmodel.data.Messages
 
 class MessengerViewModel {
+    private var currentUserSelected: String = "";
     private val login = Login();
     private val convoListClass = ConvoList();
     private val convoClass = Convo();
+
+
+
+    fun getCurrentUser(): ConvoListData {
+        return convoListClass.getUser(currentUserSelected);
+    }
+
+    fun selectUser(uid: String){
+        currentUserSelected = uid;
+    }
 
 
     private var _convosMessages: MutableList<Messages> = mutableListOf()
@@ -54,7 +65,6 @@ class MessengerViewModel {
 
 
     //TODO: Credentials
-
     fun loginVerification(email: String, password: String): Boolean{
         return login.CheckCredentials(email, password)
     }
