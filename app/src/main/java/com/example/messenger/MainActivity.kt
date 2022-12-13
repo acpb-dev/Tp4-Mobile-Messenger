@@ -14,7 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.messenger.composable.menu.ConversationsScreen
 import com.example.messenger.data.api.SocialNetworkApiImpl
-import com.example.messenger.composable.feed.individualConversation
+import com.example.messenger.composable.feed.feed
 import com.example.messenger.composable.friendList.myFriends
 import com.example.messenger.composable.login.LoginScreen
 import com.example.messenger.composable.profile.profileScreen
@@ -29,7 +29,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val socialNetworkApi = SocialNetworkApiImpl(sharedPreferences!!)
         val messengerViewModel = MessengerViewModel(socialNetworkApi);
-        messengerViewModel.getMessages();
         setContent {
             MainScreen(messengerViewModel);
         }
@@ -51,13 +50,14 @@ fun MainScreen(messengerViewModel: MessengerViewModel) {
         composable(
             route = Routes.Menu.route
         ){
+            messengerViewModel.getUsers();
             ConversationsScreen(navController, messengerViewModel)
         }
 
         composable(
             route = Routes.Feed.route
         ){
-            individualConversation(navController, messengerViewModel)
+            feed(navController, messengerViewModel)
         }
 
         composable(
@@ -68,7 +68,7 @@ fun MainScreen(messengerViewModel: MessengerViewModel) {
         composable(
             route = Routes.MyProfile.route
         ){
-            profileScreen()
+            profileScreen(messengerViewModel = messengerViewModel)
         }
 
     }

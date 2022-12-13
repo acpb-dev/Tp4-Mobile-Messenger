@@ -7,5 +7,6 @@ data class UsersItem(
     val friends: List<String> = listOf(),
     val id: String = "",
     val lastname: String = "",
-    val profileImgUrl: String = ""
+    val profileImgUrl: String = "",
+    val isCurrentUser: Boolean
 )

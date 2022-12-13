@@ -45,14 +45,6 @@ fun ConversationsScreen(navController: NavController, messengerViewModel: Messen
     val searchWidgetState by messengerViewModel.searchWidgetState
     val searchTextState by messengerViewModel.searchTextState
 
-    val convosList = remember { mutableStateOf(messengerViewModel.convoList) }
-
-    val navigateToConvoSelected: (convoListData: ConvoListData) -> Unit = {
-            individualConvo ->
-            messengerViewModel.selectUser(individualConvo.user.uid)
-        navController.navigate(Routes.Feed.route)
-    }
-
     Column(
         modifier = Modifier.fillMaxSize().background(Color.Black),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -65,7 +57,7 @@ fun ConversationsScreen(navController: NavController, messengerViewModel: Messen
                 modifier = Modifier.size(250.dp)
             )
         }
-        Row(Modifier.padding(top = 50.dp).clickable(onClick = {navController.navigate(Routes.MyProfile.route)})){
+        Row(Modifier.padding(top = 50.dp).clickable(onClick = { goTo(navController, messengerViewModel)})){
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
@@ -144,6 +136,12 @@ fun ConversationsScreen(navController: NavController, messengerViewModel: Messen
 //                )
 //            }
 //        })
+}
+
+fun goTo(navController : NavController, messengerViewModel: MessengerViewModel){
+    // messengerViewModel.userSelected.value = messengerViewModel.currentUser.value
+    messengerViewModel.userSelected.value = "c5678761-07c6-4d9b-a7e5-1d264234ea9e"
+    navController.navigate(Routes.MyProfile.route)
 }
 
 @Composable

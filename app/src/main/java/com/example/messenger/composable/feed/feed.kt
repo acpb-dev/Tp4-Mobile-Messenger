@@ -44,16 +44,14 @@ import androidx.compose.material3.Button as Button1
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun individualConversation(navController: NavController, messengerViewModel: MessengerViewModel) {
-    // messengerViewModel.getMessages();
+fun feed(navController: NavController, messengerViewModel: MessengerViewModel) {
     messengerViewModel.feed()
-    messengerViewModel.getUsers();
+
 
     val feed by remember { messengerViewModel.feed }
     val users by remember { messengerViewModel.userList }
     print(messengerViewModel.feed);
 
-//    val convo = remember { messengerViewModel.convosMessages }
 
 
     Scaffold(topBar = {
@@ -112,7 +110,7 @@ fun MessageCard1(feedPost: feedItem, user: Users) {
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 4.dp),
         horizontalAlignment = when { // 2
-            false -> Alignment.End
+            feedPost.isFromCurrentUser -> Alignment.End
             else -> Alignment.Start
         },
     ) {
@@ -120,7 +118,7 @@ fun MessageCard1(feedPost: feedItem, user: Users) {
             modifier = Modifier.widthIn(max = 340.dp),
             shape = cardShapeFor1(feedPost), // 3
             backgroundColor = when {
-                false -> MaterialTheme.colors.primary
+                feedPost.isFromCurrentUser -> MaterialTheme.colors.primary
                 else -> DarkGray
             },
         ) {
@@ -128,14 +126,14 @@ fun MessageCard1(feedPost: feedItem, user: Users) {
                 modifier = Modifier.padding(8.dp),
                 text = feedPost.text,
                 color = when {
-                    false -> MaterialTheme.colors.onPrimary
+                    feedPost.isFromCurrentUser -> MaterialTheme.colors.onPrimary
                     else -> White
                 },
             )
         }
         Text( // 4
             text = when {
-                false -> "Me"
+                feedPost.isFromCurrentUser -> "Me"
                 else -> getName(feedPost.user, user)
             },
             color = White,
@@ -157,7 +155,7 @@ fun formatTime(time: LocalDateTime): String{
 fun cardShapeFor1(messageItem: feedItem): Shape {
     val roundedCorners = RoundedCornerShape(16.dp)
     return when {
-        false -> roundedCorners.copy(bottomEnd = CornerSize(0))
+        messageItem.isFromCurrentUser -> roundedCorners.copy(bottomEnd = CornerSize(0))
         else -> roundedCorners.copy(bottomStart = CornerSize(0))
     }
 }
@@ -167,7 +165,6 @@ fun MessageInput(messengerViewModel: MessengerViewModel) {
     var inputValue by remember { mutableStateOf("") } // 2
 
     fun sendMessage() {
-        messengerViewModel.pushMessage(inputValue);
         inputValue = ""
     }
     Row {

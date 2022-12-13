@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.messenger.data.api.SignInViewModel
 import com.example.messenger.data.api.SocialNetworkApi
 import com.example.messenger.viewmodel.data.ConvoListData
 import com.example.messenger.viewmodel.data.Messages
@@ -19,12 +18,15 @@ class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
     private val convoListClass = ConvoList();
     private val convoClass = Convo();
 
-    var isAuth: Boolean = false;
 
 
-    var firstEntry: Boolean? = null;
+    var currentUser = mutableStateOf("")
+    var userSelected = mutableStateOf("")
     val isAuthenticated = mutableStateOf(false)
     private val usernameStored = mutableStateOf("")
+    val getEmail: String
+        get() = usernameStored.value
+
     private val passwordStored = mutableStateOf("")
     val feed = mutableStateOf(feedList())
     val userList = mutableStateOf(Users())
@@ -51,39 +53,13 @@ class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
             val tempfeed = api.getUsers(usernameStored.value, passwordStored.value)
             if (tempfeed != null){
                 userList.value = tempfeed
+                userList.value.forEach{
+                    if (it.isCurrentUser){
+                        currentUser.value = it.id
+                    }
+                }
             }
         }
-    }
-
-    val convoList: Map<String, ConvoListData>
-        get() = convoListClass.convoList
-
-
-    fun getCurrentUser(): ConvoListData {
-        return convoListClass.getUser(currentUserSelected)
-    }
-
-    fun selectUser(uid: String){
-        currentUserSelected = uid;
-    }
-
-
-    private var _convosMessages: MutableList<Messages> = mutableStateListOf()
-    val convosMessages: List<Messages>
-        get() = _convosMessages
-
-
-    fun getMessages(): List<Messages> {
-        val tt = convoClass.getConvo()
-        tt.messages.forEach{
-            _convosMessages.add(it)
-        }
-        return convosMessages;
-    }
-
-    fun pushMessage(message: String){
-        _convosMessages.add(Messages(true, message))
-        print(_convosMessages)
     }
 
 

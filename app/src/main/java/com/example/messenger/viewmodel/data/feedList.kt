@@ -7,5 +7,6 @@ data class feedItem(
     val id: String = "",
     val images: List<Any> = listOf(),
     val text: String = "",
-    val user: String = ""
+    val user: String = "",
+    val isFromCurrentUser: Boolean = false
 )
