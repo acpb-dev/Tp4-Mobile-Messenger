@@ -6,4 +6,5 @@ sealed class Routes(val route: String) {
     object Feed: Routes("feed")
     object FriendList: Routes("friendList")
     object MyProfile: Routes("myProfile")
+    object SearchFriend: Routes("searchFriends")
 }

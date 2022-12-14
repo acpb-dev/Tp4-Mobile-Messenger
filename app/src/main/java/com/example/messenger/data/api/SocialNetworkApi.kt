@@ -10,5 +10,5 @@ interface SocialNetworkApi {
 
     suspend fun feed(email: String, password: String): feedList?
 
-    suspend fun getUsers(email: String, password: String): Users?
+    suspend fun getUsers(email: String, password: String, search: String): Users?
 }

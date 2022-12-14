@@ -18,8 +18,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -37,7 +35,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.MessengerViewModel
 import com.example.messenger.viewmodel.SearchWidget
-import com.example.messenger.viewmodel.data.ConvoListData
+import com.example.messenger.viewmodel.data.UsersItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,7 +55,7 @@ fun ConversationsScreen(navController: NavController, messengerViewModel: Messen
                 modifier = Modifier.size(250.dp)
             )
         }
-        Row(Modifier.padding(top = 50.dp).clickable(onClick = { goTo(navController, messengerViewModel)})){
+        Row(Modifier.padding(top = 50.dp).clickable(onClick = { goTo(navController, messengerViewModel, messengerViewModel.currentUser.value)})){
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
@@ -138,9 +136,9 @@ fun ConversationsScreen(navController: NavController, messengerViewModel: Messen
 //        })
 }
 
-fun goTo(navController : NavController, messengerViewModel: MessengerViewModel){
+fun goTo(navController: NavController, messengerViewModel: MessengerViewModel, uid: UsersItem){
     // messengerViewModel.userSelected.value = messengerViewModel.currentUser.value
-    messengerViewModel.userSelected.value = "c5678761-07c6-4d9b-a7e5-1d264234ea9e"
+    messengerViewModel.userSelected.value = uid.id
     navController.navigate(Routes.MyProfile.route)
 }
 

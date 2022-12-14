@@ -8,5 +8,5 @@ data class UsersItem(
     val id: String = "",
     val lastname: String = "",
     val profileImgUrl: String = "",
-    val isCurrentUser: Boolean
+    val isCurrentUser: Boolean = false
 )

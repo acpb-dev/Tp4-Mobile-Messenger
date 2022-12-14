@@ -18,6 +18,7 @@ import com.example.messenger.composable.feed.feed
 import com.example.messenger.composable.friendList.myFriends
 import com.example.messenger.composable.login.LoginScreen
 import com.example.messenger.composable.profile.profileScreen
+import com.example.messenger.composable.search.Search
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.MessengerViewModel
 
@@ -50,7 +51,8 @@ fun MainScreen(messengerViewModel: MessengerViewModel) {
         composable(
             route = Routes.Menu.route
         ){
-            messengerViewModel.getUsers();
+            messengerViewModel.getAllUsers();
+            messengerViewModel.getFriendsList()
             ConversationsScreen(navController, messengerViewModel)
         }
 
@@ -63,12 +65,18 @@ fun MainScreen(messengerViewModel: MessengerViewModel) {
         composable(
             route = Routes.FriendList.route
         ){
-            myFriends()
+            myFriends(navController = navController, messengerViewModel = messengerViewModel)
         }
         composable(
             route = Routes.MyProfile.route
         ){
-            profileScreen(messengerViewModel = messengerViewModel)
+            profileScreen(navController = navController, messengerViewModel = messengerViewModel)
+        }
+
+        composable(
+            route = Routes.SearchFriend.route
+        ){
+            Search(navController = navController, messengerViewModel = messengerViewModel)
         }
 
     }

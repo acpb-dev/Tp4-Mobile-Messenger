@@ -6,21 +6,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.messenger.data.api.SocialNetworkApi
-import com.example.messenger.viewmodel.data.ConvoListData
-import com.example.messenger.viewmodel.data.Messages
-import com.example.messenger.viewmodel.data.Users
-import com.example.messenger.viewmodel.data.feedList
+import com.example.messenger.viewmodel.data.*
 import kotlinx.coroutines.launch
 
 class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
-    private var currentUserSelected: String = "";
-    private val login = Login();
-    private val convoListClass = ConvoList();
-    private val convoClass = Convo();
 
 
+    var myFriends = mutableStateOf(mutableListOf<String>())
 
-    var currentUser = mutableStateOf("")
+    var searchedUser = mutableStateOf(Users())
+
+    var currentUser = mutableStateOf(UsersItem())
     var userSelected = mutableStateOf("")
     val isAuthenticated = mutableStateOf(false)
     private val usernameStored = mutableStateOf("")
@@ -48,18 +44,48 @@ class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
         }
     }
 
-    fun getUsers(){
+    fun getAllUsers(){
         viewModelScope.launch {
-            val tempfeed = api.getUsers(usernameStored.value, passwordStored.value)
+            val tempfeed = api.getUsers(usernameStored.value, passwordStored.value, "")
             if (tempfeed != null){
                 userList.value = tempfeed
                 userList.value.forEach{
                     if (it.isCurrentUser){
-                        currentUser.value = it.id
+                        currentUser.value = it
                     }
                 }
             }
         }
+    }
+
+    fun getUserByName(search: String) {
+        viewModelScope.launch {
+            val tempfeed = api.getUsers(usernameStored.value, passwordStored.value, search)
+            if (tempfeed != null){
+                searchedUser.value = tempfeed
+            }
+        }
+    }
+
+    fun getFriendsList(){
+        var list = mutableListOf<String>()
+        userList.value.forEach{ user ->
+            currentUser.value.friends.forEach { friend ->
+                if (user.id == friend){
+                    list.add(friend)
+                }
+            }
+        }
+        myFriends.value = list;
+    }
+
+    fun getUserById(uid: String): UsersItem {
+        userList.value.forEach{ user ->
+            if (user.id == uid){
+                return user;
+            }
+        }
+        return UsersItem()
     }
 
 

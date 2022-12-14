@@ -45,10 +45,10 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
         }
     }
 
-    override suspend fun getUsers(email: String, password: String): Users?{
+    override suspend fun getUsers(email: String, password: String, search: String): Users?{
         saveAuthInformation(email, password)
         authenticatedClient = createAuthClient()
-        val response = authenticatedClient.getUsers("")
+        val response = authenticatedClient.getUsers(search)
         return if(response.isSuccessful){
             return response.body();
         }else {
