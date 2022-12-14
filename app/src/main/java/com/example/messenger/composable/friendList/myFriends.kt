@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.MessengerViewModel
+import com.example.messenger.viewmodel.data.UsersItem
 
 @Composable
 fun myFriends(navController: NavController, messengerViewModel: MessengerViewModel) {
@@ -79,7 +80,11 @@ fun myFriends(navController: NavController, messengerViewModel: MessengerViewMod
                         Row(
                             Modifier
                                 .padding(20.dp)
-                                .clickable(onClick = {}),
+                                .clickable(onClick = { goTo(
+                                    navController,
+                                    messengerViewModel,
+                                    user
+                                ) }),
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically) {
                             Column(Modifier.padding(end = 5.dp)) {
@@ -104,4 +109,9 @@ fun myFriends(navController: NavController, messengerViewModel: MessengerViewMod
             }
         }
     }
+}
+
+fun goTo(navController: NavController, messengerViewModel: MessengerViewModel, user: UsersItem){
+    messengerViewModel.currentUser.value = user
+    navController.navigate(Routes.MyProfile.route)
 }

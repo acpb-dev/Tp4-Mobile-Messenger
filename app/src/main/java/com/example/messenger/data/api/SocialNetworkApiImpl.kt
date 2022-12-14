@@ -3,12 +3,16 @@ package com.example.messenger.data.api
 import UnsafeOkHttpClient
 import android.content.SharedPreferences
 import com.example.messenger.data.api.auth.BasicAuthInterceptor
+import com.example.messenger.viewmodel.data.PostInfo
 import com.example.messenger.viewmodel.data.Users
 import com.example.messenger.viewmodel.data.feedList
 import com.google.gson.Gson
 import okhttp3.internal.wait
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.PUT
+import retrofit2.http.Url
 
 
 class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): SocialNetworkApi {
@@ -26,6 +30,30 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
         saveAuthInformation(email, password)
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.signIn()
+        return if(response.isSuccessful){
+            println("Success")
+            return true
+        }else {
+            return false
+        }
+    }
+
+    override suspend fun postToFeed(email: String, password: String, body: PostInfo): Boolean {
+        saveAuthInformation(email, password)
+        authenticatedClient = createAuthClient()
+        val response = authenticatedClient.postToFeed(body)
+        return if(response.isSuccessful){
+            println("Success")
+            return true
+        }else {
+            return false
+        }
+    }
+
+    override suspend fun addFriend(email: String, password: String, friendId: String): Boolean {
+        saveAuthInformation(email, password)
+        authenticatedClient = createAuthClient()
+        val response = authenticatedClient.addFriend(friendId)
         return if(response.isSuccessful){
             println("Success")
             return true

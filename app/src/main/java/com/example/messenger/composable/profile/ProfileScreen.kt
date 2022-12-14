@@ -20,27 +20,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.DarkGray
 import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.messenger.ui.theme.Purple40
+import com.example.messenger.composable.topBar
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.MessengerViewModel
 import com.example.messenger.viewmodel.data.Users
 import com.example.messenger.viewmodel.data.UsersItem
-import kotlinx.coroutines.yield
 
 @Composable
 fun profileScreen(navController: NavController, messengerViewModel: MessengerViewModel) {
 
-    val userViewing by remember { messengerViewModel.userSelected }
+    val userViewing by remember { messengerViewModel.currentUser }
 
     var currentUser = getCurrentUser(messengerViewModel.userList.value, userViewing)
     var friends: MutableList<String> = mutableListOf()
@@ -55,6 +54,7 @@ fun profileScreen(navController: NavController, messengerViewModel: MessengerVie
         image = currentUser!!.profileImgUrl
     }
 
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -66,7 +66,7 @@ fun profileScreen(navController: NavController, messengerViewModel: MessengerVie
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Blue)
+                    .background(Black)
                     .weight(1f)
                     .padding(8.dp),
                 contentAlignment = Alignment.Center
@@ -88,22 +88,29 @@ fun profileScreen(navController: NavController, messengerViewModel: MessengerVie
                             Box(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(10.dp))
-                                    .background(DarkGray)
+                                    .background(Transparent)
                                     .padding(1.dp)
                             ){
                                 Row(Modifier.align(Alignment.Center)) {
                                     Column(Modifier.padding(5.dp)) {
                                         if (currentUser.isCurrentUser) {
-                                            Text(
-                                                text = checkNull(messengerViewModel.getEmail),
-                                                fontSize = 18.sp,
-                                                color = White,
-                                                textAlign = TextAlign.Right
-                                            )
+                                            Box(
+                                                modifier = Modifier
+                                                    .clip(RoundedCornerShape(10.dp))
+                                                    .background(DarkGray)
+                                                    .padding(6.dp)
+                                            ) {
+                                                Text(
+                                                    text = checkNull(messengerViewModel.getEmail),
+                                                    fontSize = 18.sp,
+                                                    color = White,
+                                                    textAlign = TextAlign.Right
+                                                )
+                                            }
                                         } else {
                                             if (messengerViewModel.myFriends.value.contains(currentUser.id)) {
                                                 Button(
-                                                    onClick = {},
+                                                    onClick = {  },
                                                     shape = CutCornerShape(10),
                                                     colors = ButtonDefaults.buttonColors(
                                                         backgroundColor = Red
@@ -113,7 +120,7 @@ fun profileScreen(navController: NavController, messengerViewModel: MessengerVie
                                                 }
                                             } else {
                                                 Button(
-                                                    onClick = {},
+                                                    onClick = { messengerViewModel.addFriend(currentUser.id) },
                                                     shape = CutCornerShape(10),
                                                     colors = ButtonDefaults.buttonColors(
                                                         backgroundColor = Green
@@ -187,7 +194,7 @@ fun profileScreen(navController: NavController, messengerViewModel: MessengerVie
                                         goTo(
                                             navController,
                                             messengerViewModel,
-                                            user.id
+                                            user
                                         )
                                     }),
                                 horizontalArrangement = Arrangement.Start,
@@ -217,10 +224,10 @@ fun profileScreen(navController: NavController, messengerViewModel: MessengerVie
     }
 }
 
-fun goTo(navController : NavController, messengerViewModel: MessengerViewModel, uid: String){
+fun goTo(navController: NavController, messengerViewModel: MessengerViewModel, user: UsersItem){
     // messengerViewModel.userSelected.value = messengerViewModel.currentUser.value
-    messengerViewModel.userSelected.value = uid
-    //navController.navigate(Routes.MyProfile.route)
+    messengerViewModel.currentUser.value = user
+    navController.navigate(Routes.MyProfile.route)
 }
 
 fun getFriendsProfile(users: Users, uids: MutableList<String>): List<UsersItem>{
@@ -242,9 +249,9 @@ fun checkNull(entry: String?): String{
     return ""
 }
 
-fun getCurrentUser(userList: Users, uid: String): UsersItem? {
+fun getCurrentUser(userList: Users, user: UsersItem): UsersItem? {
     userList.forEach{
-        if (it.id == uid){
+        if (it.id == user.id){
             return it
         }
     }

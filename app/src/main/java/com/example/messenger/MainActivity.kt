@@ -12,7 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.messenger.composable.menu.ConversationsScreen
+import com.example.messenger.composable.menu.Menu
 import com.example.messenger.data.api.SocialNetworkApiImpl
 import com.example.messenger.composable.feed.feed
 import com.example.messenger.composable.friendList.myFriends
@@ -53,7 +53,7 @@ fun MainScreen(messengerViewModel: MessengerViewModel) {
         ){
             messengerViewModel.getAllUsers();
             messengerViewModel.getFriendsList()
-            ConversationsScreen(navController, messengerViewModel)
+            Menu(navController, messengerViewModel)
         }
 
         composable(

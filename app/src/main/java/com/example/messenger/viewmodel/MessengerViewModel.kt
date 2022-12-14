@@ -1,7 +1,6 @@
 package com.example.messenger.viewmodel
 
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,22 +9,16 @@ import com.example.messenger.viewmodel.data.*
 import kotlinx.coroutines.launch
 
 class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
-
-
-    var myFriends = mutableStateOf(mutableListOf<String>())
-
-    var searchedUser = mutableStateOf(Users())
-
-    var currentUser = mutableStateOf(UsersItem())
-    var userSelected = mutableStateOf("")
+    val searchedUser = mutableStateOf(Users())
+    val currentUser = mutableStateOf(UsersItem())
+    val userList = mutableStateOf(Users())
+    val myFriends = mutableStateOf(mutableListOf<String>())
+    val feed = mutableStateOf(feedList())
     val isAuthenticated = mutableStateOf(false)
     private val usernameStored = mutableStateOf("")
     val getEmail: String
         get() = usernameStored.value
-
     private val passwordStored = mutableStateOf("")
-    val feed = mutableStateOf(feedList())
-    val userList = mutableStateOf(Users())
 
     fun signIn(email: String, password: String){
         usernameStored.value = email
@@ -37,18 +30,32 @@ class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
 
     fun feed(){
         viewModelScope.launch {
-            val tempfeed = api.feed(usernameStored.value, passwordStored.value)
-            if (tempfeed != null){
-                feed.value = tempfeed
+            val response = api.feed(usernameStored.value, passwordStored.value)
+            println("Get Feed : " + response.toString())
+            if (response != null){
+                feed.value = response
             }
+        }
+    }
+
+    fun addFriend(id: String){
+        viewModelScope.launch {
+            val response = api.addFriend(usernameStored.value, passwordStored.value, id)
+            println("Added Friend : $id $response")
+        }
+    }
+
+    fun postFeed(body: PostInfo){
+        viewModelScope.launch {
+            api.postToFeed(usernameStored.value, passwordStored.value, body)
         }
     }
 
     fun getAllUsers(){
         viewModelScope.launch {
-            val tempfeed = api.getUsers(usernameStored.value, passwordStored.value, "")
-            if (tempfeed != null){
-                userList.value = tempfeed
+            val response = api.getUsers(usernameStored.value, passwordStored.value, "")
+            if (response != null){
+                userList.value = response
                 userList.value.forEach{
                     if (it.isCurrentUser){
                         currentUser.value = it
@@ -60,9 +67,9 @@ class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
 
     fun getUserByName(search: String) {
         viewModelScope.launch {
-            val tempfeed = api.getUsers(usernameStored.value, passwordStored.value, search)
-            if (tempfeed != null){
-                searchedUser.value = tempfeed
+            val response = api.getUsers(usernameStored.value, passwordStored.value, search)
+            if (response != null){
+                searchedUser.value = response
             }
         }
     }
@@ -88,18 +95,6 @@ class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
         return UsersItem()
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    //TODO: Search Widget
     private val searchWidget = SearchWidget();
     val searchWidgetState: State<SearchWidget.SearchWidgetState>
         get() = searchWidget.searchWidgetState
@@ -114,8 +109,4 @@ class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
     fun updateSearchTextState(newValue: String){
         searchWidget.updateSearchTextState(newValue);
     }
-
-
-
-
 }

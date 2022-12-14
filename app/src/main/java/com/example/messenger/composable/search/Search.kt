@@ -16,13 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.MessengerViewModel
+import com.example.messenger.viewmodel.data.UsersItem
 
 @Composable
 fun Search(navController: NavController, messengerViewModel: MessengerViewModel) {
@@ -54,7 +53,7 @@ fun Search(navController: NavController, messengerViewModel: MessengerViewModel)
                     Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically){
                         TextField(
                             value = search,
-                            onValueChange = { search = it; messengerViewModel.getUserByName(search) },
+                            onValueChange = { search = it; search(search, messengerViewModel) },
                             label = { Text("") },
                             shape = RoundedCornerShape(8.dp),
                             colors = TextFieldDefaults.textFieldColors(
@@ -83,7 +82,7 @@ fun Search(navController: NavController, messengerViewModel: MessengerViewModel)
                                         goTo(
                                             navController,
                                             messengerViewModel,
-                                            user.id
+                                            user
                                         )
                                     }),
                                 horizontalArrangement = Arrangement.Start,
@@ -113,8 +112,13 @@ fun Search(navController: NavController, messengerViewModel: MessengerViewModel)
     }
 }
 
-fun goTo(navController : NavController, messengerViewModel: MessengerViewModel, uid: String){
-    // messengerViewModel.userSelected.value = messengerViewModel.currentUser.value
-    messengerViewModel.userSelected.value = uid
+fun search(searchString: String, messengerViewModel: MessengerViewModel){
+    if (searchString.trim() != ""){
+        messengerViewModel.getUserByName(searchString)
+    }
+}
+
+fun goTo(navController: NavController, messengerViewModel: MessengerViewModel, user: UsersItem){
+    messengerViewModel.currentUser.value = user
     navController.navigate(Routes.MyProfile.route)
 }
