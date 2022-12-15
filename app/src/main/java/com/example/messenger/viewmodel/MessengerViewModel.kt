@@ -21,11 +21,15 @@ class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
     private val passwordStored = mutableStateOf("")
 
     fun signIn(email: String, password: String){
+        println("Email: $email")
+        println("Password: $password")
         usernameStored.value = email
         passwordStored.value = password
         viewModelScope.launch {
             isAuthenticated.value = api.signIn(email, password)
+
         }
+        println(isAuthenticated)
     }
 
     fun feed(){
