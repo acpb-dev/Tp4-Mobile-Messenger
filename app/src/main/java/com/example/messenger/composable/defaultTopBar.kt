@@ -26,7 +26,7 @@ fun DefaultAppBar(navController: NavController, tabName: String) {
         backgroundColor = androidx.compose.material.MaterialTheme.colors.primaryVariant,
         actions = {
             Column(Modifier.padding(5.dp)) {
-                androidx.compose.material3.Text(text = tabName, fontSize = 25.sp, color = Color.White, fontWeight = FontWeight.Bold)
+                Text(text = tabName, fontSize = 25.sp, color = Color.White, fontWeight = FontWeight.Bold)
             }
         }
     )

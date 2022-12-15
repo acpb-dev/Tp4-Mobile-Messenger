@@ -1,4 +1,4 @@
-package com.example.messenger.viewmodel.data
+package com.example.messenger.api.data
 
 class Users : ArrayList<UsersItem>()
 

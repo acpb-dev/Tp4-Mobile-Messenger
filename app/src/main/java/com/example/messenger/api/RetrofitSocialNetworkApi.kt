@@ -1,8 +1,8 @@
-package com.example.messenger.data.api
+package com.example.messenger.api
 
-import com.example.messenger.viewmodel.data.PostInfo
-import com.example.messenger.viewmodel.data.Users
-import com.example.messenger.viewmodel.data.feedList
+import com.example.messenger.api.data.PostInfo
+import com.example.messenger.api.data.Users
+import com.example.messenger.api.data.feedList
 import retrofit2.Response
 import retrofit2.http.*
 

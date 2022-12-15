@@ -24,8 +24,8 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.MessengerViewModel
-import com.example.messenger.viewmodel.data.Users
-import com.example.messenger.viewmodel.data.UsersItem
+import com.example.messenger.api.data.Users
+import com.example.messenger.api.data.UsersItem
 
 @Composable
 fun profileScreenComponent(

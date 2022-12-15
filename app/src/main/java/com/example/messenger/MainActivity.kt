@@ -13,7 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.messenger.composable.menu.Menu
-import com.example.messenger.data.api.SocialNetworkApiImpl
+import com.example.messenger.api.SocialNetworkApiImpl
 import com.example.messenger.composable.feed.feed
 import com.example.messenger.composable.friendList.myFriends
 import com.example.messenger.composable.login.LoginScreen

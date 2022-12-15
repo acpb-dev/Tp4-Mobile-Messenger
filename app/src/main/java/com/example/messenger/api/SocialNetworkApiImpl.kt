@@ -1,18 +1,12 @@
-package com.example.messenger.data.api
+package com.example.messenger.api
 
-import UnsafeOkHttpClient
 import android.content.SharedPreferences
-import com.example.messenger.data.api.auth.BasicAuthInterceptor
-import com.example.messenger.viewmodel.data.PostInfo
-import com.example.messenger.viewmodel.data.Users
-import com.example.messenger.viewmodel.data.feedList
-import com.google.gson.Gson
-import okhttp3.internal.wait
-import retrofit2.Response
+import com.example.messenger.api.auth.BasicAuthInterceptor
+import com.example.messenger.api.data.PostInfo
+import com.example.messenger.api.data.Users
+import com.example.messenger.api.data.feedList
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.PUT
-import retrofit2.http.Url
 
 
 class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): SocialNetworkApi {
@@ -38,8 +32,17 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
         }
     }
 
-    override suspend fun postToFeed(email: String, password: String, body: PostInfo): Boolean {
-        saveAuthInformation(email, password)
+    override suspend fun signUp(
+        email: String,
+        password: String,
+        firstname: String,
+        lastname: String
+    ) {
+        //client.signUp(email, password, firstname, lastname)
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun postToFeed(body: PostInfo): Boolean {
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.postToFeed(body)
         return if(response.isSuccessful){
@@ -50,8 +53,7 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
         }
     }
 
-    override suspend fun addFriend(email: String, password: String, friendId: String): Boolean {
-        saveAuthInformation(email, password)
+    override suspend fun addFriend(friendId: String): Boolean {
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.addFriend(friendId)
         return if(response.isSuccessful){
@@ -62,8 +64,7 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
         }
     }
 
-    override suspend fun feed(email: String, password: String): feedList? {
-        saveAuthInformation(email, password)
+    override suspend fun feed(): feedList? {
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.feed()
         return if(response.isSuccessful){
@@ -73,8 +74,7 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
         }
     }
 
-    override suspend fun getUsers(email: String, password: String, search: String): Users?{
-        saveAuthInformation(email, password)
+    override suspend fun getUsers(search: String): Users?{
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.getUsers(search)
         return if(response.isSuccessful){
@@ -82,16 +82,6 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
         }else {
             return null
         }
-    }
-
-    override suspend fun signUp(
-        email: String,
-        password: String,
-        firstname: String,
-        lastname: String
-    ) {
-        //client.signUp(email, password, firstname, lastname)
-        TODO("Not yet implemented")
     }
 
     private fun saveAuthInformation(email: String, password: String){

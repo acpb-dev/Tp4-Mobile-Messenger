@@ -1,3 +1,5 @@
+package com.example.messenger.api
+
 import okhttp3.OkHttpClient
 import java.security.cert.CertificateException
 import javax.net.ssl.HostnameVerifier

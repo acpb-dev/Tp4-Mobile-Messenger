@@ -28,10 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.viewmodel.MessengerViewModel
-import com.example.messenger.viewmodel.data.PostInfo
-import com.example.messenger.viewmodel.data.Users
-import com.example.messenger.viewmodel.data.feedItem
-import com.example.messenger.viewmodel.data.feedList
+import com.example.messenger.api.data.PostInfo
+import com.example.messenger.api.data.Users
+import com.example.messenger.api.data.feedItem
+import com.example.messenger.api.data.feedList
 import java.time.LocalDateTime
 
 @Composable

@@ -1,4 +1,4 @@
-package com.example.messenger.data.api.auth
+package com.example.messenger.api.auth
 
 import okhttp3.Credentials
 import okhttp3.Interceptor

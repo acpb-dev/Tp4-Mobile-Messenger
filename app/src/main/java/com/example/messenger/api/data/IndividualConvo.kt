@@ -1,7 +1,6 @@
-package com.example.messenger.viewmodel.data
+package com.example.messenger.api.data
 
 import android.os.Parcelable
-import android.text.BoringLayout
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

@@ -1,4 +1,4 @@
-package com.example.messenger.viewmodel
+package com.example.messenger.utils
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -24,7 +24,5 @@ class SearchWidget {
 
     fun updateSearchTextState(newValue: String) {
         _searchTextState.value = newValue
-        // updateList(newValue)
-        // println("Called Update Values")
     }
 }

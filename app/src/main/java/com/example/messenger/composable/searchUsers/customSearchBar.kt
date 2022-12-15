@@ -20,12 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.messenger.viewmodel.MessengerViewModel
-import com.example.messenger.viewmodel.SearchWidget
-import com.example.messenger.viewmodel.data.Users
+import com.example.messenger.utils.SearchWidget
+import com.example.messenger.api.data.Users
 
 @Composable
 fun searchTopBar(messengerViewModel: MessengerViewModel, navController: NavController){
@@ -92,12 +94,10 @@ fun MainAppBar(
 fun AppBar(onSearchClicked: () -> Unit, navController: NavController) {
     TopAppBar(
         title = {
-            Column(modifier = Modifier.clickable(onClick = { navController.popBackStack() }).padding(end = 5.dp)) {
+            Column(modifier = Modifier.clickable(onClick = { navController.popBackStack() }).padding(end = 20.dp)) {
                 androidx.compose.material.Icon(Icons.Filled.ArrowBack, "", tint = Color.White)
             }
-            Text(
-                text = "Search", color = Color.White
-            )
+            Text(text = "Search", fontSize = 25.sp, color = Color.White, fontWeight = FontWeight.Bold)
 
         },
         backgroundColor = Color.DarkGray,
@@ -114,7 +114,6 @@ fun AppBar(onSearchClicked: () -> Unit, navController: NavController) {
         }
     )
 }
-
 
 @Composable
 fun SearchAppBar(
