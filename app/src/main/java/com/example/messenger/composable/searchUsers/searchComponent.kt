@@ -83,9 +83,7 @@ fun searchComponent(
                 }
             }
         }
-    }
-
-
+}
 
 
 fun goTo(navController: NavController, messengerViewModel: MessengerViewModel, user: UsersItem){

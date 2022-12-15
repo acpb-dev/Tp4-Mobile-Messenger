@@ -42,40 +42,29 @@ fun MainScreen(messengerViewModel: MessengerViewModel) {
     val navController: NavHostController = rememberNavController()
 
     NavHost(navController = navController, startDestination = Routes.LoginScreen.route){
-        composable(
-            route = Routes.LoginScreen.route
-        ){
+        composable(route = Routes.LoginScreen.route){
             LoginScreen(navController, messengerViewModel)
         }
 
-        composable(
-            route = Routes.Menu.route
-        ){
+        composable(route = Routes.Menu.route){
             messengerViewModel.getAllUsers();
             messengerViewModel.getFriendsList()
             Menu(navController, messengerViewModel)
         }
 
-        composable(
-            route = Routes.Feed.route
-        ){
+        composable(route = Routes.Feed.route){
             feed(navController, messengerViewModel)
         }
 
-        composable(
-            route = Routes.FriendList.route
-        ){
+        composable(route = Routes.FriendList.route ) {
             myFriends(navController = navController, messengerViewModel = messengerViewModel)
         }
-        composable(
-            route = Routes.MyProfile.route
-        ){
+
+        composable(route = Routes.MyProfile.route){
             profileScreen(navController = navController, messengerViewModel = messengerViewModel)
         }
 
-        composable(
-            route = Routes.SearchFriend.route
-        ){
+        composable(route = Routes.SearchFriend.route ){
             search(navController = navController, messengerViewModel = messengerViewModel)
         }
 

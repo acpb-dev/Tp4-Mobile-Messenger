@@ -111,6 +111,12 @@ class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
     }
 
     fun updateSearchTextState(newValue: String){
+        val trimmedValue = newValue.trim()
+        if (trimmedValue != ""){
+            getUserByName(trimmedValue)
+        }else{
+            searchedUser.value = Users()
+        }
         searchWidget.updateSearchTextState(newValue);
     }
 }

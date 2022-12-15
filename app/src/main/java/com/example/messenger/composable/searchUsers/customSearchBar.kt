@@ -1,16 +1,18 @@
-package com.example.messenger.composable
+package com.example.messenger.composable.searchUsers
 
 import android.util.Log
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,15 +22,43 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.messenger.viewmodel.MessengerViewModel
 import com.example.messenger.viewmodel.SearchWidget
+import com.example.messenger.viewmodel.data.Users
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun topBar(messengerViewModel: MessengerViewModel, content: @Composable() () -> Unit) {
+fun searchTopBar(messengerViewModel: MessengerViewModel, navController: NavController){
+    val searchWidgetState by messengerViewModel.searchWidgetState
+    val searchTextState by messengerViewModel.searchTextState
+    MainAppBar(
+        searchWidgetState = searchWidgetState,
+        searchTextState = searchTextState,
+        onTextChange = {
+            messengerViewModel.updateSearchTextState(newValue = it)
 
+        },
+        onCloseClicked = {
+            messengerViewModel.updateSearchWidgetState(newValue = SearchWidget.SearchWidgetState.CLOSED)
+        },
+        onSearchClicked = {
+            Log.d("Searched Text", it)
+        },
+        onSearchTriggered = {
+            messengerViewModel.updateSearchWidgetState(newValue = SearchWidget.SearchWidgetState.OPENED)
+        },
+        navController = navController
+    )
 }
+
+@Composable
+fun searchResults(navController: NavController, messengerViewModel: MessengerViewModel, usersFound: Users){
+    Row(Modifier.background(Color.Black)) {
+        searchComponent(navController = navController, messengerViewModel = messengerViewModel, usersFound)
+    }
+}
+
+
 
 @Composable
 fun MainAppBar(
@@ -37,12 +67,14 @@ fun MainAppBar(
     onTextChange: (String) -> Unit,
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit,
-    onSearchTriggered: () -> Unit
+    onSearchTriggered: () -> Unit,
+    navController: NavController
 ) {
     when (searchWidgetState) {
         SearchWidget.SearchWidgetState.CLOSED -> {
-            DefaultAppBar(
-                onSearchClicked = onSearchTriggered
+            AppBar(
+                onSearchClicked = onSearchTriggered,
+                navController = navController
             )
         }
         SearchWidget.SearchWidgetState.OPENED -> {
@@ -57,12 +89,16 @@ fun MainAppBar(
 }
 
 @Composable
-fun DefaultAppBar(onSearchClicked: () -> Unit) {
+fun AppBar(onSearchClicked: () -> Unit, navController: NavController) {
     TopAppBar(
         title = {
+            Column(modifier = Modifier.clickable(onClick = { navController.popBackStack() }).padding(end = 5.dp)) {
+                androidx.compose.material.Icon(Icons.Filled.ArrowBack, "", tint = Color.White)
+            }
             Text(
-                text = "Messenger", color = Color.White
+                text = "Search", color = Color.White
             )
+
         },
         backgroundColor = Color.DarkGray,
         actions = {
@@ -78,6 +114,7 @@ fun DefaultAppBar(onSearchClicked: () -> Unit) {
         }
     )
 }
+
 
 @Composable
 fun SearchAppBar(
