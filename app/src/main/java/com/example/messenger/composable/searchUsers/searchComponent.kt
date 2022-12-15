@@ -1,4 +1,4 @@
-package com.example.messenger.composable.search
+package com.example.messenger.composable.searchUsers
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -6,28 +6,26 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.MessengerViewModel
+import com.example.messenger.viewmodel.data.Users
 import com.example.messenger.viewmodel.data.UsersItem
 
 @Composable
-fun Search(navController: NavController, messengerViewModel: MessengerViewModel) {
-    val usersFound by remember { messengerViewModel.searchedUser }
-    var search by remember { mutableStateOf("") }
-
+fun searchComponent(
+    navController: NavController,
+    messengerViewModel: MessengerViewModel,
+    usersFound: Users
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -42,30 +40,6 @@ fun Search(navController: NavController, messengerViewModel: MessengerViewModel)
                 .weight(1f),
             contentAlignment = Alignment.TopCenter
         ){
-            Column(verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(Color.DarkGray)
-                        .padding(1.dp)
-                        .fillMaxWidth()
-                ){
-                    Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically){
-                        TextField(
-                            value = search,
-                            onValueChange = { search = it; search(search, messengerViewModel) },
-                            label = { Text("") },
-                            shape = RoundedCornerShape(8.dp),
-                            colors = TextFieldDefaults.textFieldColors(
-                                backgroundColor = Color.White,
-                                focusedIndicatorColor = Color.Transparent, //hide the indicator
-                                unfocusedIndicatorColor = Color.White
-                            )
-                        )
-                    }
-                }
-
-
                 LazyColumn(
                     reverseLayout = false
                 ) {
@@ -110,13 +84,9 @@ fun Search(navController: NavController, messengerViewModel: MessengerViewModel)
             }
         }
     }
-}
 
-fun search(searchString: String, messengerViewModel: MessengerViewModel){
-    if (searchString.trim() != ""){
-        messengerViewModel.getUserByName(searchString)
-    }
-}
+
+
 
 fun goTo(navController: NavController, messengerViewModel: MessengerViewModel, user: UsersItem){
     messengerViewModel.currentUser.value = user

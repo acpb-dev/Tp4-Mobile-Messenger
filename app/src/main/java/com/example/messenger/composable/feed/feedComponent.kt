@@ -44,9 +44,6 @@ import com.example.messenger.viewmodel.data.feedItem
 import com.example.messenger.viewmodel.data.feedList
 import java.time.LocalDateTime
 
-
-
-
 @Composable
 fun feedComponent(feedList: feedList, user: Users, messengerViewModel: MessengerViewModel) {
     val reverse: List<feedItem> = feedList.reversed();
@@ -117,6 +114,13 @@ fun MessageCard1(feedPost: feedItem, user: Users) {
             color = Color.White,
             fontSize = 8.sp,
         )
+        feedPost.images.forEach{
+            Image(
+                painter = rememberAsyncImagePainter(it),
+                contentDescription = null,
+                modifier = Modifier.size(250.dp)
+            )
+        }
     }
 }
 
