@@ -45,7 +45,6 @@ fun feed(navController: NavController, messengerViewModel: MessengerViewModel) {
                 )
             }
         })
-
 }
 
 @Composable
@@ -56,7 +55,7 @@ fun DefaultAppBar(navController: NavController) {
                 MaterialIcon(Icons.Filled.ArrowBack, "")
             }
         },
-        backgroundColor = Color.DarkGray,
+        backgroundColor = androidx.compose.material.MaterialTheme.colors.primaryVariant,
         actions = {
             Column(Modifier.padding(5.dp)) {
                 Material3Text(text = "Feed", fontSize = 25.sp, fontWeight = FontWeight.Bold)

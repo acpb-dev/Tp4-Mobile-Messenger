@@ -1,5 +1,6 @@
 package com.example.messenger.composable.feed
 
+import android.graphics.Color.RED
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,12 +25,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.DarkGray
+import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Green
+import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.example.messenger.ui.theme.Purple40
 import com.example.messenger.viewmodel.MessengerViewModel
 import com.example.messenger.viewmodel.data.PostInfo
 import com.example.messenger.viewmodel.data.Users
@@ -130,19 +138,24 @@ fun MessageInput(messengerViewModel: MessengerViewModel) {
     var inputValue by remember { mutableStateOf("") } // 2
 
     fun sendMessage() {
-
-        val body = PostInfo(text = inputValue)
-        messengerViewModel.postFeed(body);
-        inputValue = ""
+        if (inputValue.trim() != ""){
+            val body = PostInfo(text = inputValue)
+            messengerViewModel.postFeed(body);
+            inputValue = ""
+        }
     }
+
     Row {
         TextField( // 4
             modifier = Modifier.weight(1f),
             value = inputValue,
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.DarkGray,
-                focusedIndicatorColor =  Color.Transparent,
-                unfocusedIndicatorColor = Color.DarkGray
+                textColor = White,
+                disabledTextColor = DarkGray,
+                backgroundColor = DarkGray,
+                cursorColor = DarkGray,
+                errorCursorColor = DarkGray,
+                focusedIndicatorColor = DarkGray
             ),
             onValueChange = { inputValue = it },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
@@ -151,12 +164,13 @@ fun MessageInput(messengerViewModel: MessengerViewModel) {
         Button( // 5
             modifier = Modifier
                 .height(56.dp)
-                .background(MaterialTheme.colors.primary),
+                .background(DarkGray)
+                .clip(RoundedCornerShape(100.dp)),
             onClick = { sendMessage() },
             enabled = inputValue.isNotBlank(),
         ) {
             Icon( // 6
-                imageVector = Icons.Default.Send,
+                imageVector = Icons.Outlined.Send,
                 contentDescription = ""
             )
         }
