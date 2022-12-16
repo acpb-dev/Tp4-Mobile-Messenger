@@ -1,5 +1,6 @@
 package com.example.messenger.viewmodel
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -9,14 +10,10 @@ import com.example.messenger.api.data.*
 import com.example.messenger.utils.SearchWidget
 import kotlinx.coroutines.launch
 
-class ViewModel(private val api: SocialNetworkApi): ViewModel() {
+class ViewModel(private val api: SocialNetworkApi) : ViewModel() {
     val searchedUser = mutableStateOf(Users())
-
     val currentUser = mutableStateOf(UsersItem())
-
-
     val myUser = mutableStateOf(UsersItem())
-
     val userList = mutableStateOf(Users())
     val feed = mutableStateOf(FeedList())
     val userFeed = mutableStateOf(FeedList())
@@ -24,31 +21,30 @@ class ViewModel(private val api: SocialNetworkApi): ViewModel() {
     private val usernameStored = mutableStateOf("")
     val getEmail: String
         get() = usernameStored.value
+    private var recentUsers = mutableStateOf(mutableListOf<UsersItem>())
 
-    var recentUsers = mutableStateOf(mutableListOf<UsersItem>())
-
-    fun addRecent(uid: UsersItem){
-        if (recentUsers.value.isNotEmpty()){
-            if (recentUsers.value.last().id != uid.id){
+    fun addRecent(uid: UsersItem) {
+        if (recentUsers.value.isNotEmpty()) {
+            if (recentUsers.value.last().id != uid.id) {
                 recentUsers.value.add(uid)
             }
-        }else{
+        } else {
             recentUsers.value.add(uid)
         }
     }
 
-    fun removeRecent(){
+    fun removeRecent() {
         recentUsers.value.removeLast()
         if (recentUsers.value.isNotEmpty()) {
             currentUser.value = recentUsers.value.last()
         }
     }
 
-    fun clearRecent(){
+    fun clearRecent() {
         recentUsers.value.clear()
     }
 
-    fun signIn(email: String, password: String){
+    fun signIn(email: String, password: String) {
         usernameStored.value = email
         viewModelScope.launch {
             isAuthenticated.value = api.signIn(email, password)
@@ -56,30 +52,34 @@ class ViewModel(private val api: SocialNetworkApi): ViewModel() {
         }
     }
 
-    fun getFeed(){
+    fun getFeed() {
         viewModelScope.launch {
             val response = api.getFeed()
-            if (response != null){
+            if (response != null) {
                 feed.value = response
             }
         }
     }
 
-    fun getUserPosts(userId: String){
+    fun getUserPosts(userId: String) {
         println(userId)
         viewModelScope.launch {
             val response = api.getUserPosts(userId)
-            if (response != null){
+            if (response != null) {
                 userFeed.value = response
             }
         }
     }
 
-    fun updateProfile(fName: String, lName: String, imgLink: String){
-        val updated = UpdateProfile(firstname = fName.trim(), lastname = lName.trim(), profileImageUrl = imgLink.trim())
+    fun updateProfile(fName: String, lName: String, imgLink: String) {
+        val updated = UpdateProfile(
+            firstname = fName.trim(),
+            lastname = lName.trim(),
+            profileImageUrl = imgLink.trim()
+        )
         viewModelScope.launch {
             val response = api.updateProfile(updated)
-            if (response){
+            if (response) {
                 getAllUsers(true)
             }
             println("WAS SUCCESSFUL $response")
@@ -87,26 +87,26 @@ class ViewModel(private val api: SocialNetworkApi): ViewModel() {
 
     }
 
-    fun addFriend(id: String){
+    fun addFriend(id: String) {
         viewModelScope.launch {
             val response = api.addFriend(id)
         }
     }
 
-    fun postFeed(body: PostInfo){
+    fun postFeed(body: PostInfo) {
         viewModelScope.launch {
             api.postToFeed(body)
         }
     }
 
-    fun getAllUsers(setCurrentUser: Boolean){
+    fun getAllUsers(setCurrentUser: Boolean) {
         viewModelScope.launch {
             val response = api.getUsers("")
-            if (response != null){
+            if (response != null) {
                 userList.value = response
-                userList.value.forEach{
-                    if (it.isCurrentUser){
-                        if (setCurrentUser){
+                userList.value.forEach {
+                    if (it.isCurrentUser) {
+                        if (setCurrentUser) {
                             currentUser.value = it
                         }
                         myUser.value = it
@@ -116,20 +116,20 @@ class ViewModel(private val api: SocialNetworkApi): ViewModel() {
         }
     }
 
-    fun getUserByName(search: String) {
+    private fun getUserByName(search: String) {
         viewModelScope.launch {
             val response = api.getUsers(search)
-            if (response != null){
+            if (response != null) {
                 searchedUser.value = response
             }
         }
     }
 
     fun getFriendsList(friendList: List<String>): MutableList<String> {
-        var list = mutableListOf<String>()
-        userList.value.forEach{ user ->
+        val list = mutableListOf<String>()
+        userList.value.forEach { user ->
             friendList.forEach { friend ->
-                if (user.id == friend){
+                if (user.id == friend) {
                     list.add(friend)
                 }
             }
@@ -138,8 +138,8 @@ class ViewModel(private val api: SocialNetworkApi): ViewModel() {
     }
 
     fun getUserById(uid: String): UsersItem {
-        userList.value.forEach{ user ->
-            if (user.id == uid){
+        userList.value.forEach { user ->
+            if (user.id == uid) {
                 return user
             }
         }
@@ -153,15 +153,15 @@ class ViewModel(private val api: SocialNetworkApi): ViewModel() {
     val searchTextState: State<String>
         get() = searchWidget.searchTextState
 
-    fun updateSearchWidgetState(newValue: SearchWidget.SearchWidgetState){
+    fun updateSearchWidgetState(newValue: SearchWidget.SearchWidgetState) {
         searchWidget.updateSearchWidgetState(newValue)
     }
 
-    fun updateSearchTextState(newValue: String){
+    fun updateSearchTextState(newValue: String) {
         val trimmedValue = newValue.trim()
-        if (trimmedValue != ""){
+        if (trimmedValue != "") {
             getUserByName(trimmedValue)
-        }else{
+        } else {
             searchedUser.value = Users()
         }
         searchWidget.updateSearchTextState(newValue)

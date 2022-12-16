@@ -22,17 +22,20 @@ fun userFeed(navController: NavController, viewModel: ViewModel) {
 
     val userFeed by remember { viewModel.userFeed }
     val users by remember { viewModel.userList }
-    Column(Modifier.fillMaxSize().background(Color.Black)) {
-    Scaffold(topBar = {
-        DefaultAppBar("Feed", Icons.Filled.ArrowBack) { navController.popBackStack() }
-    },
-        content = { padding ->
-            feedComponent(
-                feedList = userFeed,
-                user = users,
-                viewModel = viewModel,
-                canType = false
-            )
-        })
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(Color.Black)) {
+        Scaffold(topBar = {
+            DefaultAppBar("Feed", Icons.Filled.ArrowBack) { navController.popBackStack() }
+        },
+            content = { padding ->
+                feedComponent(
+                    feedList = userFeed,
+                    user = users,
+                    viewModel = viewModel,
+                    canType = false
+                )
+            })
     }
 }

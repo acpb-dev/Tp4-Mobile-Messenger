@@ -9,7 +9,10 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.Button
@@ -29,11 +32,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import com.example.messenger.viewmodel.ViewModel
-import com.example.messenger.api.data.PostInfo
-import com.example.messenger.api.data.Users
 import com.example.messenger.api.data.FeedItem
 import com.example.messenger.api.data.FeedList
+import com.example.messenger.api.data.PostInfo
+import com.example.messenger.api.data.Users
+import com.example.messenger.viewmodel.ViewModel
 import java.time.LocalDateTime
 
 @Composable
@@ -44,21 +47,26 @@ fun feedComponent(feedList: FeedList, user: Users, viewModel: ViewModel, canType
             .background(Black),
         contentAlignment = Alignment.Center
     ) {
-        if (feedList.isEmpty()){
+        if (feedList.isEmpty()) {
             Column(
                 Modifier
                     .background(Black)
-                    .fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(text = "No Posts to display", color = White, textAlign = TextAlign.Center)
             }
         }
         LazyColumn(
-            Modifier.background(Black).fillMaxSize(),
+            Modifier
+                .background(Black)
+                .fillMaxSize(),
             reverseLayout = true
         ) {
 
             itemsIndexed(feedList) { index, message ->
-                if(index == 0 && canType){
+                if (index == 0 && canType) {
                     MessageInput(viewModel)
                 }
                 MessageCard1(message, user)
@@ -67,9 +75,9 @@ fun feedComponent(feedList: FeedList, user: Users, viewModel: ViewModel, canType
     }
 }
 
-fun getName(uid: String, users: Users): String{
-    users.forEach{
-        if (uid == it.id){
+fun getName(uid: String, users: Users): String {
+    users.forEach {
+        if (uid == it.id) {
             return it.firstname + " " + it.lastname
         }
     }
@@ -93,7 +101,7 @@ fun MessageCard1(feedPost: FeedItem, user: Users) {
             shape = cardShapeFor1(feedPost), // 3
             backgroundColor = when {
                 feedPost.isFromCurrentUser -> MaterialTheme.colors.primary
-                else -> Color.DarkGray
+                else -> DarkGray
             },
         ) {
             Text(
@@ -101,36 +109,41 @@ fun MessageCard1(feedPost: FeedItem, user: Users) {
                 text = feedPost.text,
                 color = when {
                     feedPost.isFromCurrentUser -> MaterialTheme.colors.onPrimary
-                    else -> Color.White
+                    else -> White
                 },
             )
         }
-        feedPost.images.forEach{
+        feedPost.images.forEach {
             Image(
                 painter = rememberAsyncImagePainter(it),
                 contentDescription = null,
                 modifier = Modifier.size(250.dp)
             )
         }
-        Text( // 4
+        Text(
+            // 4
             text = when {
                 feedPost.isFromCurrentUser -> "Me"
                 else -> getName(feedPost.user, user)
             },
-            color = Color.White,
+            color = White,
             fontSize = 12.sp,
         )
-        Text( // 4
+        Text(
+            // 4
             text = formatTime(localDateTime),
-            color = Color.White,
+            color = White,
             fontSize = 8.sp,
         )
 
     }
 }
 
-fun formatTime(time: LocalDateTime): String{
-    return time.hour.toString() + ":" + time.minute.toString().padStart(2, '0') + " " + time.dayOfMonth.toString() + " " + time.month.toString() + " " + time.year
+fun formatTime(time: LocalDateTime): String {
+    return time.hour.toString() + ":" + time.minute.toString().padStart(
+        2,
+        '0'
+    ) + " " + time.dayOfMonth.toString() + " " + time.month.toString() + " " + time.year
 }
 
 @Composable
@@ -148,7 +161,7 @@ fun MessageInput(viewModel: ViewModel) {
 
     fun sendMessage() {
         inputValue = inputValue.trim()
-        if (inputValue != ""){
+        if (inputValue != "") {
             val body = splitImages(inputValue)
             viewModel.postFeed(body)
             inputValue = ""
@@ -156,7 +169,8 @@ fun MessageInput(viewModel: ViewModel) {
     }
 
     Row {
-        TextField( // 4
+        TextField(
+            // 4
             modifier = Modifier.weight(1f),
             value = inputValue,
             colors = TextFieldDefaults.textFieldColors(
@@ -171,7 +185,8 @@ fun MessageInput(viewModel: ViewModel) {
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
             keyboardActions = KeyboardActions { sendMessage() },
         )
-        Button( // 5
+        Button(
+            // 5
             modifier = Modifier
                 .height(56.dp)
                 .background(DarkGray)
@@ -187,9 +202,9 @@ fun MessageInput(viewModel: ViewModel) {
     }
 }
 
-fun splitImages(input: String): PostInfo{
+fun splitImages(input: String): PostInfo {
     val split = input.split('[')
-    if (split.size > 1){
+    if (split.size > 1) {
         val images = split[1].trimEnd(']').split(',')
         return PostInfo(text = split[0], images = images)
     }

@@ -25,12 +25,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.messenger.viewmodel.ViewModel
-import com.example.messenger.utils.SearchWidget
 import com.example.messenger.api.data.Users
+import com.example.messenger.utils.SearchWidget
+import com.example.messenger.viewmodel.ViewModel
 
 @Composable
-fun searchTopBar(viewModel: ViewModel, navController: NavController){
+fun searchTopBar(viewModel: ViewModel, navController: NavController) {
     val searchWidgetState by viewModel.searchWidgetState
     val searchTextState by viewModel.searchTextState
     MainAppBar(
@@ -54,12 +54,11 @@ fun searchTopBar(viewModel: ViewModel, navController: NavController){
 }
 
 @Composable
-fun searchResults(navController: NavController, viewModel: ViewModel, usersFound: Users){
+fun searchResults(navController: NavController, viewModel: ViewModel, usersFound: Users) {
     Row(Modifier.background(Color.Black)) {
         searchComponent(navController = navController, viewModel = viewModel, usersFound)
     }
 }
-
 
 
 @Composable
@@ -94,7 +93,11 @@ fun MainAppBar(
 fun AppBar(onSearchClicked: () -> Unit, navController: NavController) {
     TopAppBar(
         title = {
-            Column(modifier = Modifier.clickable(onClick = { navController.popBackStack() }).padding(end = 20.dp)) {
+            Column(
+                modifier = Modifier
+                    .clickable(onClick = { navController.popBackStack() })
+                    .padding(end = 20.dp)
+            ) {
                 androidx.compose.material.Icon(Icons.Filled.ArrowBack, "", tint = Color.White)
             }
 
@@ -102,7 +105,12 @@ fun AppBar(onSearchClicked: () -> Unit, navController: NavController) {
         },
         backgroundColor = Color.DarkGray,
         actions = {
-            Text(text = "Search", fontSize = 25.sp, color = Color.White, fontWeight = FontWeight.Bold)
+            Text(
+                text = "Search",
+                fontSize = 25.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
             IconButton(
                 onClick = { onSearchClicked() }
             ) {

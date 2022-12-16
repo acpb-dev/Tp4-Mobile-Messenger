@@ -25,7 +25,9 @@ import com.example.messenger.viewmodel.ViewModel
 @Composable
 fun menuComponent(navController: NavController, viewModel: ViewModel) {
     Column(
-        modifier = Modifier.fillMaxSize().background(Color.Black),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
@@ -33,51 +35,81 @@ fun menuComponent(navController: NavController, viewModel: ViewModel) {
             Image(
                 painter = rememberAsyncImagePainter("https://icons.iconarchive.com/icons/igh0zt/ios7-style-metro-ui/512/MetroUI-Apps-Messaging-Alt-icon.png"),
                 contentDescription = null,
-                modifier = Modifier.size(250.dp).clip(CircleShape)
+                modifier = Modifier
+                    .size(250.dp)
+                    .clip(CircleShape)
             )
         }
-        Row(Modifier.padding(top = 50.dp).clickable(onClick = { goTo(navController, viewModel, viewModel.currentUser.value)})){
+        Row(
+            Modifier
+                .padding(top = 50.dp)
+                .clickable(onClick = {
+                    goTo(
+                        navController,
+                        viewModel,
+                        viewModel.currentUser.value
+                    )
+                })
+        ) {
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
                     .background(Color.DarkGray)
                     .padding(10.dp)
 
-            ){
+            ) {
                 Row(Modifier.align(Alignment.Center)) {
                     Column(Modifier.padding(5.dp)) {
-                        Text(text = "My Profile", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.White, textAlign = TextAlign.Right)
+                        Text(
+                            text = "My Profile",
+                            fontSize = 30.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            textAlign = TextAlign.Right
+                        )
                     }
 
                 }
             }
         }
-        Row(Modifier.clickable(onClick = {navController.navigate(Routes.Feed.route)})){
+        Row(Modifier.clickable(onClick = { navController.navigate(Routes.Feed.route) })) {
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
                     .background(Color.DarkGray)
                     .padding(10.dp)
 
-            ){
+            ) {
                 Row(Modifier.align(Alignment.Center)) {
                     Column(Modifier.padding(5.dp)) {
-                        Text(text = "My Feed", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.White, textAlign = TextAlign.Right)
+                        Text(
+                            text = "My Feed",
+                            fontSize = 30.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            textAlign = TextAlign.Right
+                        )
                     }
 
                 }
             }
         }
-        Row(Modifier.clickable(onClick = {navController.navigate(Routes.FriendList.route)})){
+        Row(Modifier.clickable(onClick = { navController.navigate(Routes.FriendList.route) })) {
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
                     .background(Color.DarkGray)
                     .padding(10.dp)
-            ){
+            ) {
                 Row(Modifier.align(Alignment.Center)) {
                     Column(Modifier.padding(5.dp)) {
-                        Text(text = "My Friends", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.White, textAlign = TextAlign.Right)
+                        Text(
+                            text = "My Friends",
+                            fontSize = 30.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            textAlign = TextAlign.Right
+                        )
                     }
 
                 }
@@ -86,7 +118,7 @@ fun menuComponent(navController: NavController, viewModel: ViewModel) {
     }
 }
 
-fun goTo(navController: NavController, viewModel: ViewModel, user: UsersItem){
+fun goTo(navController: NavController, viewModel: ViewModel, user: UsersItem) {
     viewModel.currentUser.value = user
     navController.navigate(Routes.MyProfile.route)
 }

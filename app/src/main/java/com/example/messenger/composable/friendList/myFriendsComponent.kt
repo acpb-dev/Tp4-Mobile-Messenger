@@ -20,15 +20,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.messenger.api.data.UsersItem
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.ViewModel
-import com.example.messenger.api.data.UsersItem
 
 @Composable
 fun myFriendsComponent(
     navController: NavController,
     viewModel: ViewModel,
-    friends: MutableList<String> ) {
+    friends: MutableList<String>
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -43,8 +44,11 @@ fun myFriendsComponent(
                 .weight(1f)
                 .padding(8.dp),
             contentAlignment = Alignment.TopCenter
-        ){
-            Column(verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally) {
+        ) {
+            Column(
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
@@ -52,13 +56,19 @@ fun myFriendsComponent(
                         .padding(1.dp)
                         .fillMaxWidth()
                         .clickable(onClick = { navController.navigate(Routes.SearchFriend.route) })
-                ){
+                ) {
                     Row(
                         Modifier
                             .align(Alignment.Center)
-                            .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
+                            .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround
+                    ) {
                         Column(Modifier.padding(5.dp)) {
-                            Text(text = "Add Friend", fontSize = 18.sp, color = Color.White, textAlign = TextAlign.End)
+                            Text(
+                                text = "Add Friend",
+                                fontSize = 18.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.End
+                            )
                         }
                     }
                 }
@@ -68,20 +78,24 @@ fun myFriendsComponent(
                 ) {
                     itemsIndexed(friends) { index, user ->
                         val user = viewModel.getUserById(user)
-                        var image = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png"
-                        if(user.profileImgUrl != ""){
+                        var image =
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png"
+                        if (user.profileImgUrl != "") {
                             image = user.profileImgUrl
                         }
                         Row(
                             Modifier
                                 .padding(20.dp)
-                                .clickable(onClick = { goTo(
-                                    navController,
-                                    viewModel,
-                                    user
-                                ) }),
+                                .clickable(onClick = {
+                                    goTo(
+                                        navController,
+                                        viewModel,
+                                        user
+                                    )
+                                }),
                             horizontalArrangement = Arrangement.Start,
-                            verticalAlignment = Alignment.CenterVertically) {
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Column(Modifier.padding(end = 5.dp)) {
                                 Image(
                                     painter = rememberAsyncImagePainter(image),
@@ -93,11 +107,14 @@ fun myFriendsComponent(
                                 )
                             }
                             Column {
-                                Text(text = user.firstname + " " + user.lastname, color = Color.White)
+                                Text(
+                                    text = user.firstname + " " + user.lastname,
+                                    color = Color.White
+                                )
                             }
                         }
 
-                        if (index < friends.lastIndex){
+                        if (index < friends.lastIndex) {
                             Divider(color = Color.White, thickness = 1.dp, startIndent = 20.dp)
                         }
                     }
@@ -107,7 +124,7 @@ fun myFriendsComponent(
     }
 }
 
-fun goTo(navController: NavController, viewModel: ViewModel, user: UsersItem){
+fun goTo(navController: NavController, viewModel: ViewModel, user: UsersItem) {
     viewModel.currentUser.value = user
     navController.navigate(Routes.MyProfile.route)
 }

@@ -1,6 +1,8 @@
 package com.example.messenger.composable.profile
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -26,7 +28,10 @@ fun updateProfileComponent(navController: NavController, viewModel: ViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Text(text = "Update Image Link:", color = White, textAlign = TextAlign.Center)
             TextField(
                 shape = RoundedCornerShape(8.dp),
@@ -45,7 +50,10 @@ fun updateProfileComponent(navController: NavController, viewModel: ViewModel) {
         }
 
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Text(text = "Update First Name:", color = White, textAlign = TextAlign.Center)
             TextField( // 4,
                 shape = RoundedCornerShape(8.dp),
@@ -63,7 +71,10 @@ fun updateProfileComponent(navController: NavController, viewModel: ViewModel) {
             )
         }
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Text(text = "Update Last Name:", color = White, textAlign = TextAlign.Center)
             TextField( // 4
                 shape = RoundedCornerShape(8.dp),

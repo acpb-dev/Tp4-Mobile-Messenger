@@ -17,10 +17,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.messenger.utils.const.Routes
-import com.example.messenger.viewmodel.ViewModel
 import com.example.messenger.api.data.Users
 import com.example.messenger.api.data.UsersItem
+import com.example.messenger.utils.const.Routes
+import com.example.messenger.viewmodel.ViewModel
 
 @Composable
 fun searchComponent(
@@ -41,55 +41,60 @@ fun searchComponent(
                 .background(Color.Black)
                 .weight(1f),
             contentAlignment = Alignment.TopCenter
-        ){
-                LazyColumn(
-                    reverseLayout = false
-                ) {
-                    itemsIndexed(usersFound) { index, user ->
-                        var image = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png"
-                        if (!user.isCurrentUser){
-                            if(user.profileImgUrl != ""){
-                                image = user.profileImgUrl
-                            }
-                            Row(
-                                Modifier
-                                    .padding(20.dp)
-                                    .clickable(onClick = {
-                                        goTo(
-                                            navController,
-                                            viewModel,
-                                            user
-                                        )
-                                    }),
-                                horizontalArrangement = Arrangement.Start,
-                                verticalAlignment = Alignment.CenterVertically) {
-                                Column(Modifier.padding(end = 5.dp)) {
-                                    Image(
-                                        painter = rememberAsyncImagePainter(image),
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .size(30.dp)
-                                            .padding(end = 5.dp)
-                                            .clip(CircleShape)
+        ) {
+            LazyColumn(
+                reverseLayout = false
+            ) {
+                itemsIndexed(usersFound) { index, user ->
+                    var image =
+                        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png"
+                    if (!user.isCurrentUser) {
+                        if (user.profileImgUrl != "") {
+                            image = user.profileImgUrl
+                        }
+                        Row(
+                            Modifier
+                                .padding(20.dp)
+                                .clickable(onClick = {
+                                    goTo(
+                                        navController,
+                                        viewModel,
+                                        user
                                     )
-                                }
-                                Column {
-                                    Text(text = user.firstname + " " + user.lastname, color = Color.White)
-                                }
+                                }),
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(Modifier.padding(end = 5.dp)) {
+                                Image(
+                                    painter = rememberAsyncImagePainter(image),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(30.dp)
+                                        .padding(end = 5.dp)
+                                        .clip(CircleShape)
+                                )
                             }
+                            Column {
+                                Text(
+                                    text = user.firstname + " " + user.lastname,
+                                    color = Color.White
+                                )
+                            }
+                        }
 
-                            if (index < usersFound.lastIndex){
-                                Divider(color = Color.White, thickness = 1.dp, startIndent = 20.dp)
-                            }
+                        if (index < usersFound.lastIndex) {
+                            Divider(color = Color.White, thickness = 1.dp, startIndent = 20.dp)
                         }
                     }
                 }
             }
         }
+    }
 }
 
 
-fun goTo(navController: NavController, viewModel: ViewModel, user: UsersItem){
+fun goTo(navController: NavController, viewModel: ViewModel, user: UsersItem) {
     println("${user.firstname} \n\n\n\n\n\n")
     viewModel.currentUser.value = user
     navController.navigate(Routes.MyProfile.route)

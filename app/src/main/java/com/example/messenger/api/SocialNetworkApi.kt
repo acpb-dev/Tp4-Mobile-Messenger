@@ -1,9 +1,9 @@
 package com.example.messenger.api
 
-import com.example.messenger.api.data.PostInfo
-import com.example.messenger.api.data.Users
 import com.example.messenger.api.data.FeedList
+import com.example.messenger.api.data.PostInfo
 import com.example.messenger.api.data.UpdateProfile
+import com.example.messenger.api.data.Users
 
 interface SocialNetworkApi {
     suspend fun signIn(email: String, password: String): Boolean// Resource<Unit>

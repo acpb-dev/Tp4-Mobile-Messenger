@@ -14,8 +14,8 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Feed(navController: NavController, viewModel: ViewModel) {
-    LaunchedEffect(true){
-        while (true){
+    LaunchedEffect(true) {
+        while (true) {
             viewModel.getFeed()
             delay(5000)
         }

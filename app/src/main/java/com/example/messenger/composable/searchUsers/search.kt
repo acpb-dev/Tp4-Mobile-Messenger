@@ -16,6 +16,10 @@ fun search(navController: NavController, viewModel: ViewModel) {
         searchTopBar(viewModel = viewModel, navController)
     },
         content = { content ->
-            searchResults(navController = navController, viewModel = viewModel, usersFound = usersFound)
+            searchResults(
+                navController = navController,
+                viewModel = viewModel,
+                usersFound = usersFound
+            )
         })
 }

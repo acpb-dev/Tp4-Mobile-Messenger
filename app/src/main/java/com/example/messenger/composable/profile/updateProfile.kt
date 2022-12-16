@@ -17,7 +17,7 @@ import com.example.messenger.viewmodel.ViewModel
 @Composable
 fun updateProfile(navController: NavController, viewModel: ViewModel) {
     Scaffold(topBar = {
-        DefaultAppBar("Update Profile", Icons.Filled.ArrowBack)  { navController.popBackStack() }
+        DefaultAppBar("Update Profile", Icons.Filled.ArrowBack) { navController.popBackStack() }
     },
         content = { padding ->
             Row(Modifier.background(Color.Black)) {

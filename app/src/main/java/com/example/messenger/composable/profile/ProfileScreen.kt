@@ -25,13 +25,13 @@ fun profileScreen(navController: NavController, viewModel: ViewModel) {
     viewModel.getUserPosts(currentUser.id)
     viewModel.addRecent(currentUser)
 
-    fun back(){
+    fun back() {
         viewModel.removeRecent()
         navController.popBackStack()
     }
 
     Scaffold(topBar = {
-        DefaultAppBar("Profile", Icons.Filled.ArrowBack)  { back() }
+        DefaultAppBar("Profile", Icons.Filled.ArrowBack) { back() }
     },
         content = { padding ->
             Row(Modifier.background(Color.Black)) {

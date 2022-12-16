@@ -2,15 +2,15 @@ package com.example.messenger.api
 
 import android.content.SharedPreferences
 import com.example.messenger.api.auth.BasicAuthInterceptor
-import com.example.messenger.api.data.PostInfo
-import com.example.messenger.api.data.Users
 import com.example.messenger.api.data.FeedList
+import com.example.messenger.api.data.PostInfo
 import com.example.messenger.api.data.UpdateProfile
+import com.example.messenger.api.data.Users
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): SocialNetworkApi {
+class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences) : SocialNetworkApi {
 
     private val client: RetrofitSocialNetworkApi = Retrofit.Builder()
         .baseUrl("https://wiveb.webredirect.org:8888")
@@ -25,10 +25,10 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
         saveAuthInformation(email, password)
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.signIn()
-        return if(response.isSuccessful){
+        return if (response.isSuccessful) {
             println("Success")
             return true
-        }else {
+        } else {
             return false
         }
     }
@@ -52,10 +52,10 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
     override suspend fun postToFeed(body: PostInfo): Boolean {
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.postToFeed(body)
-        return if(response.isSuccessful){
+        return if (response.isSuccessful) {
             println("Success")
             return true
-        }else {
+        } else {
             return false
         }
     }
@@ -63,10 +63,10 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
     override suspend fun addFriend(friendId: String): Boolean {
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.addFriend(friendId)
-        return if(response.isSuccessful){
+        return if (response.isSuccessful) {
             println("Success")
             return true
-        }else {
+        } else {
             return false
         }
     }
@@ -74,9 +74,9 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
     override suspend fun getFeed(): FeedList? {
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.getFeed()
-        return if(response.isSuccessful){
+        return if (response.isSuccessful) {
             return response.body()
-        }else {
+        } else {
             return null
         }
     }
@@ -84,24 +84,24 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
     override suspend fun getUserPosts(userId: String): FeedList? {
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.getUserPosts(userId)
-        return if(response.isSuccessful){
+        return if (response.isSuccessful) {
             return response.body()
-        }else {
+        } else {
             return null
         }
     }
 
-    override suspend fun getUsers(search: String): Users?{
+    override suspend fun getUsers(search: String): Users? {
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.getUsers(search)
-        return if(response.isSuccessful){
+        return if (response.isSuccessful) {
             return response.body()
-        }else {
+        } else {
             return null
         }
     }
 
-    private fun saveAuthInformation(email: String, password: String){
+    private fun saveAuthInformation(email: String, password: String) {
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
         editor.putString("email", email)
         editor.putString("password", password)
@@ -114,9 +114,9 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
         val okHttpClient = UnsafeOkHttpClient.getUnsafeOkHttpClient()
             .addInterceptor(
                 BasicAuthInterceptor(
-                sharedPreferences.getString("email","")?: "",
-                sharedPreferences.getString("password","")?: ""
-            )
+                    sharedPreferences.getString("email", "") ?: "",
+                    sharedPreferences.getString("password", "") ?: ""
+                )
             )
             .build()
         return Retrofit.Builder()
