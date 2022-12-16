@@ -50,11 +50,24 @@ class ViewModel(private val api: SocialNetworkApi) : ViewModel() {
     }
 
     fun signIn(email: String, password: String) {
-        usernameStored.value = email
+        println("$email $password \n\n\n\n\n")
         viewModelScope.launch {
             isAuthenticated.value = api.signIn(email, password)
-            usernameStored.value = api.getStoredEmail()
+            //usernameStored.value = api.getStoredEmail()
         }
+    }
+
+    fun signInAuto(){
+        val email = api.getStoredEmail()
+        val password = api.getStoredPassword()
+        if (password.isNotEmpty() && email.isNotEmpty()){
+            viewModelScope.launch {
+                val response = api.signIn(email, password)
+                isAuthenticated.value = response
+                println("$response\n\n\n\n\n")
+            }
+        }
+
     }
 
     fun clearSavedCredentials(){

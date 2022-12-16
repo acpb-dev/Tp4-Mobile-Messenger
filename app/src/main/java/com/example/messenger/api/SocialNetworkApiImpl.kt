@@ -36,6 +36,10 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences) : S
         return sharedPreferences.getString("email", "") ?: ""
     }
 
+    override fun getStoredPassword(): String {
+        return sharedPreferences.getString("password", "") ?: ""
+    }
+
     override fun clearStoredCredentials(){
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
         editor.clear()
