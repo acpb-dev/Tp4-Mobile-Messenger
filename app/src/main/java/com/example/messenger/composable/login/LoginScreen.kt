@@ -110,11 +110,21 @@ fun LoginScreen(
                 onClick = {
                     messengerViewModel.signIn(email, password)
                 },
-                colors = ButtonDefaults.buttonColors(backgroundColor = DarkGray)
+                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primaryVariant)
             )
 
             {
                 Text(text = "Login", color = White)
+            }
+            Button(
+                onClick = {
+
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = DarkGray)
+            )
+
+            {
+                Text(text = "Register", color = White)
             }
         }
     }

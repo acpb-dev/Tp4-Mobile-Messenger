@@ -86,7 +86,7 @@ fun updateProfileComponent(navController: NavController, messengerViewModel: Mes
 
         Button(
             onClick = {
-                messengerViewModel.updateProfile(firstName, lastName, imgLink); navController.navigate(Routes.MyProfile.route)
+                messengerViewModel.updateProfile(firstName, lastName, imgLink); navController.popBackStack()
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primaryVariant)
         )

@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 
 class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
     val searchedUser = mutableStateOf(Users())
+
     val currentUser = mutableStateOf(UsersItem())
 
 
@@ -78,8 +79,12 @@ class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
         val updated = UpdateProfile(firstname = fName.trim(), lastname = lName.trim(), profileImageUrl = imgLink.trim())
         viewModelScope.launch {
             val response = api.updateProfile(updated)
+            if (response){
+                getAllUsers(true);
+            }
             println("WAS SUCCESSFUL $response")
         }
+
     }
 
     fun addFriend(id: String){

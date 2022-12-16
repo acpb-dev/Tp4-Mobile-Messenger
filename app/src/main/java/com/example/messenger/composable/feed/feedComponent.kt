@@ -53,6 +53,7 @@ fun feedComponent(feedList: FeedList, user: Users, messengerViewModel: Messenger
             }
         }
         LazyColumn(
+            Modifier.background(Black).fillMaxSize(),
             reverseLayout = true
         ) {
 
