@@ -5,23 +5,47 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.messenger.api.SocialNetworkApi
-import com.example.messenger.api.data.PostInfo
-import com.example.messenger.api.data.Users
-import com.example.messenger.api.data.UsersItem
-import com.example.messenger.api.data.feedList
+import com.example.messenger.api.data.*
 import com.example.messenger.utils.SearchWidget
 import kotlinx.coroutines.launch
 
 class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
     val searchedUser = mutableStateOf(Users())
     val currentUser = mutableStateOf(UsersItem())
+
+
+    val myUser = mutableStateOf(UsersItem())
+
     val userList = mutableStateOf(Users())
-    val myFriends = mutableStateOf(mutableListOf<String>())
-    val feed = mutableStateOf(feedList())
+    val feed = mutableStateOf(FeedList())
+    val userFeed = mutableStateOf(FeedList())
     val isAuthenticated = mutableStateOf(false)
     private val usernameStored = mutableStateOf("")
     val getEmail: String
         get() = usernameStored.value
+
+    var recentUsers = mutableStateOf(mutableListOf<UsersItem>())
+
+    fun addRecent(uid: UsersItem){
+        if (recentUsers.value.isNotEmpty()){
+            if (recentUsers.value.last().id != uid.id){
+                recentUsers.value.add(uid)
+            }
+        }else{
+            recentUsers.value.add(uid)
+        }
+    }
+
+    fun removeRecent(){
+        recentUsers.value.removeLast()
+        if (recentUsers.value.isNotEmpty()) {
+            currentUser.value = recentUsers.value.last()
+        }
+    }
+
+    fun clearRecent(){
+        recentUsers.value.clear()
+    }
 
     fun signIn(email: String, password: String){
         usernameStored.value = email
@@ -29,23 +53,38 @@ class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
             isAuthenticated.value = api.signIn(email, password)
 
         }
-        println(isAuthenticated)
     }
 
-    fun feed(){
+    fun getFeed(){
         viewModelScope.launch {
-            val response = api.feed()
-            println("Get Feed : " + response.toString())
+            val response = api.getFeed()
             if (response != null){
                 feed.value = response
             }
         }
     }
 
+    fun getUserPosts(userId: String){
+        println(userId)
+        viewModelScope.launch {
+            val response = api.getUserPosts(userId)
+            if (response != null){
+                userFeed.value = response
+            }
+        }
+    }
+
+    fun updateProfile(fName: String, lName: String, imgLink: String){
+        val updated = UpdateProfile(firstname = fName.trim(), lastname = lName.trim(), profileImageUrl = imgLink.trim())
+        viewModelScope.launch {
+            val response = api.updateProfile(updated)
+            println("WAS SUCCESSFUL $response")
+        }
+    }
+
     fun addFriend(id: String){
         viewModelScope.launch {
             val response = api.addFriend(id)
-            println("Added Friend : $id $response")
         }
     }
 
@@ -55,14 +94,17 @@ class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
         }
     }
 
-    fun getAllUsers(){
+    fun getAllUsers(setCurrentUser: Boolean){
         viewModelScope.launch {
             val response = api.getUsers("")
             if (response != null){
                 userList.value = response
                 userList.value.forEach{
                     if (it.isCurrentUser){
-                        currentUser.value = it
+                        if (setCurrentUser){
+                            currentUser.value = it
+                        }
+                        myUser.value = it
                     }
                 }
             }
@@ -78,16 +120,16 @@ class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
         }
     }
 
-    fun getFriendsList(){
+    fun getFriendsList(friendList: List<String>): MutableList<String> {
         var list = mutableListOf<String>()
         userList.value.forEach{ user ->
-            currentUser.value.friends.forEach { friend ->
+            friendList.forEach { friend ->
                 if (user.id == friend){
                     list.add(friend)
                 }
             }
         }
-        myFriends.value = list;
+        return list;
     }
 
     fun getUserById(uid: String): UsersItem {

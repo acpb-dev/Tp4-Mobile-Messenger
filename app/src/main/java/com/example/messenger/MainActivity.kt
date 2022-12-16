@@ -15,9 +15,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.messenger.composable.menu.Menu
 import com.example.messenger.api.SocialNetworkApiImpl
 import com.example.messenger.composable.feed.feed
+import com.example.messenger.composable.feed.userFeed
 import com.example.messenger.composable.friendList.myFriends
 import com.example.messenger.composable.login.LoginScreen
 import com.example.messenger.composable.profile.profileScreen
+import com.example.messenger.composable.profile.updateProfile
+import com.example.messenger.composable.profile.updateProfileComponent
 import com.example.messenger.composable.searchUsers.search
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.MessengerViewModel
@@ -47,8 +50,7 @@ fun MainScreen(messengerViewModel: MessengerViewModel) {
         }
 
         composable(route = Routes.Menu.route){
-            messengerViewModel.getAllUsers();
-            messengerViewModel.getFriendsList()
+            messengerViewModel.getAllUsers(true)
             Menu(navController, messengerViewModel)
         }
 
@@ -56,7 +58,12 @@ fun MainScreen(messengerViewModel: MessengerViewModel) {
             feed(navController, messengerViewModel)
         }
 
-        composable(route = Routes.FriendList.route ) {
+        composable(route = Routes.UserFeed.route){
+            userFeed(navController = navController, messengerViewModel = messengerViewModel)
+        }
+
+        composable(route = Routes.FriendList.route) {
+            messengerViewModel.clearRecent()
             myFriends(navController = navController, messengerViewModel = messengerViewModel)
         }
 
@@ -64,8 +71,12 @@ fun MainScreen(messengerViewModel: MessengerViewModel) {
             profileScreen(navController = navController, messengerViewModel = messengerViewModel)
         }
 
-        composable(route = Routes.SearchFriend.route ){
+        composable(route = Routes.SearchFriend.route){
             search(navController = navController, messengerViewModel = messengerViewModel)
+        }
+
+        composable(route = Routes.UpdateProfile.route){
+            updateProfile(navController = navController, messengerViewModel = messengerViewModel)
         }
 
     }

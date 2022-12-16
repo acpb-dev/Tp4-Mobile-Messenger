@@ -16,14 +16,14 @@ import androidx.navigation.NavController
 
 
 @Composable
-fun DefaultAppBar(navController: NavController, tabName: String) {
+fun DefaultAppBar(tabName: String, onClick: ()-> Unit) {
     TopAppBar(
         title = {
-            Column(modifier = Modifier.clickable(onClick = { navController.popBackStack() })) {
+            Column(modifier = Modifier.clickable(onClick = { onClick() })) {
                 Icon(Icons.Filled.ArrowBack, "", tint = Color.White)
             }
         },
-        backgroundColor = androidx.compose.material.MaterialTheme.colors.primaryVariant,
+        backgroundColor = MaterialTheme.colors.primaryVariant,
         actions = {
             Column(Modifier.padding(5.dp)) {
                 Text(text = tabName, fontSize = 25.sp, color = Color.White, fontWeight = FontWeight.Bold)

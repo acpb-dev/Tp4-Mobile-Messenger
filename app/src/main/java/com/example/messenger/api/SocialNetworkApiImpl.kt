@@ -4,7 +4,8 @@ import android.content.SharedPreferences
 import com.example.messenger.api.auth.BasicAuthInterceptor
 import com.example.messenger.api.data.PostInfo
 import com.example.messenger.api.data.Users
-import com.example.messenger.api.data.feedList
+import com.example.messenger.api.data.FeedList
+import com.example.messenger.api.data.UpdateProfile
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -42,6 +43,12 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
         TODO("Not yet implemented")
     }
 
+    override suspend fun updateProfile(updated: UpdateProfile): Boolean {
+        authenticatedClient = createAuthClient()
+        val response = authenticatedClient.updateProfile(updated)
+        return response.isSuccessful
+    }
+
     override suspend fun postToFeed(body: PostInfo): Boolean {
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.postToFeed(body)
@@ -64,9 +71,19 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
         }
     }
 
-    override suspend fun feed(): feedList? {
+    override suspend fun getFeed(): FeedList? {
         authenticatedClient = createAuthClient()
-        val response = authenticatedClient.feed()
+        val response = authenticatedClient.getFeed()
+        return if(response.isSuccessful){
+            return response.body();
+        }else {
+            return null
+        }
+    }
+
+    override suspend fun getUserPosts(userId: String): FeedList? {
+        authenticatedClient = createAuthClient()
+        val response = authenticatedClient.getUserPosts(userId)
         return if(response.isSuccessful){
             return response.body();
         }else {

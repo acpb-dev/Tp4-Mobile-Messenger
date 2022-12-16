@@ -87,6 +87,7 @@ fun searchComponent(
 
 
 fun goTo(navController: NavController, messengerViewModel: MessengerViewModel, user: UsersItem){
+    println("${user.firstname} \n\n\n\n\n\n")
     messengerViewModel.currentUser.value = user
     navController.navigate(Routes.MyProfile.route)
 }

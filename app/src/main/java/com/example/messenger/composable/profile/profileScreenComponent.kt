@@ -6,11 +6,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Divider
+import androidx.compose.material.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,23 +25,30 @@ import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.MessengerViewModel
 import com.example.messenger.api.data.Users
 import com.example.messenger.api.data.UsersItem
+import androidx.compose.runtime.*
 
 @Composable
 fun profileScreenComponent(
     navController: NavController,
     messengerViewModel: MessengerViewModel,
-    currentUser: UsersItem?, ) {
+    currentUser: UsersItem
+) {
+
+    val myUser by remember { messengerViewModel.myUser }
 
     var friends: MutableList<String> = mutableListOf()
-    currentUser?.friends?.forEach{
+    currentUser.friends.forEach{
         friends.add(it)
     }
 
-    var tt = getFriendsProfile(messengerViewModel.userList.value, friends)
+    var friendList = getFriendsProfile(messengerViewModel.userList.value, friends)
 
-    var image = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png";
-    if(currentUser?.profileImgUrl != ""){
-        image = currentUser!!.profileImgUrl
+
+    fun getImage(img: String): String{
+        if (img.trim() == ""){
+            return "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png"
+        }
+        return img
     }
 
     Column(
@@ -63,11 +69,11 @@ fun profileScreenComponent(
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                    Row(Modifier.padding(top = 10.dp)) {
+                    Row(Modifier.clickable(onClick = { navController.navigate(Routes.UpdateProfile.route) })) {
                         Image(
-                            painter = rememberAsyncImagePainter(image),
+                            painter = rememberAsyncImagePainter(getImage(currentUser.profileImgUrl)),
                             contentDescription = null,
-                            modifier = Modifier.size(150.dp)
+                            modifier = Modifier.size(150.dp).clip(CircleShape)
                         )
                     }
                     Row() {
@@ -79,7 +85,7 @@ fun profileScreenComponent(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(10.dp))
                                     .background(Color.Transparent)
-                                    .padding(1.dp)
+                                    .padding(10.dp)
                             ){
                                 Row(Modifier.align(Alignment.Center)) {
                                     Column(Modifier.padding(5.dp)) {
@@ -98,7 +104,7 @@ fun profileScreenComponent(
                                                 )
                                             }
                                         } else {
-                                            if (messengerViewModel.myFriends.value.contains(currentUser.id)) {
+                                            if (myUser.friends.contains(currentUser.id)) {
                                                 Button(
                                                     onClick = {  },
                                                     shape = CutCornerShape(10),
@@ -110,7 +116,7 @@ fun profileScreenComponent(
                                                 }
                                             } else {
                                                 Button(
-                                                    onClick = { messengerViewModel.addFriend(currentUser.id) },
+                                                    onClick = { messengerViewModel.addFriend(currentUser.id); messengerViewModel.getAllUsers(false) },
                                                     shape = CutCornerShape(10),
                                                     colors = ButtonDefaults.buttonColors(
                                                         backgroundColor = Color.Green
@@ -138,6 +144,24 @@ fun profileScreenComponent(
                             Row(Modifier.align(Alignment.Center)) {
                                 Column(Modifier.padding(5.dp)) {
                                     Text(text = checkNull(currentUser?.firstname) + " " + checkNull(currentUser?.lastname), fontSize = 18.sp, color = Color.White, textAlign = TextAlign.Right)
+                                }
+                            }
+                        }
+                    }
+
+
+                    Row(
+                        Modifier
+                            .padding(top = 20.dp).clickable(onClick = { seePosts(navController, messengerViewModel, currentUser.id) })){
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(MaterialTheme.colors.primaryVariant)
+                                .padding(1.dp)
+                        ){
+                            Row(Modifier.align(Alignment.Center)) {
+                                Column(Modifier.padding(5.dp)) {
+                                    Text(text = "See Post History", fontSize = 18.sp, color = Color.White, textAlign = TextAlign.Right)
                                 }
                             }
                         }
@@ -175,7 +199,7 @@ fun profileScreenComponent(
                     LazyColumn(
                         reverseLayout = false
                     ) {
-                        itemsIndexed(tt) { index, user ->
+                        itemsIndexed(friendList) { index, user ->
                             // here
                             Row(
                                 Modifier
@@ -191,11 +215,12 @@ fun profileScreenComponent(
                                 verticalAlignment = Alignment.CenterVertically) {
                                 Column(Modifier.padding(end = 5.dp)) {
                                     Image(
-                                        painter = rememberAsyncImagePainter(image),
+                                        painter = rememberAsyncImagePainter(getImage(user.profileImgUrl)),
                                         contentDescription = null,
                                         modifier = Modifier
                                             .size(30.dp)
                                             .padding(end = 5.dp)
+                                            .clip(CircleShape)
                                     )
                                 }
                                 Column() {
@@ -203,15 +228,21 @@ fun profileScreenComponent(
                                 }
                             }
 
-                            if (index < tt.lastIndex){
+                            if (index < friendList.lastIndex){
                                 Divider(color = Color.White, thickness = 1.dp, startIndent = 20.dp)
                             }
                         }
                     }
+
                 }
             }
         }
     }
+}
+
+fun seePosts(navController: NavController, messengerViewModel: MessengerViewModel, userId: String){
+    messengerViewModel.getUserPosts(userId)
+    navController.navigate(Routes.UserFeed.route)
 }
 
 fun goTo(navController: NavController, messengerViewModel: MessengerViewModel, user: UsersItem){

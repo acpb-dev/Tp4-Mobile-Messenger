@@ -16,15 +16,14 @@ import com.example.messenger.viewmodel.MessengerViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun myFriends(navController: NavController, messengerViewModel: MessengerViewModel) {
-
-    val friends by remember { messengerViewModel.myFriends }
+    val myF = messengerViewModel.getFriendsList(messengerViewModel.myUser.value.friends)
 
     Scaffold(topBar = {
-        DefaultAppBar(navController, "Friends List")
+        DefaultAppBar("Friends List") { navController.popBackStack() }
     },
         content = { padding ->
             Row(Modifier.background(Color.Black)) {
-                myFriendsComponent(navController = navController, messengerViewModel = messengerViewModel, friends)
+                myFriendsComponent(navController = navController, messengerViewModel = messengerViewModel, myF)
             }
         })
 }

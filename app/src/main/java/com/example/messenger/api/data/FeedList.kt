@@ -1,8 +1,8 @@
 package com.example.messenger.api.data
 
-class feedList : ArrayList<feedItem>()
+class FeedList : ArrayList<FeedItem>()
 
-data class feedItem(
+data class FeedItem(
     val createdAt: String = "",
     val id: String = "",
     val images: List<Any> = listOf(),

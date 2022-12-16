@@ -1,12 +1,9 @@
 package com.example.messenger.composable.feed
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.navigation.NavController
 import com.example.messenger.composable.DefaultAppBar
 import com.example.messenger.viewmodel.MessengerViewModel
@@ -17,7 +14,7 @@ import kotlinx.coroutines.delay
 fun feed(navController: NavController, messengerViewModel: MessengerViewModel) {
     LaunchedEffect(true){
         while (true){
-            messengerViewModel.feed()
+            messengerViewModel.getFeed()
             delay(5000)
         }
     }
@@ -26,20 +23,14 @@ fun feed(navController: NavController, messengerViewModel: MessengerViewModel) {
     val users by remember { messengerViewModel.userList }
 
     Scaffold(topBar = {
-        DefaultAppBar(navController, "Feed")
+        DefaultAppBar("Feed") { navController.popBackStack() }
     },
         content = { padding ->
-            Row(Modifier.background(Black)) {
-                feedComponent(
-                    feedList = feed,
-                    user = users,
-                    messengerViewModel = messengerViewModel
-                )
-            }
+            feedComponent(
+                feedList = feed,
+                user = users,
+                messengerViewModel = messengerViewModel,
+                canType = true
+            )
         })
 }
-
-
-
-
-

@@ -20,31 +20,44 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.DarkGray
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.viewmodel.MessengerViewModel
 import com.example.messenger.api.data.PostInfo
 import com.example.messenger.api.data.Users
-import com.example.messenger.api.data.feedItem
-import com.example.messenger.api.data.feedList
+import com.example.messenger.api.data.FeedItem
+import com.example.messenger.api.data.FeedList
 import java.time.LocalDateTime
 
 @Composable
-fun feedComponent(feedList: feedList, user: Users, messengerViewModel: MessengerViewModel) {
-    val reverse: List<feedItem> = feedList.reversed();
+fun feedComponent(feedList: FeedList, user: Users, messengerViewModel: MessengerViewModel, canType: Boolean) {
+//    val reverse: List<FeedItem> = feedList.reversed()
     Box(
+        Modifier
+            .background(Black),
         contentAlignment = Alignment.Center
     ) {
+        if (feedList.isEmpty()){
+            Column(
+                Modifier
+                    .background(Black)
+                    .fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "No Posts to display", color = White, textAlign = TextAlign.Center)
+            }
+        }
         LazyColumn(
             reverseLayout = true
         ) {
+
             itemsIndexed(feedList) { index, message ->
-                if(index == 0){
+                if(index == 0 && canType){
                     MessageInput(messengerViewModel)
                 }
                 MessageCard1(message, user)
@@ -63,7 +76,7 @@ fun getName(uid: String, users: Users): String{
 }
 
 @Composable
-fun MessageCard1(feedPost: feedItem, user: Users) {
+fun MessageCard1(feedPost: FeedItem, user: Users) {
     val localDateTime = LocalDateTime.parse(feedPost.createdAt)
     Column(
         modifier = Modifier
@@ -91,6 +104,13 @@ fun MessageCard1(feedPost: feedItem, user: Users) {
                 },
             )
         }
+        feedPost.images.forEach{
+            Image(
+                painter = rememberAsyncImagePainter(it),
+                contentDescription = null,
+                modifier = Modifier.size(250.dp)
+            )
+        }
         Text( // 4
             text = when {
                 feedPost.isFromCurrentUser -> "Me"
@@ -104,13 +124,7 @@ fun MessageCard1(feedPost: feedItem, user: Users) {
             color = Color.White,
             fontSize = 8.sp,
         )
-        feedPost.images.forEach{
-            Image(
-                painter = rememberAsyncImagePainter(it),
-                contentDescription = null,
-                modifier = Modifier.size(250.dp)
-            )
-        }
+
     }
 }
 
@@ -119,7 +133,7 @@ fun formatTime(time: LocalDateTime): String{
 }
 
 @Composable
-fun cardShapeFor1(messageItem: feedItem): Shape {
+fun cardShapeFor1(messageItem: FeedItem): Shape {
     val roundedCorners = RoundedCornerShape(16.dp)
     return when {
         messageItem.isFromCurrentUser -> roundedCorners.copy(bottomEnd = CornerSize(0))
@@ -132,8 +146,9 @@ fun MessageInput(messengerViewModel: MessengerViewModel) {
     var inputValue by remember { mutableStateOf("") } // 2
 
     fun sendMessage() {
-        if (inputValue.trim() != ""){
-            val body = PostInfo(text = inputValue)
+        inputValue = inputValue.trim()
+        if (inputValue != ""){
+            val body = splitImages(inputValue)
             messengerViewModel.postFeed(body);
             inputValue = ""
         }
@@ -169,6 +184,15 @@ fun MessageInput(messengerViewModel: MessengerViewModel) {
             )
         }
     }
+}
+
+fun splitImages(input: String): PostInfo{
+    val split = input.split('[')
+    if (split.size > 1){
+        val images = split[1].trimEnd(']').split(',')
+        return PostInfo(text = split[0], images = images)
+    }
+    return PostInfo(text = input)
 }
 
 

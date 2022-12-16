@@ -97,11 +97,12 @@ fun AppBar(onSearchClicked: () -> Unit, navController: NavController) {
             Column(modifier = Modifier.clickable(onClick = { navController.popBackStack() }).padding(end = 20.dp)) {
                 androidx.compose.material.Icon(Icons.Filled.ArrowBack, "", tint = Color.White)
             }
-            Text(text = "Search", fontSize = 25.sp, color = Color.White, fontWeight = FontWeight.Bold)
+
 
         },
         backgroundColor = Color.DarkGray,
         actions = {
+            Text(text = "Search", fontSize = 25.sp, color = Color.White, fontWeight = FontWeight.Bold)
             IconButton(
                 onClick = { onSearchClicked() }
             ) {
