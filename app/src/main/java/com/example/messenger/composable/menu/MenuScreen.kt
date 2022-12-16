@@ -20,6 +20,9 @@ fun MenuScreen(navController: NavController, viewModel: ViewModel) {
 
     fun unAuthenticate() {
         viewModel.isAuthenticated.value = false
+        viewModel.clearSavedCredentials()
+        navController.popBackStack()
+        navController.navigate(Routes.LoginScreen.route)
     }
 
     Column(
@@ -30,7 +33,7 @@ fun MenuScreen(navController: NavController, viewModel: ViewModel) {
             DefaultAppBar(
                 "Messenger App",
                 Icons.Filled.Logout
-            ) { unAuthenticate(); navController.popBackStack(); navController.navigate(Routes.LoginScreen.route) }
+            ) { unAuthenticate() }
         },
             content = {
                 MenuComponent(navController, viewModel)

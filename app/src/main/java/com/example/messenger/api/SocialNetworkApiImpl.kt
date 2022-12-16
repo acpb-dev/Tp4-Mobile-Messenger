@@ -36,6 +36,12 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences) : S
         return sharedPreferences.getString("email", "") ?: ""
     }
 
+    override fun clearStoredCredentials(){
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+    }
+
     override suspend fun signUp(email: String, password: String, firstname: String, lastname: String): Boolean {
         val body = CreateAccount(email = email, firstname = firstname, lastname = lastname, password = password)
         authenticatedClient = createAuthClient()

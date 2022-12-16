@@ -57,6 +57,10 @@ class ViewModel(private val api: SocialNetworkApi) : ViewModel() {
         }
     }
 
+    fun clearSavedCredentials(){
+        api.clearStoredCredentials()
+    }
+
     fun getFeed() {
         viewModelScope.launch {
             val response = api.getFeed()
