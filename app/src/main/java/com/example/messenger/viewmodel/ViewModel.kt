@@ -51,9 +51,10 @@ class ViewModel(private val api: SocialNetworkApi) : ViewModel() {
 
     fun signIn(email: String, password: String) {
         println("$email $password \n\n\n\n\n")
+
         viewModelScope.launch {
             isAuthenticated.value = api.signIn(email, password)
-            //usernameStored.value = api.getStoredEmail()
+            usernameStored.value = api.getStoredEmail()
         }
     }
 

@@ -57,18 +57,33 @@ fun FeedComponent(feedList: FeedList, user: Users, viewModel: ViewModel, canType
                 Text(text = "No Posts to display", color = White, textAlign = TextAlign.Center)
             }
         }
-        LazyColumn(
-            Modifier
-                .background(Black)
-                .fillMaxSize(),
-            reverseLayout = true
-        ) {
 
-            itemsIndexed(feedList) { index, message ->
-                if (index == 0 && canType) {
+        if (feedList.isNotEmpty()) {
+            LazyColumn(
+                Modifier
+                    .background(Black)
+                    .fillMaxSize(),
+                reverseLayout = true
+            ) {
+
+                itemsIndexed(feedList) { index, message ->
+                    if (index == 0 && canType) {
+                        MessageInput(viewModel)
+                    }
+                    MessageCard1(message, user)
+                }
+            }
+        } else {
+            Column(
+                Modifier
+                    .background(Black)
+                    .fillMaxSize(),
+
+            ) {
+                if (canType) {
+                    Spacer(modifier = Modifier.weight(1f))
                     MessageInput(viewModel)
                 }
-                MessageCard1(message, user)
             }
         }
     }

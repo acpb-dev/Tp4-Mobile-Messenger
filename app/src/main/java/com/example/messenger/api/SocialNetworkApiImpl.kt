@@ -19,15 +19,15 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences) : S
     private var authenticatedClient: RetrofitSocialNetworkApi = createAuthClient()
 
     override suspend fun signIn(email: String, password: String): Boolean {
+        saveAuthInformation(email, password)
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.signIn()
+        println("${response.isSuccessful} \nn\nn\nn\nn\nn")
         return if (response.isSuccessful) {
-            println("Success")
-            if (email != "" && password != ""){
-                saveAuthInformation(email, password)
-            }
+            println("Success\n\n\nn\nn")
             return true
         } else {
+            clearStoredCredentials()
             return false
         }
     }
@@ -42,7 +42,8 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences) : S
 
     override fun clearStoredCredentials(){
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
-        editor.clear()
+        editor.remove("email")
+        editor.remove("password")
         editor.apply()
     }
 
