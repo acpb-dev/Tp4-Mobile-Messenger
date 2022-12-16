@@ -2,6 +2,8 @@ package com.example.messenger.composable.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -29,7 +31,7 @@ fun profileScreen(navController: NavController, viewModel: ViewModel) {
     }
 
     Scaffold(topBar = {
-        DefaultAppBar("Profile")  { back() }
+        DefaultAppBar("Profile", Icons.Filled.ArrowBack)  { back() }
     },
         content = { padding ->
             Row(Modifier.background(Color.Black)) {

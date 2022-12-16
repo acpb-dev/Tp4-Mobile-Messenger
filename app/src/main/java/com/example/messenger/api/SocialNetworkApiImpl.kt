@@ -16,7 +16,7 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
         .baseUrl("https://wiveb.webredirect.org:8888")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-        .create(RetrofitSocialNetworkApi::class.java);
+        .create(RetrofitSocialNetworkApi::class.java)
 
 
     private var authenticatedClient: RetrofitSocialNetworkApi = createAuthClient()
@@ -75,7 +75,7 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.getFeed()
         return if(response.isSuccessful){
-            return response.body();
+            return response.body()
         }else {
             return null
         }
@@ -85,7 +85,7 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.getUserPosts(userId)
         return if(response.isSuccessful){
-            return response.body();
+            return response.body()
         }else {
             return null
         }
@@ -95,7 +95,7 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.getUsers(search)
         return if(response.isSuccessful){
-            return response.body();
+            return response.body()
         }else {
             return null
         }
@@ -124,6 +124,6 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences): So
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
-            .create(RetrofitSocialNetworkApi::class.java);
+            .create(RetrofitSocialNetworkApi::class.java)
     }
 }

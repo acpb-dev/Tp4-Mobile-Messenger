@@ -14,7 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.messenger.composable.menu.Menu
 import com.example.messenger.api.SocialNetworkApiImpl
-import com.example.messenger.composable.feed.feed
+import com.example.messenger.composable.feed.Feed
 import com.example.messenger.composable.feed.userFeed
 import com.example.messenger.composable.friendList.myFriends
 import com.example.messenger.composable.login.LoginScreen
@@ -31,9 +31,9 @@ class MainActivity : ComponentActivity() {
         sharedPreferences = getSharedPreferences("login_information", MODE_PRIVATE)
         super.onCreate(savedInstanceState)
         val socialNetworkApi = SocialNetworkApiImpl(sharedPreferences!!)
-        val viewModel = ViewModel(socialNetworkApi);
+        val viewModel = ViewModel(socialNetworkApi)
         setContent {
-            MainScreen(viewModel);
+            MainScreen(viewModel)
         }
     }
 }
@@ -54,7 +54,7 @@ fun MainScreen(viewModel: ViewModel) {
         }
 
         composable(route = Routes.Feed.route){
-            feed(navController, viewModel)
+            Feed(navController, viewModel)
         }
 
         composable(route = Routes.UserFeed.route){

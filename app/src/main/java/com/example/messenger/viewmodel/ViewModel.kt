@@ -20,7 +20,7 @@ class ViewModel(private val api: SocialNetworkApi): ViewModel() {
     val userList = mutableStateOf(Users())
     val feed = mutableStateOf(FeedList())
     val userFeed = mutableStateOf(FeedList())
-    val isAuthenticated = mutableStateOf(false)
+    var isAuthenticated = mutableStateOf(false)
     private val usernameStored = mutableStateOf("")
     val getEmail: String
         get() = usernameStored.value
@@ -80,7 +80,7 @@ class ViewModel(private val api: SocialNetworkApi): ViewModel() {
         viewModelScope.launch {
             val response = api.updateProfile(updated)
             if (response){
-                getAllUsers(true);
+                getAllUsers(true)
             }
             println("WAS SUCCESSFUL $response")
         }
@@ -134,19 +134,19 @@ class ViewModel(private val api: SocialNetworkApi): ViewModel() {
                 }
             }
         }
-        return list;
+        return list
     }
 
     fun getUserById(uid: String): UsersItem {
         userList.value.forEach{ user ->
             if (user.id == uid){
-                return user;
+                return user
             }
         }
         return UsersItem()
     }
 
-    private val searchWidget = SearchWidget();
+    private val searchWidget = SearchWidget()
     val searchWidgetState: State<SearchWidget.SearchWidgetState>
         get() = searchWidget.searchWidgetState
 
@@ -154,7 +154,7 @@ class ViewModel(private val api: SocialNetworkApi): ViewModel() {
         get() = searchWidget.searchTextState
 
     fun updateSearchWidgetState(newValue: SearchWidget.SearchWidgetState){
-        searchWidget.updateSearchWidgetState(newValue);
+        searchWidget.updateSearchWidgetState(newValue)
     }
 
     fun updateSearchTextState(newValue: String){
@@ -164,6 +164,6 @@ class ViewModel(private val api: SocialNetworkApi): ViewModel() {
         }else{
             searchedUser.value = Users()
         }
-        searchWidget.updateSearchTextState(newValue);
+        searchWidget.updateSearchTextState(newValue)
     }
 }

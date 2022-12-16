@@ -68,7 +68,7 @@ fun myFriendsComponent(
                 ) {
                     itemsIndexed(friends) { index, user ->
                         val user = viewModel.getUserById(user)
-                        var image = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png";
+                        var image = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png"
                         if(user.profileImgUrl != ""){
                             image = user.profileImgUrl
                         }
@@ -92,7 +92,7 @@ fun myFriendsComponent(
                                         .clip(CircleShape)
                                 )
                             }
-                            Column() {
+                            Column {
                                 Text(text = user.firstname + " " + user.lastname, color = Color.White)
                             }
                         }

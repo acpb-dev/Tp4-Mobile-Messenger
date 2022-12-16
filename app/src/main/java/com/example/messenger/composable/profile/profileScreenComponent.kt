@@ -76,7 +76,7 @@ fun profileScreenComponent(
                             modifier = Modifier.size(150.dp).clip(CircleShape)
                         )
                     }
-                    Row() {
+                    Row {
                         Row(
                             Modifier
                                 .clickable(onClick = {})
@@ -143,7 +143,9 @@ fun profileScreenComponent(
                         ){
                             Row(Modifier.align(Alignment.Center)) {
                                 Column(Modifier.padding(5.dp)) {
-                                    Text(text = checkNull(currentUser?.firstname) + " " + checkNull(currentUser?.lastname), fontSize = 18.sp, color = Color.White, textAlign = TextAlign.Right)
+                                    Text(text = checkNull(currentUser.firstname) + " " + checkNull(
+                                        currentUser.lastname
+                                    ), fontSize = 18.sp, color = Color.White, textAlign = TextAlign.Right)
                                 }
                             }
                         }
@@ -223,7 +225,7 @@ fun profileScreenComponent(
                                             .clip(CircleShape)
                                     )
                                 }
-                                Column() {
+                                Column {
                                     Text(text = user.firstname + " " + user.lastname, color = Color.White)
                                 }
                             }
@@ -265,7 +267,7 @@ fun getFriendsProfile(users: Users, uids: MutableList<String>): List<UsersItem>{
 
 fun checkNull(entry: String?): String{
     if (entry != null){
-        return entry;
+        return entry
     }
     return ""
 }

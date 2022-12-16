@@ -150,7 +150,7 @@ fun MessageInput(viewModel: ViewModel) {
         inputValue = inputValue.trim()
         if (inputValue != ""){
             val body = splitImages(inputValue)
-            viewModel.postFeed(body);
+            viewModel.postFeed(body)
             inputValue = ""
         }
     }
