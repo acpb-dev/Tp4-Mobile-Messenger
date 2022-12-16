@@ -1,9 +1,6 @@
 package com.example.messenger.api
 
-import com.example.messenger.api.data.FeedList
-import com.example.messenger.api.data.PostInfo
-import com.example.messenger.api.data.UpdateProfile
-import com.example.messenger.api.data.Users
+import com.example.messenger.api.data.*
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -12,13 +9,8 @@ interface RetrofitSocialNetworkApi {
     @GET("/signin")
     suspend fun signIn(): Response<Unit>
 
-    @GET("/signup")
-    suspend fun signUp(
-        email: String,
-        password: String,
-        firstname: String,
-        lastname: String
-    ): Response<Unit>
+    @POST("/signup")
+    suspend fun signUp(@Body body: CreateAccount): Response<Unit>
 
     @GET("/feed")
     suspend fun getFeed(): Response<FeedList>

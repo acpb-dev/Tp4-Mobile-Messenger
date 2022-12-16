@@ -21,6 +21,7 @@ import com.example.messenger.composable.menu.Menu
 import com.example.messenger.composable.profile.profileScreen
 import com.example.messenger.composable.profile.updateProfile
 import com.example.messenger.composable.searchUsers.search
+import com.example.messenger.composable.register.SignUp
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.ViewModel
 
@@ -47,6 +48,10 @@ fun MainScreen(viewModel: ViewModel) {
     NavHost(navController = navController, startDestination = Routes.LoginScreen.route) {
         composable(route = Routes.LoginScreen.route) {
             LoginScreen(navController, viewModel)
+        }
+
+        composable(route = Routes.RegisterScreen.route) {
+            SignUp(navController, viewModel)
         }
 
         composable(route = Routes.Menu.route) {

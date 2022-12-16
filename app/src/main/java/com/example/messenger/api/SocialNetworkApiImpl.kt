@@ -2,10 +2,7 @@ package com.example.messenger.api
 
 import android.content.SharedPreferences
 import com.example.messenger.api.auth.BasicAuthInterceptor
-import com.example.messenger.api.data.FeedList
-import com.example.messenger.api.data.PostInfo
-import com.example.messenger.api.data.UpdateProfile
-import com.example.messenger.api.data.Users
+import com.example.messenger.api.data.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -33,14 +30,14 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences) : S
         }
     }
 
-    override suspend fun signUp(
-        email: String,
-        password: String,
-        firstname: String,
-        lastname: String
-    ) {
-        //client.signUp(email, password, firstname, lastname)
-        TODO("Not yet implemented")
+    override suspend fun signUp(email: String, password: String, firstname: String, lastname: String): Boolean {
+        val body = CreateAccount(email = email, firstname = firstname, lastname = lastname, password = password)
+        authenticatedClient = createAuthClient()
+        val response = authenticatedClient.signUp(body)
+        if (response.isSuccessful){
+            saveAuthInformation(email, password)
+        }
+        return response.isSuccessful
     }
 
     override suspend fun updateProfile(updated: UpdateProfile): Boolean {

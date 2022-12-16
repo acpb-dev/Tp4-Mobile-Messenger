@@ -1,6 +1,5 @@
 package com.example.messenger.viewmodel
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -18,7 +17,7 @@ class ViewModel(private val api: SocialNetworkApi) : ViewModel() {
     val feed = mutableStateOf(FeedList())
     val userFeed = mutableStateOf(FeedList())
     var isAuthenticated = mutableStateOf(false)
-    private val usernameStored = mutableStateOf("")
+    var usernameStored = mutableStateOf("")
     val getEmail: String
         get() = usernameStored.value
     private var recentUsers = mutableStateOf(mutableListOf<UsersItem>())
@@ -42,6 +41,12 @@ class ViewModel(private val api: SocialNetworkApi) : ViewModel() {
 
     fun clearRecent() {
         recentUsers.value.clear()
+    }
+
+    fun signUp(email: String, password: String, firstname: String, lastname: String){
+        viewModelScope.launch {
+            isAuthenticated.value = api.signUp(email = email, password = password, firstname = firstname, lastname = lastname)
+        }
     }
 
     fun signIn(email: String, password: String) {

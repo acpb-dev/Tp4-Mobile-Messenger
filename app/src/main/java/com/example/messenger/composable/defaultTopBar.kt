@@ -26,7 +26,7 @@ fun DefaultAppBar(tabName: String, icon: ImageVector, onClick: () -> Unit) {
         },
         backgroundColor = MaterialTheme.colors.primaryVariant,
         actions = {
-            Column(Modifier.padding(5.dp)) {
+            Column(Modifier.padding(10.dp)) {
                 Text(
                     text = tabName,
                     fontSize = 25.sp,

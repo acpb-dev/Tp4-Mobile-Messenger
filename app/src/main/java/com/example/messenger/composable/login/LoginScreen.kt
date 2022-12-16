@@ -121,7 +121,7 @@ fun LoginScreen(
             }
             Button(
                 onClick = {
-
+                          navController.navigate(Routes.RegisterScreen.route)
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = DarkGray)
             )
