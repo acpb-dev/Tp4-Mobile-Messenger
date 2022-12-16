@@ -1,4 +1,4 @@
-package com.example.messenger.composable.searchUsers
+package com.example.messenger.composable.friendList
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,19 +15,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.messenger.api.data.Users
 import com.example.messenger.api.data.UsersItem
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.ViewModel
 
 @Composable
-fun searchComponent(
+fun FriendsComponent(
     navController: NavController,
     viewModel: ViewModel,
-    usersFound: Users
+    friends: MutableList<String>
 ) {
     Column(
         modifier = Modifier
@@ -39,16 +41,45 @@ fun searchComponent(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.Black)
-                .weight(1f),
+                .weight(1f)
+                .padding(8.dp),
             contentAlignment = Alignment.TopCenter
         ) {
-            LazyColumn(
-                reverseLayout = false
+            Column(
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                itemsIndexed(usersFound) { index, user ->
-                    var image =
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png"
-                    if (!user.isCurrentUser) {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color.DarkGray)
+                        .padding(1.dp)
+                        .fillMaxWidth()
+                        .clickable(onClick = { navController.navigate(Routes.SearchFriend.route) })
+                ) {
+                    Row(
+                        Modifier
+                            .align(Alignment.Center)
+                            .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround
+                    ) {
+                        Column(Modifier.padding(5.dp)) {
+                            Text(
+                                text = "Add Friend",
+                                fontSize = 18.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.End
+                            )
+                        }
+                    }
+                }
+
+                LazyColumn(
+                    reverseLayout = false
+                ) {
+                    itemsIndexed(friends) { index, user ->
+                        val user = viewModel.getUserById(user)
+                        var image =
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png"
                         if (user.profileImgUrl != "") {
                             image = user.profileImgUrl
                         }
@@ -83,7 +114,7 @@ fun searchComponent(
                             }
                         }
 
-                        if (index < usersFound.lastIndex) {
+                        if (index < friends.lastIndex) {
                             Divider(color = Color.White, thickness = 1.dp, startIndent = 20.dp)
                         }
                     }
@@ -93,9 +124,7 @@ fun searchComponent(
     }
 }
 
-
 fun goTo(navController: NavController, viewModel: ViewModel, user: UsersItem) {
-    println("${user.firstname} \n\n\n\n\n\n")
     viewModel.currentUser.value = user
     navController.navigate(Routes.MyProfile.route)
 }

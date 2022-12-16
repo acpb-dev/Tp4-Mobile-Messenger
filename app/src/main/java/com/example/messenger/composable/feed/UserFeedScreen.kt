@@ -18,7 +18,7 @@ import com.example.messenger.viewmodel.ViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun userFeed(navController: NavController, viewModel: ViewModel) {
+fun UserFeedScreen(navController: NavController, viewModel: ViewModel) {
 
     val userFeed by remember { viewModel.userFeed }
     val users by remember { viewModel.userList }
@@ -30,7 +30,7 @@ fun userFeed(navController: NavController, viewModel: ViewModel) {
             DefaultAppBar("Feed", Icons.Filled.ArrowBack) { navController.popBackStack() }
         },
             content = { padding ->
-                feedComponent(
+                FeedComponent(
                     feedList = userFeed,
                     user = users,
                     viewModel = viewModel,

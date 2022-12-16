@@ -32,7 +32,7 @@ import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.ViewModel
 
 @Composable
-fun profileScreenComponent(
+fun ProfileComponent(
     navController: NavController,
     viewModel: ViewModel,
     currentUser: UsersItem

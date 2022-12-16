@@ -9,7 +9,7 @@ import com.example.messenger.viewmodel.ViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun search(navController: NavController, viewModel: ViewModel) {
+fun SearchScreen(navController: NavController, viewModel: ViewModel) {
     val usersFound by remember { viewModel.searchedUser }
 
     androidx.compose.material3.Scaffold(topBar = {

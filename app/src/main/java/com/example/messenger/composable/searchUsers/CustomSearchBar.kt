@@ -56,7 +56,7 @@ fun searchTopBar(viewModel: ViewModel, navController: NavController) {
 @Composable
 fun searchResults(navController: NavController, viewModel: ViewModel, usersFound: Users) {
     Row(Modifier.background(Color.Black)) {
-        searchComponent(navController = navController, viewModel = viewModel, usersFound)
+        SearchComponent(navController = navController, viewModel = viewModel, usersFound)
     }
 }
 

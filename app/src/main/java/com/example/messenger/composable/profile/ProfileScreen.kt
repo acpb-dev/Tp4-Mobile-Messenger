@@ -35,7 +35,7 @@ fun profileScreen(navController: NavController, viewModel: ViewModel) {
     },
         content = { padding ->
             Row(Modifier.background(Color.Black)) {
-                profileScreenComponent(navController, viewModel, currentUser)
+                ProfileComponent(navController, viewModel, currentUser)
             }
         })
 }

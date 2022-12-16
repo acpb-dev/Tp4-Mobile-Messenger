@@ -1,7 +1,7 @@
-package com.example.messenger.composable.friendList
+package com.example.messenger.composable.profile
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,19 +15,13 @@ import com.example.messenger.viewmodel.ViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun myFriends(navController: NavController, viewModel: ViewModel) {
-    val myF = viewModel.getFriendsList(viewModel.myUser.value.friends)
-
+fun UpdateProfileScreen(navController: NavController, viewModel: ViewModel) {
     Scaffold(topBar = {
-        DefaultAppBar("Friends List", Icons.Filled.ArrowBack) { navController.popBackStack() }
+        DefaultAppBar("Update Profile", Icons.Filled.ArrowBack) { navController.popBackStack() }
     },
         content = { padding ->
             Row(Modifier.background(Color.Black)) {
-                myFriendsComponent(navController = navController, viewModel = viewModel, myF)
+                UpdateProfileComponent(navController, viewModel)
             }
         })
 }
-
-
-
-

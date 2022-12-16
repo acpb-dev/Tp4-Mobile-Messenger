@@ -13,14 +13,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.messenger.api.SocialNetworkApiImpl
-import com.example.messenger.composable.feed.Feed
-import com.example.messenger.composable.feed.userFeed
-import com.example.messenger.composable.friendList.myFriends
+import com.example.messenger.composable.feed.FeedScreen
+import com.example.messenger.composable.feed.UserFeedScreen
+import com.example.messenger.composable.friendList.FriendsScreen
 import com.example.messenger.composable.login.LoginScreen
-import com.example.messenger.composable.menu.Menu
+import com.example.messenger.composable.menu.MenuScreen
 import com.example.messenger.composable.profile.profileScreen
-import com.example.messenger.composable.profile.updateProfile
-import com.example.messenger.composable.searchUsers.search
+import com.example.messenger.composable.profile.UpdateProfileScreen
+import com.example.messenger.composable.searchUsers.SearchScreen
 import com.example.messenger.composable.register.SignUp
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.ViewModel
@@ -56,20 +56,20 @@ fun MainScreen(viewModel: ViewModel) {
 
         composable(route = Routes.Menu.route) {
             viewModel.getAllUsers(true)
-            Menu(navController, viewModel)
+            MenuScreen(navController, viewModel)
         }
 
         composable(route = Routes.Feed.route) {
-            Feed(navController, viewModel)
+            FeedScreen(navController, viewModel)
         }
 
         composable(route = Routes.UserFeed.route) {
-            userFeed(navController = navController, viewModel = viewModel)
+            UserFeedScreen(navController = navController, viewModel = viewModel)
         }
 
         composable(route = Routes.FriendList.route) {
             viewModel.clearRecent()
-            myFriends(navController = navController, viewModel = viewModel)
+            FriendsScreen(navController = navController, viewModel = viewModel)
         }
 
         composable(route = Routes.MyProfile.route) {
@@ -77,11 +77,11 @@ fun MainScreen(viewModel: ViewModel) {
         }
 
         composable(route = Routes.SearchFriend.route) {
-            search(navController = navController, viewModel = viewModel)
+            SearchScreen(navController = navController, viewModel = viewModel)
         }
 
         composable(route = Routes.UpdateProfile.route) {
-            updateProfile(navController = navController, viewModel = viewModel)
+            UpdateProfileScreen(navController = navController, viewModel = viewModel)
         }
 
     }

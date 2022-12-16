@@ -15,7 +15,7 @@ import com.example.messenger.viewmodel.ViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Menu(navController: NavController, viewModel: ViewModel) {
+fun MenuScreen(navController: NavController, viewModel: ViewModel) {
 
     fun unAuthenticate() {
         viewModel.isAuthenticated.value = false
@@ -32,7 +32,7 @@ fun Menu(navController: NavController, viewModel: ViewModel) {
             ) { unAuthenticate(); navController.popBackStack() }
         },
             content = {
-                menuComponent(navController, viewModel)
+                MenuComponent(navController, viewModel)
             })
     }
 }

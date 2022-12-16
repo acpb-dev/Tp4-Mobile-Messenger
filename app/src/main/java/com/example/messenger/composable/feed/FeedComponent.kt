@@ -22,7 +22,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.DarkGray
 import androidx.compose.ui.graphics.Color.Companion.White
@@ -40,7 +39,7 @@ import com.example.messenger.viewmodel.ViewModel
 import java.time.LocalDateTime
 
 @Composable
-fun feedComponent(feedList: FeedList, user: Users, viewModel: ViewModel, canType: Boolean) {
+fun FeedComponent(feedList: FeedList, user: Users, viewModel: ViewModel, canType: Boolean) {
 //    val reverse: List<FeedItem> = feedList.reversed()
     Box(
         Modifier

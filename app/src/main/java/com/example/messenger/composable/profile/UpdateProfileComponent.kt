@@ -16,7 +16,7 @@ import androidx.navigation.NavController
 import com.example.messenger.viewmodel.ViewModel
 
 @Composable
-fun updateProfileComponent(navController: NavController, viewModel: ViewModel) {
+fun UpdateProfileComponent(navController: NavController, viewModel: ViewModel) {
     val currentUser by remember { mutableStateOf(viewModel.currentUser) }
     var imgLink by remember { mutableStateOf(currentUser.value.profileImgUrl) }
     var firstName by remember { mutableStateOf(currentUser.value.firstname) }

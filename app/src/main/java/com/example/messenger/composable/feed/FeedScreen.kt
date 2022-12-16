@@ -13,7 +13,7 @@ import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Feed(navController: NavController, viewModel: ViewModel) {
+fun FeedScreen(navController: NavController, viewModel: ViewModel) {
     LaunchedEffect(true) {
         while (true) {
             viewModel.getFeed()
@@ -28,7 +28,7 @@ fun Feed(navController: NavController, viewModel: ViewModel) {
         DefaultAppBar("Feed", Icons.Filled.ArrowBack) { navController.popBackStack() }
     },
         content = {
-            feedComponent(
+            FeedComponent(
                 feedList = feed,
                 user = users,
                 viewModel = viewModel,

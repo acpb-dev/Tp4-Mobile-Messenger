@@ -23,7 +23,7 @@ import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.ViewModel
 
 @Composable
-fun menuComponent(navController: NavController, viewModel: ViewModel) {
+fun MenuComponent(navController: NavController, viewModel: ViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
