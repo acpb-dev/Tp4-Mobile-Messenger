@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.messenger.api.data.UsersItem
 import com.example.messenger.utils.const.Routes
+import com.example.messenger.utils.navToProfile
 import com.example.messenger.viewmodel.ViewModel
 
 @Composable
@@ -31,20 +31,18 @@ fun MenuComponent(navController: NavController, viewModel: ViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        Row {
+        Row(Modifier.fillMaxWidth()) {
             Image(
-                painter = rememberAsyncImagePainter("https://icons.iconarchive.com/icons/igh0zt/ios7-style-metro-ui/512/MetroUI-Apps-Messaging-Alt-icon.png"),
+                painter = rememberAsyncImagePainter("https://aliased.club/images/BergysGTI/GTI_D.jpg"),
                 contentDescription = null,
-                modifier = Modifier
-                    .size(250.dp)
-                    .clip(CircleShape)
+                Modifier.weight(1f).fillMaxWidth()
             )
         }
         Row(
             Modifier
-                .padding(top = 50.dp)
+                .padding(top = 25.dp)
                 .clickable(onClick = {
-                    goTo(
+                    navToProfile(
                         navController,
                         viewModel,
                         viewModel.currentUser.value
@@ -72,7 +70,7 @@ fun MenuComponent(navController: NavController, viewModel: ViewModel) {
                 }
             }
         }
-        Row(Modifier.clickable(onClick = { navController.navigate(Routes.Feed.route) })) {
+        Row(Modifier.clickable(onClick = { navController.navigate(Routes.FeedScreen.route) })) {
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
@@ -94,7 +92,7 @@ fun MenuComponent(navController: NavController, viewModel: ViewModel) {
                 }
             }
         }
-        Row(Modifier.clickable(onClick = { navController.navigate(Routes.FriendList.route) })) {
+        Row(Modifier.clickable(onClick = { navController.navigate(Routes.FriendListScreen.route) })) {
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
@@ -116,9 +114,4 @@ fun MenuComponent(navController: NavController, viewModel: ViewModel) {
             }
         }
     }
-}
-
-fun goTo(navController: NavController, viewModel: ViewModel, user: UsersItem) {
-    viewModel.currentUser.value = user
-    navController.navigate(Routes.MyProfile.route)
 }

@@ -43,7 +43,7 @@ fun RegisterComponent(navController: NavController, viewModel: ViewModel) {
     LaunchedEffect(isAuthenticated) {
         if (isAuthenticated) {
             viewModel.usernameStored.value = email
-            navController.navigate(Routes.Menu.route)
+            navController.navigate(Routes.MenuScreen.route)
         }
     }
 
@@ -168,10 +168,10 @@ fun RegisterComponent(navController: NavController, viewModel: ViewModel) {
 }
 
 fun verifyInfo(email: String, password: String, password2: String, fName: String, lName: String): String{
-    val emailT = email.trim();
-    val passwordT = password.trim();
-    val fNameT = fName.trim();
-    val lNameT = lName.trim();
+    val emailT = email.trim()
+    val passwordT = password.trim()
+    val fNameT = fName.trim()
+    val lNameT = lName.trim()
     var error = ""
     if (fNameT == ""){
         error = "Firstname cannot be empty "
@@ -189,5 +189,5 @@ fun verifyInfo(email: String, password: String, password2: String, fName: String
     if (!emailT.contains('@')){
         error = "Invalid Email address"
     }
-    return error;
+    return error
 }

@@ -29,6 +29,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.api.data.Users
 import com.example.messenger.api.data.UsersItem
 import com.example.messenger.utils.const.Routes
+import com.example.messenger.utils.navToProfile
 import com.example.messenger.viewmodel.ViewModel
 
 @Composable
@@ -75,7 +76,7 @@ fun ProfileComponent(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
-                    Row(Modifier.clickable(onClick = { navController.navigate(Routes.UpdateProfile.route) })) {
+                    Row(Modifier.clickable(onClick = { navController.navigate(Routes.UpdateProfileScreen.route) })) {
                         Image(
                             painter = rememberAsyncImagePainter(getImage(currentUser.profileImgUrl)),
                             contentDescription = null,
@@ -251,7 +252,7 @@ fun ProfileComponent(
                                 Modifier
                                     .padding(20.dp)
                                     .clickable(onClick = {
-                                        goTo(
+                                        navToProfile(
                                             navController,
                                             viewModel,
                                             user
@@ -292,13 +293,7 @@ fun ProfileComponent(
 
 fun seePosts(navController: NavController, viewModel: ViewModel, userId: String) {
     viewModel.getUserPosts(userId)
-    navController.navigate(Routes.UserFeed.route)
-}
-
-fun goTo(navController: NavController, viewModel: ViewModel, user: UsersItem) {
-    // messengerViewModel.userSelected.value = messengerViewModel.currentUser.value
-    viewModel.currentUser.value = user
-    navController.navigate(Routes.MyProfile.route)
+    navController.navigate(Routes.UserFeedScreen.route)
 }
 
 fun getFriendsProfile(users: Users, uids: MutableList<String>): List<UsersItem> {

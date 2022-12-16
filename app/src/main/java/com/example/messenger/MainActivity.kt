@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val socialNetworkApi = SocialNetworkApiImpl(sharedPreferences!!)
         val viewModel = ViewModel(socialNetworkApi)
+        viewModel.signIn("", "")
         setContent {
             MainScreen(viewModel)
         }
@@ -54,33 +55,33 @@ fun MainScreen(viewModel: ViewModel) {
             SignUp(navController, viewModel)
         }
 
-        composable(route = Routes.Menu.route) {
+        composable(route = Routes.MenuScreen.route) {
             viewModel.getAllUsers(true)
             MenuScreen(navController, viewModel)
         }
 
-        composable(route = Routes.Feed.route) {
+        composable(route = Routes.FeedScreen.route) {
             FeedScreen(navController, viewModel)
         }
 
-        composable(route = Routes.UserFeed.route) {
+        composable(route = Routes.UserFeedScreen.route) {
             UserFeedScreen(navController = navController, viewModel = viewModel)
         }
 
-        composable(route = Routes.FriendList.route) {
+        composable(route = Routes.FriendListScreen.route) {
             viewModel.clearRecent()
             FriendsScreen(navController = navController, viewModel = viewModel)
         }
 
-        composable(route = Routes.MyProfile.route) {
+        composable(route = Routes.ProfileScreen.route) {
             profileScreen(navController = navController, viewModel = viewModel)
         }
 
-        composable(route = Routes.SearchFriend.route) {
+        composable(route = Routes.SearchFriendScreen.route) {
             SearchScreen(navController = navController, viewModel = viewModel)
         }
 
-        composable(route = Routes.UpdateProfile.route) {
+        composable(route = Routes.UpdateProfileScreen.route) {
             UpdateProfileScreen(navController = navController, viewModel = viewModel)
         }
 

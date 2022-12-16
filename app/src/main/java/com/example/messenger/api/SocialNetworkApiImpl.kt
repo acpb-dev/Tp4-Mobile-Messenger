@@ -19,15 +19,21 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences) : S
     private var authenticatedClient: RetrofitSocialNetworkApi = createAuthClient()
 
     override suspend fun signIn(email: String, password: String): Boolean {
-        saveAuthInformation(email, password)
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.signIn()
         return if (response.isSuccessful) {
             println("Success")
+            if (email != "" && password != ""){
+                saveAuthInformation(email, password)
+            }
             return true
         } else {
             return false
         }
+    }
+
+    override fun getStoredEmail(): String{
+        return sharedPreferences.getString("email", "") ?: ""
     }
 
     override suspend fun signUp(email: String, password: String, firstname: String, lastname: String): Boolean {

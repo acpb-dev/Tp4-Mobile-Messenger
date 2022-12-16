@@ -41,13 +41,10 @@ fun LoginScreen(
     var passwordVisible by remember { mutableStateOf(false) }
 
     val isAuthenticated by remember { viewModel.isAuthenticated }
-    val context = LocalContext.current
 
     LaunchedEffect(isAuthenticated) {
         if (isAuthenticated) {
-            navController.navigate(Routes.Menu.route)
-        } else {
-            Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
+            navController.navigate(Routes.MenuScreen.route)
         }
     }
     Column(

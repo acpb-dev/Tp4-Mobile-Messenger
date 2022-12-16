@@ -18,8 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.api.data.Users
-import com.example.messenger.api.data.UsersItem
-import com.example.messenger.utils.const.Routes
+import com.example.messenger.utils.navToProfile
 import com.example.messenger.viewmodel.ViewModel
 
 @Composable
@@ -56,7 +55,7 @@ fun SearchComponent(
                             Modifier
                                 .padding(20.dp)
                                 .clickable(onClick = {
-                                    goTo(
+                                    navToProfile(
                                         navController,
                                         viewModel,
                                         user
@@ -94,8 +93,3 @@ fun SearchComponent(
 }
 
 
-fun goTo(navController: NavController, viewModel: ViewModel, user: UsersItem) {
-    println("${user.firstname} \n\n\n\n\n\n")
-    viewModel.currentUser.value = user
-    navController.navigate(Routes.MyProfile.route)
-}

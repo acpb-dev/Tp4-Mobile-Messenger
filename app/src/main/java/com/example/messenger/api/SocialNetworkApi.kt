@@ -14,4 +14,5 @@ interface SocialNetworkApi {
     suspend fun postToFeed(body: PostInfo): Boolean
     suspend fun addFriend(url: String): Boolean
     suspend fun updateProfile(update: UpdateProfile): Boolean
+    fun getStoredEmail(): String
 }

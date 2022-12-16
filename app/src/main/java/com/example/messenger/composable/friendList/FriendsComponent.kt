@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.messenger.api.data.UsersItem
 import com.example.messenger.utils.const.Routes
+import com.example.messenger.utils.navToProfile
 import com.example.messenger.viewmodel.ViewModel
 
 @Composable
@@ -55,7 +55,7 @@ fun FriendsComponent(
                         .background(Color.DarkGray)
                         .padding(1.dp)
                         .fillMaxWidth()
-                        .clickable(onClick = { navController.navigate(Routes.SearchFriend.route) })
+                        .clickable(onClick = { navController.navigate(Routes.SearchFriendScreen.route) })
                 ) {
                     Row(
                         Modifier
@@ -87,7 +87,7 @@ fun FriendsComponent(
                             Modifier
                                 .padding(20.dp)
                                 .clickable(onClick = {
-                                    goTo(
+                                    navToProfile(
                                         navController,
                                         viewModel,
                                         user
@@ -122,9 +122,4 @@ fun FriendsComponent(
             }
         }
     }
-}
-
-fun goTo(navController: NavController, viewModel: ViewModel, user: UsersItem) {
-    viewModel.currentUser.value = user
-    navController.navigate(Routes.MyProfile.route)
 }

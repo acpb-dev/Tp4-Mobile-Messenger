@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.example.messenger.composable.DefaultAppBar
+import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodel.ViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,7 +30,7 @@ fun MenuScreen(navController: NavController, viewModel: ViewModel) {
             DefaultAppBar(
                 "Messenger App",
                 Icons.Filled.Logout
-            ) { unAuthenticate(); navController.popBackStack() }
+            ) { unAuthenticate(); navController.popBackStack(); navController.navigate(Routes.LoginScreen.route) }
         },
             content = {
                 MenuComponent(navController, viewModel)
