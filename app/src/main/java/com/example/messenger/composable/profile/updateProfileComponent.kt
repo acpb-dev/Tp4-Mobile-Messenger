@@ -1,24 +1,21 @@
 package com.example.messenger.composable.profile
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.DarkGray
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.messenger.utils.const.Routes
-import com.example.messenger.viewmodel.MessengerViewModel
+import com.example.messenger.viewmodel.ViewModel
 
 @Composable
-fun updateProfileComponent(navController: NavController, messengerViewModel: MessengerViewModel) {
-    val currentUser by remember { mutableStateOf(messengerViewModel.currentUser) }
+fun updateProfileComponent(navController: NavController, viewModel: ViewModel) {
+    val currentUser by remember { mutableStateOf(viewModel.currentUser) }
     var imgLink by remember { mutableStateOf(currentUser.value.profileImgUrl) }
     var firstName by remember { mutableStateOf(currentUser.value.firstname) }
     var lastName by remember { mutableStateOf(currentUser.value.lastname) }
@@ -86,7 +83,7 @@ fun updateProfileComponent(navController: NavController, messengerViewModel: Mes
 
         Button(
             onClick = {
-                messengerViewModel.updateProfile(firstName, lastName, imgLink); navController.popBackStack()
+                viewModel.updateProfile(firstName, lastName, imgLink); navController.popBackStack()
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primaryVariant)
         )

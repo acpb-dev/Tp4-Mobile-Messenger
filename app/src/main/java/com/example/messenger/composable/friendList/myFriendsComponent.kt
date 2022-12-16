@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material3.Text
@@ -20,13 +21,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.utils.const.Routes
-import com.example.messenger.viewmodel.MessengerViewModel
+import com.example.messenger.viewmodel.ViewModel
 import com.example.messenger.api.data.UsersItem
 
 @Composable
 fun myFriendsComponent(
     navController: NavController,
-    messengerViewModel: MessengerViewModel,
+    viewModel: ViewModel,
     friends: MutableList<String> ) {
     Column(
         modifier = Modifier
@@ -66,7 +67,7 @@ fun myFriendsComponent(
                     reverseLayout = false
                 ) {
                     itemsIndexed(friends) { index, user ->
-                        val user = messengerViewModel.getUserById(user)
+                        val user = viewModel.getUserById(user)
                         var image = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png";
                         if(user.profileImgUrl != ""){
                             image = user.profileImgUrl
@@ -76,7 +77,7 @@ fun myFriendsComponent(
                                 .padding(20.dp)
                                 .clickable(onClick = { goTo(
                                     navController,
-                                    messengerViewModel,
+                                    viewModel,
                                     user
                                 ) }),
                             horizontalArrangement = Arrangement.Start,
@@ -88,6 +89,7 @@ fun myFriendsComponent(
                                     modifier = Modifier
                                         .size(30.dp)
                                         .padding(end = 5.dp)
+                                        .clip(CircleShape)
                                 )
                             }
                             Column() {
@@ -105,7 +107,7 @@ fun myFriendsComponent(
     }
 }
 
-fun goTo(navController: NavController, messengerViewModel: MessengerViewModel, user: UsersItem){
-    messengerViewModel.currentUser.value = user
+fun goTo(navController: NavController, viewModel: ViewModel, user: UsersItem){
+    viewModel.currentUser.value = user
     navController.navigate(Routes.MyProfile.route)
 }

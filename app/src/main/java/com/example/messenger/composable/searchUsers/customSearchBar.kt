@@ -25,38 +25,38 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.messenger.viewmodel.MessengerViewModel
+import com.example.messenger.viewmodel.ViewModel
 import com.example.messenger.utils.SearchWidget
 import com.example.messenger.api.data.Users
 
 @Composable
-fun searchTopBar(messengerViewModel: MessengerViewModel, navController: NavController){
-    val searchWidgetState by messengerViewModel.searchWidgetState
-    val searchTextState by messengerViewModel.searchTextState
+fun searchTopBar(viewModel: ViewModel, navController: NavController){
+    val searchWidgetState by viewModel.searchWidgetState
+    val searchTextState by viewModel.searchTextState
     MainAppBar(
         searchWidgetState = searchWidgetState,
         searchTextState = searchTextState,
         onTextChange = {
-            messengerViewModel.updateSearchTextState(newValue = it)
+            viewModel.updateSearchTextState(newValue = it)
 
         },
         onCloseClicked = {
-            messengerViewModel.updateSearchWidgetState(newValue = SearchWidget.SearchWidgetState.CLOSED)
+            viewModel.updateSearchWidgetState(newValue = SearchWidget.SearchWidgetState.CLOSED)
         },
         onSearchClicked = {
             Log.d("Searched Text", it)
         },
         onSearchTriggered = {
-            messengerViewModel.updateSearchWidgetState(newValue = SearchWidget.SearchWidgetState.OPENED)
+            viewModel.updateSearchWidgetState(newValue = SearchWidget.SearchWidgetState.OPENED)
         },
         navController = navController
     )
 }
 
 @Composable
-fun searchResults(navController: NavController, messengerViewModel: MessengerViewModel, usersFound: Users){
+fun searchResults(navController: NavController, viewModel: ViewModel, usersFound: Users){
     Row(Modifier.background(Color.Black)) {
-        searchComponent(navController = navController, messengerViewModel = messengerViewModel, usersFound)
+        searchComponent(navController = navController, viewModel = viewModel, usersFound)
     }
 }
 

@@ -2,7 +2,6 @@ package com.example.messenger.composable.feed
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -13,14 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.example.messenger.composable.DefaultAppBar
-import com.example.messenger.viewmodel.MessengerViewModel
+import com.example.messenger.viewmodel.ViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun userFeed(navController: NavController, messengerViewModel: MessengerViewModel) {
+fun userFeed(navController: NavController, viewModel: ViewModel) {
 
-    val userFeed by remember { messengerViewModel.userFeed }
-    val users by remember { messengerViewModel.userList }
+    val userFeed by remember { viewModel.userFeed }
+    val users by remember { viewModel.userList }
     Column(Modifier.fillMaxSize().background(Color.Black)) {
     Scaffold(topBar = {
         DefaultAppBar("Feed") { navController.popBackStack() }
@@ -29,7 +28,7 @@ fun userFeed(navController: NavController, messengerViewModel: MessengerViewMode
             feedComponent(
                 feedList = userFeed,
                 user = users,
-                messengerViewModel = messengerViewModel,
+                viewModel = viewModel,
                 canType = false
             )
         })

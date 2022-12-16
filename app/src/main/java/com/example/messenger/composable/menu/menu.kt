@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,11 +19,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.utils.const.Routes
-import com.example.messenger.viewmodel.MessengerViewModel
+import com.example.messenger.viewmodel.ViewModel
 import com.example.messenger.api.data.UsersItem
 
 @Composable
-fun Menu(navController: NavController, messengerViewModel: MessengerViewModel) {
+fun Menu(navController: NavController, viewModel: ViewModel) {
 
     Column(
         modifier = Modifier.fillMaxSize().background(Color.Black),
@@ -33,10 +34,10 @@ fun Menu(navController: NavController, messengerViewModel: MessengerViewModel) {
             Image(
                 painter = rememberAsyncImagePainter("https://icons.iconarchive.com/icons/igh0zt/ios7-style-metro-ui/512/MetroUI-Apps-Messaging-Alt-icon.png"),
                 contentDescription = null,
-                modifier = Modifier.size(250.dp)
+                modifier = Modifier.size(250.dp).clip(CircleShape)
             )
         }
-        Row(Modifier.padding(top = 50.dp).clickable(onClick = { goTo(navController, messengerViewModel, messengerViewModel.currentUser.value)})){
+        Row(Modifier.padding(top = 50.dp).clickable(onClick = { goTo(navController, viewModel, viewModel.currentUser.value)})){
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
@@ -86,7 +87,7 @@ fun Menu(navController: NavController, messengerViewModel: MessengerViewModel) {
     }
 }
 
-fun goTo(navController: NavController, messengerViewModel: MessengerViewModel, user: UsersItem){
-    messengerViewModel.currentUser.value = user
+fun goTo(navController: NavController, viewModel: ViewModel, user: UsersItem){
+    viewModel.currentUser.value = user
     navController.navigate(Routes.MyProfile.route)
 }

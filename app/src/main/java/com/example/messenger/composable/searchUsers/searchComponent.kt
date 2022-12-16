@@ -6,24 +6,26 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.utils.const.Routes
-import com.example.messenger.viewmodel.MessengerViewModel
+import com.example.messenger.viewmodel.ViewModel
 import com.example.messenger.api.data.Users
 import com.example.messenger.api.data.UsersItem
 
 @Composable
 fun searchComponent(
     navController: NavController,
-    messengerViewModel: MessengerViewModel,
+    viewModel: ViewModel,
     usersFound: Users
 ) {
     Column(
@@ -55,7 +57,7 @@ fun searchComponent(
                                     .clickable(onClick = {
                                         goTo(
                                             navController,
-                                            messengerViewModel,
+                                            viewModel,
                                             user
                                         )
                                     }),
@@ -68,6 +70,7 @@ fun searchComponent(
                                         modifier = Modifier
                                             .size(30.dp)
                                             .padding(end = 5.dp)
+                                            .clip(CircleShape)
                                     )
                                 }
                                 Column {
@@ -86,8 +89,8 @@ fun searchComponent(
 }
 
 
-fun goTo(navController: NavController, messengerViewModel: MessengerViewModel, user: UsersItem){
+fun goTo(navController: NavController, viewModel: ViewModel, user: UsersItem){
     println("${user.firstname} \n\n\n\n\n\n")
-    messengerViewModel.currentUser.value = user
+    viewModel.currentUser.value = user
     navController.navigate(Routes.MyProfile.route)
 }

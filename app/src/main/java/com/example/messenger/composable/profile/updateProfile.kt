@@ -9,17 +9,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.example.messenger.composable.DefaultAppBar
-import com.example.messenger.viewmodel.MessengerViewModel
+import com.example.messenger.viewmodel.ViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun updateProfile(navController: NavController, messengerViewModel: MessengerViewModel) {
+fun updateProfile(navController: NavController, viewModel: ViewModel) {
     Scaffold(topBar = {
         DefaultAppBar("Update Profile")  { navController.popBackStack() }
     },
         content = { padding ->
             Row(Modifier.background(Color.Black)) {
-                updateProfileComponent(navController, messengerViewModel)
+                updateProfileComponent(navController, viewModel)
             }
         })
 }

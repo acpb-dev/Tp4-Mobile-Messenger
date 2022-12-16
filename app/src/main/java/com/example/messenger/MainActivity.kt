@@ -20,10 +20,9 @@ import com.example.messenger.composable.friendList.myFriends
 import com.example.messenger.composable.login.LoginScreen
 import com.example.messenger.composable.profile.profileScreen
 import com.example.messenger.composable.profile.updateProfile
-import com.example.messenger.composable.profile.updateProfileComponent
 import com.example.messenger.composable.searchUsers.search
 import com.example.messenger.utils.const.Routes
-import com.example.messenger.viewmodel.MessengerViewModel
+import com.example.messenger.viewmodel.ViewModel
 
 class MainActivity : ComponentActivity() {
     var sharedPreferences: SharedPreferences? = null
@@ -32,51 +31,51 @@ class MainActivity : ComponentActivity() {
         sharedPreferences = getSharedPreferences("login_information", MODE_PRIVATE)
         super.onCreate(savedInstanceState)
         val socialNetworkApi = SocialNetworkApiImpl(sharedPreferences!!)
-        val messengerViewModel = MessengerViewModel(socialNetworkApi);
+        val viewModel = ViewModel(socialNetworkApi);
         setContent {
-            MainScreen(messengerViewModel);
+            MainScreen(viewModel);
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
-fun MainScreen(messengerViewModel: MessengerViewModel) {
+fun MainScreen(viewModel: ViewModel) {
     val navController: NavHostController = rememberNavController()
 
     NavHost(navController = navController, startDestination = Routes.LoginScreen.route){
         composable(route = Routes.LoginScreen.route){
-            LoginScreen(navController, messengerViewModel)
+            LoginScreen(navController, viewModel)
         }
 
         composable(route = Routes.Menu.route){
-            messengerViewModel.getAllUsers(true)
-            Menu(navController, messengerViewModel)
+            viewModel.getAllUsers(true)
+            Menu(navController, viewModel)
         }
 
         composable(route = Routes.Feed.route){
-            feed(navController, messengerViewModel)
+            feed(navController, viewModel)
         }
 
         composable(route = Routes.UserFeed.route){
-            userFeed(navController = navController, messengerViewModel = messengerViewModel)
+            userFeed(navController = navController, viewModel = viewModel)
         }
 
         composable(route = Routes.FriendList.route) {
-            messengerViewModel.clearRecent()
-            myFriends(navController = navController, messengerViewModel = messengerViewModel)
+            viewModel.clearRecent()
+            myFriends(navController = navController, viewModel = viewModel)
         }
 
         composable(route = Routes.MyProfile.route){
-            profileScreen(navController = navController, messengerViewModel = messengerViewModel)
+            profileScreen(navController = navController, viewModel = viewModel)
         }
 
         composable(route = Routes.SearchFriend.route){
-            search(navController = navController, messengerViewModel = messengerViewModel)
+            search(navController = navController, viewModel = viewModel)
         }
 
         composable(route = Routes.UpdateProfile.route){
-            updateProfile(navController = navController, messengerViewModel = messengerViewModel)
+            updateProfile(navController = navController, viewModel = viewModel)
         }
 
     }

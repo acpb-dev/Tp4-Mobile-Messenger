@@ -26,18 +26,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.messenger.utils.const.Routes
-import com.example.messenger.viewmodel.MessengerViewModel
+import com.example.messenger.viewmodel.ViewModel
 
 @Composable
 fun LoginScreen(
     navController: NavController,
-    messengerViewModel: MessengerViewModel
+    viewModel: ViewModel
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
-    val isAuthenticated by remember { messengerViewModel.isAuthenticated }
+    val isAuthenticated by remember { viewModel.isAuthenticated }
     val context = LocalContext.current
 
     LaunchedEffect(isAuthenticated) {
@@ -108,7 +108,7 @@ fun LoginScreen(
             )
             Button(
                 onClick = {
-                    messengerViewModel.signIn(email, password)
+                    viewModel.signIn(email, password)
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primaryVariant)
             )

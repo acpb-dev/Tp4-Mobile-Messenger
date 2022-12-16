@@ -9,7 +9,7 @@ import com.example.messenger.api.data.*
 import com.example.messenger.utils.SearchWidget
 import kotlinx.coroutines.launch
 
-class MessengerViewModel(private val api: SocialNetworkApi): ViewModel() {
+class ViewModel(private val api: SocialNetworkApi): ViewModel() {
     val searchedUser = mutableStateOf(Users())
 
     val currentUser = mutableStateOf(UsersItem())

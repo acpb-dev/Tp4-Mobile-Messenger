@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import com.example.messenger.viewmodel.MessengerViewModel
+import com.example.messenger.viewmodel.ViewModel
 import com.example.messenger.api.data.PostInfo
 import com.example.messenger.api.data.Users
 import com.example.messenger.api.data.FeedItem
@@ -37,7 +37,7 @@ import com.example.messenger.api.data.FeedList
 import java.time.LocalDateTime
 
 @Composable
-fun feedComponent(feedList: FeedList, user: Users, messengerViewModel: MessengerViewModel, canType: Boolean) {
+fun feedComponent(feedList: FeedList, user: Users, viewModel: ViewModel, canType: Boolean) {
 //    val reverse: List<FeedItem> = feedList.reversed()
     Box(
         Modifier
@@ -59,7 +59,7 @@ fun feedComponent(feedList: FeedList, user: Users, messengerViewModel: Messenger
 
             itemsIndexed(feedList) { index, message ->
                 if(index == 0 && canType){
-                    MessageInput(messengerViewModel)
+                    MessageInput(viewModel)
                 }
                 MessageCard1(message, user)
             }
@@ -143,14 +143,14 @@ fun cardShapeFor1(messageItem: FeedItem): Shape {
 }
 
 @Composable
-fun MessageInput(messengerViewModel: MessengerViewModel) {
+fun MessageInput(viewModel: ViewModel) {
     var inputValue by remember { mutableStateOf("") } // 2
 
     fun sendMessage() {
         inputValue = inputValue.trim()
         if (inputValue != ""){
             val body = splitImages(inputValue)
-            messengerViewModel.postFeed(body);
+            viewModel.postFeed(body);
             inputValue = ""
         }
     }

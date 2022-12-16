@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.utils.const.Routes
-import com.example.messenger.viewmodel.MessengerViewModel
+import com.example.messenger.viewmodel.ViewModel
 import com.example.messenger.api.data.Users
 import com.example.messenger.api.data.UsersItem
 import androidx.compose.runtime.*
@@ -30,18 +30,18 @@ import androidx.compose.runtime.*
 @Composable
 fun profileScreenComponent(
     navController: NavController,
-    messengerViewModel: MessengerViewModel,
+    viewModel: ViewModel,
     currentUser: UsersItem
 ) {
 
-    val myUser by remember { messengerViewModel.myUser }
+    val myUser by remember { viewModel.myUser }
 
     var friends: MutableList<String> = mutableListOf()
     currentUser.friends.forEach{
         friends.add(it)
     }
 
-    var friendList = getFriendsProfile(messengerViewModel.userList.value, friends)
+    var friendList = getFriendsProfile(viewModel.userList.value, friends)
 
 
     fun getImage(img: String): String{
@@ -97,7 +97,7 @@ fun profileScreenComponent(
                                                     .padding(6.dp)
                                             ) {
                                                 Text(
-                                                    text = checkNull(messengerViewModel.getEmail),
+                                                    text = checkNull(viewModel.getEmail),
                                                     fontSize = 18.sp,
                                                     color = Color.White,
                                                     textAlign = TextAlign.Right
@@ -116,7 +116,7 @@ fun profileScreenComponent(
                                                 }
                                             } else {
                                                 Button(
-                                                    onClick = { messengerViewModel.addFriend(currentUser.id); messengerViewModel.getAllUsers(false) },
+                                                    onClick = { viewModel.addFriend(currentUser.id); viewModel.getAllUsers(false) },
                                                     shape = CutCornerShape(10),
                                                     colors = ButtonDefaults.buttonColors(
                                                         backgroundColor = Color.Green
@@ -152,7 +152,7 @@ fun profileScreenComponent(
 
                     Row(
                         Modifier
-                            .padding(top = 20.dp).clickable(onClick = { seePosts(navController, messengerViewModel, currentUser.id) })){
+                            .padding(top = 20.dp).clickable(onClick = { seePosts(navController, viewModel, currentUser.id) })){
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(10.dp))
@@ -207,7 +207,7 @@ fun profileScreenComponent(
                                     .clickable(onClick = {
                                         goTo(
                                             navController,
-                                            messengerViewModel,
+                                            viewModel,
                                             user
                                         )
                                     }),
@@ -240,14 +240,14 @@ fun profileScreenComponent(
     }
 }
 
-fun seePosts(navController: NavController, messengerViewModel: MessengerViewModel, userId: String){
-    messengerViewModel.getUserPosts(userId)
+fun seePosts(navController: NavController, viewModel: ViewModel, userId: String){
+    viewModel.getUserPosts(userId)
     navController.navigate(Routes.UserFeed.route)
 }
 
-fun goTo(navController: NavController, messengerViewModel: MessengerViewModel, user: UsersItem){
+fun goTo(navController: NavController, viewModel: ViewModel, user: UsersItem){
     // messengerViewModel.userSelected.value = messengerViewModel.currentUser.value
-    messengerViewModel.currentUser.value = user
+    viewModel.currentUser.value = user
     navController.navigate(Routes.MyProfile.route)
 }
 
