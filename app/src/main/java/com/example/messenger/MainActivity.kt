@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val socialNetworkApi = SocialNetworkApiImpl(sharedPreferences!!)
         val viewModel = ViewModel(socialNetworkApi)
+        viewModel.ping()
         viewModel.signInAuto()
         setContent {
             MainScreen(viewModel)

@@ -6,6 +6,9 @@ import retrofit2.http.*
 
 
 interface RetrofitSocialNetworkApi {
+    @GET("/")
+    suspend fun ping(): Response<Unit>
+
     @GET("/signin")
     suspend fun signIn(): Response<Unit>
 

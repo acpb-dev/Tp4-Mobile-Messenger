@@ -5,6 +5,7 @@ import com.example.messenger.api.auth.BasicAuthInterceptor
 import com.example.messenger.api.data.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.ServiceConfigurationError
 
 
 class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences) : SocialNetworkApi {
@@ -18,13 +19,16 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences) : S
 
     private var authenticatedClient: RetrofitSocialNetworkApi = createAuthClient()
 
+    override suspend fun ping() {
+       val response = authenticatedClient.ping()
+
+    }
+
     override suspend fun signIn(email: String, password: String): Boolean {
         saveAuthInformation(email, password)
         authenticatedClient = createAuthClient()
         val response = authenticatedClient.signIn()
-        println("${response.isSuccessful} \nn\nn\nn\nn\nn")
         return if (response.isSuccessful) {
-            println("Success\n\n\nn\nn")
             return true
         } else {
             clearStoredCredentials()

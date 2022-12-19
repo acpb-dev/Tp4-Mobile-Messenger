@@ -41,10 +41,14 @@ fun LoginScreen(
     var passwordVisible by remember { mutableStateOf(false) }
 
     val isAuthenticated by remember { viewModel.isAuthenticated }
+    val isValid by remember { viewModel.pingValid }
 
     LaunchedEffect(isAuthenticated) {
         if (isAuthenticated) {
             navController.navigate(Routes.MenuScreen.route)
+        }
+        while (true){
+            viewModel.ping()
         }
     }
     Column(
@@ -108,7 +112,8 @@ fun LoginScreen(
             )
             Button(
                 onClick = {
-                    viewModel.signIn(email, password)
+                        viewModel.signIn(email, password)
+
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primaryVariant)
             )
@@ -118,7 +123,10 @@ fun LoginScreen(
             }
             Button(
                 onClick = {
-                          navController.navigate(Routes.RegisterScreen.route)
+                    if (isValid){
+                        navController.navigate(Routes.RegisterScreen.route)
+                    }
+
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = DarkGray)
             )

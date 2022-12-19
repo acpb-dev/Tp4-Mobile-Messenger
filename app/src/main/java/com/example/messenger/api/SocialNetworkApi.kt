@@ -6,6 +6,7 @@ import com.example.messenger.api.data.UpdateProfile
 import com.example.messenger.api.data.Users
 
 interface SocialNetworkApi {
+    suspend fun ping();
     suspend fun signIn(email: String, password: String): Boolean// Resource<Unit>
     suspend fun signUp(email: String, password: String, firstname: String, lastname: String): Boolean
     suspend fun getFeed(): FeedList?

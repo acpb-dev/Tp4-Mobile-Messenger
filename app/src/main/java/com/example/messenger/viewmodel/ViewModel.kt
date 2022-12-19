@@ -1,5 +1,6 @@
 package com.example.messenger.viewmodel
 
+import android.accounts.NetworkErrorException
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -8,8 +9,10 @@ import com.example.messenger.api.SocialNetworkApi
 import com.example.messenger.api.data.*
 import com.example.messenger.utils.SearchWidget
 import kotlinx.coroutines.launch
+import java.net.SocketTimeoutException
 
 class ViewModel(private val api: SocialNetworkApi) : ViewModel() {
+    val pingValid = mutableStateOf(false)
     val searchedUser = mutableStateOf(Users())
     val currentUser = mutableStateOf(UsersItem())
     val myUser = mutableStateOf(UsersItem())
@@ -44,34 +47,49 @@ class ViewModel(private val api: SocialNetworkApi) : ViewModel() {
     }
 
     fun signUp(email: String, password: String, firstname: String, lastname: String){
-        viewModelScope.launch {
-            val response = api.signUp(email = email, password = password, firstname = firstname, lastname = lastname)
-            isAuthenticated.value = response
-            if (response){
-                usernameStored.value = api.getStoredEmail()
+        if (pingValid.value){
+            viewModelScope.launch {
+                val response = api.signUp(email = email, password = password, firstname = firstname, lastname = lastname)
+                isAuthenticated.value = response
+                if (response){
+                    usernameStored.value = api.getStoredEmail()
+                }
             }
-
         }
     }
 
     fun signIn(email: String, password: String) {
-        println("$email $password \n\n\n\n\n")
-
-        viewModelScope.launch {
-            isAuthenticated.value = api.signIn(email, password)
-            usernameStored.value = api.getStoredEmail()
+        if (pingValid.value) {
+            viewModelScope.launch {
+                isAuthenticated.value = api.signIn(email, password)
+                usernameStored.value = api.getStoredEmail()
+            }
         }
     }
 
     fun signInAuto(){
         val email = api.getStoredEmail()
         val password = api.getStoredPassword()
-        if (password.isNotEmpty() && email.isNotEmpty()){
-            viewModelScope.launch {
-                val response = api.signIn(email, password)
-                isAuthenticated.value = response
-                println("$response\n\n\n\n\n")
+        if (pingValid.value){
+            if (password.isNotEmpty() && email.isNotEmpty()){
+                viewModelScope.launch {
+                    val response = api.signIn(email, password)
+                    isAuthenticated.value = response
+                }
             }
+        }
+    }
+
+    fun ping(){
+        viewModelScope.launch {
+            try {
+                api.ping()
+                pingValid.value = true
+            }catch (e: SocketTimeoutException){
+                println(e)
+            }
+
+
         }
 
     }
@@ -81,20 +99,23 @@ class ViewModel(private val api: SocialNetworkApi) : ViewModel() {
     }
 
     fun getFeed() {
-        viewModelScope.launch {
-            val response = api.getFeed()
-            if (response != null) {
-                feed.value = response
+        if (pingValid.value) {
+            viewModelScope.launch {
+                val response = api.getFeed()
+                if (response != null) {
+                    feed.value = response
+                }
             }
         }
     }
 
     fun getUserPosts(userId: String) {
-        println(userId)
-        viewModelScope.launch {
-            val response = api.getUserPosts(userId)
-            if (response != null) {
-                userFeed.value = response
+        if (pingValid.value){
+            viewModelScope.launch {
+                val response = api.getUserPosts(userId)
+                if (response != null) {
+                    userFeed.value = response
+                }
             }
         }
     }
@@ -105,39 +126,46 @@ class ViewModel(private val api: SocialNetworkApi) : ViewModel() {
             lastname = lName.trim(),
             profileImageUrl = imgLink.trim()
         )
-        viewModelScope.launch {
-            val response = api.updateProfile(updated)
-            if (response) {
-                getAllUsers(true)
+        if (pingValid.value) {
+            viewModelScope.launch {
+                val response = api.updateProfile(updated)
+                if (response) {
+                    getAllUsers(true)
+                }
             }
-            println("WAS SUCCESSFUL $response")
         }
 
     }
 
     fun addFriend(id: String) {
-        viewModelScope.launch {
-            val response = api.addFriend(id)
+        if (pingValid.value) {
+            viewModelScope.launch {
+                val response = api.addFriend(id)
+            }
         }
     }
 
     fun postFeed(body: PostInfo) {
-        viewModelScope.launch {
-            api.postToFeed(body)
+        if (pingValid.value) {
+            viewModelScope.launch {
+                api.postToFeed(body)
+            }
         }
     }
 
     fun getAllUsers(setCurrentUser: Boolean) {
-        viewModelScope.launch {
-            val response = api.getUsers("")
-            if (response != null) {
-                userList.value = response
-                userList.value.forEach {
-                    if (it.isCurrentUser) {
-                        if (setCurrentUser) {
-                            currentUser.value = it
+        if (pingValid.value){
+            viewModelScope.launch {
+                val response = api.getUsers("")
+                if (response != null) {
+                    userList.value = response
+                    userList.value.forEach {
+                        if (it.isCurrentUser) {
+                            if (setCurrentUser) {
+                                currentUser.value = it
+                            }
+                            myUser.value = it
                         }
-                        myUser.value = it
                     }
                 }
             }
@@ -145,10 +173,12 @@ class ViewModel(private val api: SocialNetworkApi) : ViewModel() {
     }
 
     private fun getUserByName(search: String) {
-        viewModelScope.launch {
-            val response = api.getUsers(search)
-            if (response != null) {
-                searchedUser.value = response
+        if (pingValid.value) {
+            viewModelScope.launch {
+                val response = api.getUsers(search)
+                if (response != null) {
+                    searchedUser.value = response
+                }
             }
         }
     }
