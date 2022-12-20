@@ -92,7 +92,6 @@ fun MainScreen(socialNetworkApi: SocialNetworkApiImpl) {
             val updateProfileViewModel = UpdateProfileViewModel(socialNetworkApi, sharedViewModel)
             UpdateProfileScreen(navController = navController, updateProfileViewModel = updateProfileViewModel)
         }
-
     }
 }
 
