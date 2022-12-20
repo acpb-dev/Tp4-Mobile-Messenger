@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.navigation.NavController
 import com.example.messenger.composable.DefaultAppBar
+import com.example.messenger.utils.const.Routes
 import com.example.messenger.viewmodels.FeedViewModel
 import kotlinx.coroutines.delay
 
@@ -15,10 +16,13 @@ import kotlinx.coroutines.delay
 @Composable
 fun FeedScreen(navController: NavController, feedViewModel: FeedViewModel) {
     LaunchedEffect(true) {
-        while (true) {
+        var i = 0;
+        while (i < 73) {
             feedViewModel.getFeed()
-            delay(500)
+            delay(2500)
+            i++
         }
+        navController.navigate(Routes.FeedScreen.route) { popUpTo(Routes.FeedScreen.route) { inclusive = true }}
     }
 
     val feed by remember { feedViewModel.feed }

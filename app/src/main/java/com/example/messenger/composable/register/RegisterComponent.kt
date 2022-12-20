@@ -29,7 +29,7 @@ import com.example.messenger.viewmodels.RegisterViewModel
 
 @Composable
 fun RegisterComponent(navController: NavController, registerViewModel: RegisterViewModel) {
-    val isAuthenticated by registerViewModel.isAuthenticated
+    val isAuthenticated by remember { registerViewModel.sharedViewModel.isAuthenticated }
 
     var email by remember { registerViewModel.email }
     var password by remember { registerViewModel.password }

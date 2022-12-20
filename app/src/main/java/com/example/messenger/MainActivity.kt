@@ -47,12 +47,12 @@ fun MainScreen(socialNetworkApi: SocialNetworkApiImpl) {
     NavHost(navController = navController, startDestination = Routes.LoginScreen.route) {
 
         composable(route = Routes.LoginScreen.route) {
-            val loginViewModel = LoginViewModel(socialNetworkApi)
+            val loginViewModel = LoginViewModel(socialNetworkApi, sharedViewModel)
             LoginScreen(navController, loginViewModel)
         }
 
         composable(route = Routes.RegisterScreen.route) {
-            val registerViewModel = RegisterViewModel(socialNetworkApi)
+            val registerViewModel = RegisterViewModel(socialNetworkApi, sharedViewModel)
             SignUp(navController, registerViewModel)
         }
 

@@ -19,7 +19,7 @@ import com.example.messenger.viewmodels.MenuViewModel
 fun MenuScreen(navController: NavController, menuViewModel: MenuViewModel) {
 
     fun unAuthenticate() {
-//TODO        viewModel.isAuthenticated.value = false
+        menuViewModel.sharedViewModel.isAuthenticated.value = false
         menuViewModel.clearSavedCredentials()
         navController.popBackStack()
         navController.navigate(Routes.LoginScreen.route)

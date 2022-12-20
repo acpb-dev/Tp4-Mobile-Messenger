@@ -10,6 +10,7 @@ import com.example.messenger.api.data.UsersItem
 import kotlinx.coroutines.launch
 
 class SharedViewModel(private val api: SocialNetworkApi) : ViewModel() {
+    var isAuthenticated = mutableStateOf(false)
     val currentUser = mutableStateOf(UsersItem())
     val userList = mutableStateOf(Users())
     val userFeed = mutableStateOf(FeedList())

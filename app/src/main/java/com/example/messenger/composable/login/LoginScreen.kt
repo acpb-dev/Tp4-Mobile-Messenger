@@ -37,7 +37,7 @@ fun LoginScreen(
     var email by remember { messengerViewModel.email }
     var password by remember {messengerViewModel.password }
     var passwordVisible by remember { messengerViewModel.passwordVisible }
-    val isAuthenticated by remember { messengerViewModel.isAuthenticated }
+    val isAuthenticated by remember { messengerViewModel.sharedViewModel.isAuthenticated }
 
 
     LaunchedEffect(isAuthenticated) {

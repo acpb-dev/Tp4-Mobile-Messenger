@@ -6,9 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.messenger.api.SocialNetworkApi
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val api: SocialNetworkApi) : ViewModel() {
+class LoginViewModel(private val api: SocialNetworkApi, sharedViewModel: SharedViewModel) : ViewModel() {
 
-    var isAuthenticated = mutableStateOf(false)
+    val sharedViewModel = sharedViewModel
+
     val pingValid = mutableStateOf(true)
     var email = mutableStateOf("")
     var password = mutableStateOf("")
@@ -22,7 +23,7 @@ class LoginViewModel(private val api: SocialNetworkApi) : ViewModel() {
         if (pingValid.value) {
             viewModelScope.launch {
                 val response = api.signIn(email, password)
-                isAuthenticated.value = response
+                sharedViewModel.isAuthenticated.value = response
             }
         }
     }
@@ -34,7 +35,7 @@ class LoginViewModel(private val api: SocialNetworkApi) : ViewModel() {
             if (password.isNotEmpty() && email.isNotEmpty()) {
                 viewModelScope.launch {
                     val response = api.signIn(email, password)
-                    isAuthenticated.value = response
+                    sharedViewModel.isAuthenticated.value = response
                 }
             }
         }
