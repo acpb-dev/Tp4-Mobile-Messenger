@@ -5,20 +5,22 @@ import androidx.compose.material.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.navigation.NavController
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.SearchViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(navController: NavController, viewModel: ViewModel) {
-    val usersFound by remember { viewModel.searchedUser }
+fun SearchScreen(navController: NavController, searchViewModel: SearchViewModel) {
 
+    val usersFound by searchViewModel.searchedUser // IDK why it doesn't require the "remember { xxx }" but it's works...
+
+    println("\n\n\n\n\n\n\n\n\n\n\nn$usersFound")
     androidx.compose.material3.Scaffold(topBar = {
-        searchTopBar(viewModel = viewModel, navController)
+        searchTopBar(searchViewModel = searchViewModel, navController)
     },
         content = { content ->
             searchResults(
                 navController = navController,
-                viewModel = viewModel,
+                searchViewModel = searchViewModel,
                 usersFound = usersFound
             )
         })

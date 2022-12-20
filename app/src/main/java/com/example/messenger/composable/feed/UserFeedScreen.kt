@@ -14,14 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.example.messenger.composable.DefaultAppBar
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.FeedViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserFeedScreen(navController: NavController, viewModel: ViewModel) {
+fun UserFeedScreen(navController: NavController, feedViewModel: FeedViewModel) {
 
-    val userFeed by remember { viewModel.userFeed }
-    val users by remember { viewModel.userList }
+    val userFeed by remember { feedViewModel.sharedViewModel.userFeed }
+    val users by remember { feedViewModel.sharedViewModel.userList }
     Column(
         Modifier
             .fillMaxSize()
@@ -33,7 +33,7 @@ fun UserFeedScreen(navController: NavController, viewModel: ViewModel) {
                 FeedComponent(
                     feedList = userFeed,
                     user = users,
-                    viewModel = viewModel,
+                    feedViewModel = feedViewModel,
                     canType = false
                 )
             })

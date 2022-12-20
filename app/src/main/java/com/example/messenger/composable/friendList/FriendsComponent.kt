@@ -22,12 +22,12 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.utils.navToProfile
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.FriendListViewModel
 
 @Composable
 fun FriendsComponent(
     navController: NavController,
-    viewModel: ViewModel,
+    friendListViewModel: FriendListViewModel,
     friends: MutableList<String>
 ) {
     Column(
@@ -77,7 +77,7 @@ fun FriendsComponent(
                     reverseLayout = false
                 ) {
                     itemsIndexed(friends) { index, user ->
-                        val user = viewModel.getUserById(user)
+                        val user = friendListViewModel.getUserById(user)
                         var image =
                             "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png"
                         if (user.profileImgUrl != "") {
@@ -89,7 +89,7 @@ fun FriendsComponent(
                                 .clickable(onClick = {
                                     navToProfile(
                                         navController,
-                                        viewModel,
+                                        friendListViewModel.sharedViewModel,
                                         user
                                     )
                                 }),

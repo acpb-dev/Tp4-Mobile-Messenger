@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,10 +19,10 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.utils.navToProfile
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.MenuViewModel
 
 @Composable
-fun MenuComponent(navController: NavController, viewModel: ViewModel) {
+fun MenuComponent(navController: NavController, menuViewModel: MenuViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -44,8 +43,8 @@ fun MenuComponent(navController: NavController, viewModel: ViewModel) {
                 .clickable(onClick = {
                     navToProfile(
                         navController,
-                        viewModel,
-                        viewModel.currentUser.value
+                        menuViewModel.sharedViewModel,
+                        menuViewModel.sharedViewModel.currentUser.value
                     )
                 })
         ) {

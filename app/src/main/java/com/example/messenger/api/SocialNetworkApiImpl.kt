@@ -6,6 +6,7 @@ import com.example.messenger.api.data.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.ServiceConfigurationError
+import java.util.concurrent.TimeUnit
 
 
 class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences) : SocialNetworkApi {
@@ -127,9 +128,9 @@ class SocialNetworkApiImpl(private val sharedPreferences: SharedPreferences) : S
     }
 
     private fun createAuthClient(): RetrofitSocialNetworkApi {
-        // sharedPreferences = sauvegarder des informations sur l'appareil. Utile si on veut
-        // implementer une logique pour contouner le login si deja signin
-        val okHttpClient = UnsafeOkHttpClient.getUnsafeOkHttpClient()
+        val okHttpClient = UnsafeOkHttpClient
+            .getUnsafeOkHttpClient()
+            .connectTimeout(2, TimeUnit.SECONDS)
             .addInterceptor(
                 BasicAuthInterceptor(
                     sharedPreferences.getString("email", "") ?: "",

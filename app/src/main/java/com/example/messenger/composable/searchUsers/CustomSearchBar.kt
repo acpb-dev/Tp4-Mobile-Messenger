@@ -27,36 +27,36 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.messenger.api.data.Users
 import com.example.messenger.utils.SearchWidget
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.SearchViewModel
 
 @Composable
-fun searchTopBar(viewModel: ViewModel, navController: NavController) {
-    val searchWidgetState by viewModel.searchWidgetState
-    val searchTextState by viewModel.searchTextState
+fun searchTopBar(searchViewModel: SearchViewModel, navController: NavController) {
+    val searchWidgetState by searchViewModel.searchWidgetState
+    val searchTextState by searchViewModel.searchTextState
     MainAppBar(
         searchWidgetState = searchWidgetState,
         searchTextState = searchTextState,
         onTextChange = {
-            viewModel.updateSearchTextState(newValue = it)
+            searchViewModel.updateSearchTextState(newValue = it)
 
         },
         onCloseClicked = {
-            viewModel.updateSearchWidgetState(newValue = SearchWidget.SearchWidgetState.CLOSED)
+            searchViewModel.updateSearchWidgetState(newValue = SearchWidget.SearchWidgetState.CLOSED)
         },
         onSearchClicked = {
             Log.d("Searched Text", it)
         },
         onSearchTriggered = {
-            viewModel.updateSearchWidgetState(newValue = SearchWidget.SearchWidgetState.OPENED)
+            searchViewModel.updateSearchWidgetState(newValue = SearchWidget.SearchWidgetState.OPENED)
         },
         navController = navController
     )
 }
 
 @Composable
-fun searchResults(navController: NavController, viewModel: ViewModel, usersFound: Users) {
+fun searchResults(navController: NavController, searchViewModel: SearchViewModel, usersFound: Users) {
     Row(Modifier.background(Color.Black)) {
-        SearchComponent(navController = navController, viewModel = viewModel, usersFound)
+        SearchComponent(navController = navController, searchViewModel = searchViewModel, usersFound)
     }
 }
 

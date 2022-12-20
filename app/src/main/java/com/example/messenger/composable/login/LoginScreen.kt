@@ -1,6 +1,5 @@
 package com.example.messenger.composable.login
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.DarkGray
 import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -29,26 +27,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.messenger.utils.const.Routes
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.LoginViewModel
 
 @Composable
 fun LoginScreen(
     navController: NavController,
-    viewModel: ViewModel
+    messengerViewModel: LoginViewModel
 ) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
+    var email by remember { messengerViewModel.email }
+    var password by remember {messengerViewModel.password }
+    var passwordVisible by remember { messengerViewModel.passwordVisible }
+    val isAuthenticated by remember { messengerViewModel.isAuthenticated }
 
-    val isAuthenticated by remember { viewModel.isAuthenticated }
-    val isValid by remember { viewModel.pingValid }
 
     LaunchedEffect(isAuthenticated) {
         if (isAuthenticated) {
             navController.navigate(Routes.MenuScreen.route)
-        }
-        while (true){
-            viewModel.ping()
         }
     }
     Column(
@@ -112,7 +106,7 @@ fun LoginScreen(
             )
             Button(
                 onClick = {
-                        viewModel.signIn(email, password)
+                        messengerViewModel.signIn(email, password)
 
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primaryVariant)
@@ -123,9 +117,7 @@ fun LoginScreen(
             }
             Button(
                 onClick = {
-                    if (isValid){
                         navController.navigate(Routes.RegisterScreen.route)
-                    }
 
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = DarkGray)

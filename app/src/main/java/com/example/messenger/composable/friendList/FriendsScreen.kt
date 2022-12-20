@@ -11,19 +11,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.example.messenger.composable.DefaultAppBar
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.FriendListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FriendsScreen(navController: NavController, viewModel: ViewModel) {
-    val myF = viewModel.getFriendsList(viewModel.myUser.value.friends)
+fun FriendsScreen(navController: NavController, friendListViewModel: FriendListViewModel) {
+    val myF = friendListViewModel.getFriendsList(friendListViewModel.sharedViewModel.myUser.value.friends)
 
     Scaffold(topBar = {
         DefaultAppBar("Friends List", Icons.Filled.ArrowBack) { navController.popBackStack() }
     },
         content = { padding ->
             Row(Modifier.background(Color.Black)) {
-                FriendsComponent(navController = navController, viewModel = viewModel, myF)
+                FriendsComponent(navController = navController, friendListViewModel = friendListViewModel, myF)
             }
         })
 }

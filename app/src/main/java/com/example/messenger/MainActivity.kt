@@ -20,10 +20,10 @@ import com.example.messenger.composable.login.LoginScreen
 import com.example.messenger.composable.menu.MenuScreen
 import com.example.messenger.composable.profile.profileScreen
 import com.example.messenger.composable.profile.UpdateProfileScreen
-import com.example.messenger.composable.searchUsers.SearchScreen
 import com.example.messenger.composable.register.SignUp
+import com.example.messenger.composable.searchUsers.SearchScreen
 import com.example.messenger.utils.const.Routes
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.*
 
 class MainActivity : ComponentActivity() {
     private var sharedPreferences: SharedPreferences? = null
@@ -33,57 +33,64 @@ class MainActivity : ComponentActivity() {
         sharedPreferences = getSharedPreferences("login_information", MODE_PRIVATE)
         super.onCreate(savedInstanceState)
         val socialNetworkApi = SocialNetworkApiImpl(sharedPreferences!!)
-        val viewModel = ViewModel(socialNetworkApi)
-        viewModel.ping()
-        viewModel.signInAuto()
         setContent {
-            MainScreen(viewModel)
+            MainScreen(socialNetworkApi)
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
-fun MainScreen(viewModel: ViewModel) {
+fun MainScreen(socialNetworkApi: SocialNetworkApiImpl) {
     val navController: NavHostController = rememberNavController()
-
+    val sharedViewModel = SharedViewModel(socialNetworkApi)
     NavHost(navController = navController, startDestination = Routes.LoginScreen.route) {
+
         composable(route = Routes.LoginScreen.route) {
-            LoginScreen(navController, viewModel)
+            val loginViewModel = LoginViewModel(socialNetworkApi)
+            LoginScreen(navController, loginViewModel)
         }
 
         composable(route = Routes.RegisterScreen.route) {
-            SignUp(navController, viewModel)
+            val registerViewModel = RegisterViewModel(socialNetworkApi)
+            SignUp(navController, registerViewModel)
         }
 
         composable(route = Routes.MenuScreen.route) {
-            viewModel.getAllUsers(true)
-            MenuScreen(navController, viewModel)
+            val menuViewModel = MenuViewModel(socialNetworkApi, sharedViewModel)
+            sharedViewModel.getAllUsers(true)
+            MenuScreen(navController, menuViewModel)
         }
 
         composable(route = Routes.FeedScreen.route) {
-            FeedScreen(navController, viewModel)
+            val feedViewModel = FeedViewModel(socialNetworkApi, sharedViewModel)
+            FeedScreen(navController, feedViewModel)
         }
 
         composable(route = Routes.UserFeedScreen.route) {
-            UserFeedScreen(navController = navController, viewModel = viewModel)
+            val feedViewModel = FeedViewModel(socialNetworkApi, sharedViewModel)
+            UserFeedScreen(navController = navController, feedViewModel = feedViewModel)
         }
 
         composable(route = Routes.FriendListScreen.route) {
-            viewModel.clearRecent()
-            FriendsScreen(navController = navController, viewModel = viewModel)
+            sharedViewModel.clearRecent()
+            val friendListViewModel = FriendListViewModel(socialNetworkApi, sharedViewModel)
+            FriendsScreen(navController = navController, friendListViewModel = friendListViewModel)
         }
 
         composable(route = Routes.ProfileScreen.route) {
-            profileScreen(navController = navController, viewModel = viewModel)
+            val profileViewModel = ProfileViewModel(socialNetworkApi, sharedViewModel)
+            profileScreen(navController = navController, profileViewModel = profileViewModel)
         }
 
         composable(route = Routes.SearchFriendScreen.route) {
-            SearchScreen(navController = navController, viewModel = viewModel)
+            val searchViewModel = SearchViewModel(socialNetworkApi, sharedViewModel)
+            SearchScreen(navController = navController, searchViewModel = searchViewModel)
         }
 
         composable(route = Routes.UpdateProfileScreen.route) {
-            UpdateProfileScreen(navController = navController, viewModel = viewModel)
+            val updateProfileViewModel = UpdateProfileViewModel(socialNetworkApi, sharedViewModel)
+            UpdateProfileScreen(navController = navController, updateProfileViewModel = updateProfileViewModel)
         }
 
     }

@@ -12,15 +12,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.example.messenger.composable.DefaultAppBar
 import com.example.messenger.utils.const.Routes
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.MenuViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuScreen(navController: NavController, viewModel: ViewModel) {
+fun MenuScreen(navController: NavController, menuViewModel: MenuViewModel) {
 
     fun unAuthenticate() {
-        viewModel.isAuthenticated.value = false
-        viewModel.clearSavedCredentials()
+//TODO        viewModel.isAuthenticated.value = false
+        menuViewModel.clearSavedCredentials()
         navController.popBackStack()
         navController.navigate(Routes.LoginScreen.route)
     }
@@ -36,7 +36,7 @@ fun MenuScreen(navController: NavController, viewModel: ViewModel) {
             ) { unAuthenticate() }
         },
             content = {
-                MenuComponent(navController, viewModel)
+                MenuComponent(navController, menuViewModel)
             })
     }
 }

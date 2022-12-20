@@ -30,23 +30,23 @@ import com.example.messenger.api.data.Users
 import com.example.messenger.api.data.UsersItem
 import com.example.messenger.utils.const.Routes
 import com.example.messenger.utils.navToProfile
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.ProfileViewModel
 
 @Composable
 fun ProfileComponent(
     navController: NavController,
-    viewModel: ViewModel,
+    profileViewModel: ProfileViewModel,
     currentUser: UsersItem
 ) {
 
-    val myUser by remember { viewModel.myUser }
+    val myUser by remember { profileViewModel.sharedViewModel.myUser }
 
     val friends: MutableList<String> = mutableListOf()
     currentUser.friends.forEach {
         friends.add(it)
     }
 
-    val friendList = getFriendsProfile(viewModel.userList.value, friends)
+    val friendList = getFriendsProfile(profileViewModel.sharedViewModel.userList.value, friends)
 
 
     fun getImage(img: String): String {
@@ -107,7 +107,7 @@ fun ProfileComponent(
                                                     .padding(6.dp)
                                             ) {
                                                 Text(
-                                                    text = checkNull(viewModel.getEmail),
+                                                    text = checkNull(profileViewModel.getEmail),
                                                     fontSize = 18.sp,
                                                     color = Color.White,
                                                     textAlign = TextAlign.Right
@@ -130,9 +130,7 @@ fun ProfileComponent(
                                             } else {
                                                 Button(
                                                     onClick = {
-                                                        viewModel.addFriend(currentUser.id); viewModel.getAllUsers(
-                                                        false
-                                                    )
+                                                        profileViewModel.addFriend(currentUser.id); profileViewModel.sharedViewModel.getAllUsers(false)
                                                     },
                                                     shape = CutCornerShape(10),
                                                     colors = ButtonDefaults.buttonColors(
@@ -181,7 +179,7 @@ fun ProfileComponent(
                             .clickable(onClick = {
                                 seePosts(
                                     navController,
-                                    viewModel,
+                                    profileViewModel,
                                     currentUser.id
                                 )
                             })
@@ -254,9 +252,10 @@ fun ProfileComponent(
                                     .clickable(onClick = {
                                         navToProfile(
                                             navController,
-                                            viewModel,
+                                            profileViewModel.sharedViewModel,
                                             user
                                         )
+                                        // TODO HERE
                                     }),
                                 horizontalArrangement = Arrangement.Start,
                                 verticalAlignment = Alignment.CenterVertically
@@ -291,8 +290,8 @@ fun ProfileComponent(
     }
 }
 
-fun seePosts(navController: NavController, viewModel: ViewModel, userId: String) {
-    viewModel.getUserPosts(userId)
+fun seePosts(navController: NavController, profileViewModel: ProfileViewModel, userId: String) {
+    profileViewModel.getUserPosts(userId)
     navController.navigate(Routes.UserFeedScreen.route)
 }
 
@@ -315,11 +314,3 @@ fun checkNull(entry: String?): String {
     return ""
 }
 
-fun getCurrentUser(userList: Users, user: UsersItem): UsersItem {
-    userList.forEach {
-        if (it.id == user.id) {
-            return it
-        }
-    }
-    return UsersItem()
-}

@@ -19,12 +19,12 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.api.data.Users
 import com.example.messenger.utils.navToProfile
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.SearchViewModel
 
 @Composable
 fun SearchComponent(
     navController: NavController,
-    viewModel: ViewModel,
+    searchViewModel: SearchViewModel,
     usersFound: Users
 ) {
     Column(
@@ -57,9 +57,10 @@ fun SearchComponent(
                                 .clickable(onClick = {
                                     navToProfile(
                                         navController,
-                                        viewModel,
+                                        searchViewModel.sharedViewModel,
                                         user
                                     )
+                                    //TODO HERE
                                 }),
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically

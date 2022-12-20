@@ -35,12 +35,11 @@ import com.example.messenger.api.data.FeedItem
 import com.example.messenger.api.data.FeedList
 import com.example.messenger.api.data.PostInfo
 import com.example.messenger.api.data.Users
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.FeedViewModel
 import java.time.LocalDateTime
 
 @Composable
-fun FeedComponent(feedList: FeedList, user: Users, viewModel: ViewModel, canType: Boolean) {
-//    val reverse: List<FeedItem> = feedList.reversed()
+fun FeedComponent(feedList: FeedList, user: Users, feedViewModel: FeedViewModel, canType: Boolean) {
     Box(
         Modifier
             .background(Black),
@@ -68,7 +67,7 @@ fun FeedComponent(feedList: FeedList, user: Users, viewModel: ViewModel, canType
 
                 itemsIndexed(feedList) { index, message ->
                     if (index == 0 && canType) {
-                        MessageInput(viewModel)
+                        MessageInput(feedViewModel)
                     }
                     MessageCard1(message, user)
                 }
@@ -82,7 +81,7 @@ fun FeedComponent(feedList: FeedList, user: Users, viewModel: ViewModel, canType
             ) {
                 if (canType) {
                     Spacer(modifier = Modifier.weight(1f))
-                    MessageInput(viewModel)
+                    MessageInput(feedViewModel)
                 }
             }
         }
@@ -170,14 +169,14 @@ fun cardShapeFor1(messageItem: FeedItem): Shape {
 }
 
 @Composable
-fun MessageInput(viewModel: ViewModel) {
+fun MessageInput(feedViewModel: FeedViewModel) {
     var inputValue by remember { mutableStateOf("") } // 2
 
     fun sendMessage() {
         inputValue = inputValue.trim()
         if (inputValue != "") {
             val body = splitImages(inputValue)
-            viewModel.postFeed(body)
+            feedViewModel.postFeed(body)
             inputValue = ""
         }
     }

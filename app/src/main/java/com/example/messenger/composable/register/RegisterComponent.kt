@@ -25,24 +25,24 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.messenger.utils.const.Routes
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.RegisterViewModel
 
 @Composable
-fun RegisterComponent(navController: NavController, viewModel: ViewModel) {
-    val isAuthenticated by remember { viewModel.isAuthenticated }
+fun RegisterComponent(navController: NavController, registerViewModel: RegisterViewModel) {
+    val isAuthenticated by remember { registerViewModel.isAuthenticated }
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var password2 by remember { mutableStateOf("") }
-    var firstname by remember { mutableStateOf("") }
-    var lastname by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
+    var email by remember { registerViewModel.email }
+    var password by remember { registerViewModel.password }
+    var password2 by remember { registerViewModel.password2 }
+    var firstname by remember { registerViewModel.firstname }
+    var lastname by remember { registerViewModel.lastname }
+    var passwordVisible by remember { registerViewModel.passwordVisible }
 
     val context = LocalContext.current
 
     LaunchedEffect(isAuthenticated) {
         if (isAuthenticated) {
-            viewModel.usernameStored.value = email
+//            viewModel.getEmail.value = email
             navController.navigate(Routes.MenuScreen.route)
         }
     }
@@ -144,10 +144,10 @@ fun RegisterComponent(navController: NavController, viewModel: ViewModel) {
             Button(
                 modifier = Modifier.padding(15.dp),
                 onClick = {
-                    val error = verifyInfo(email = email, password = password, password2 = password2, fName = firstname, lName = lastname)
+                    val error = registerViewModel.verifyInfo(email = email, password = password, password2 = password2, fName = firstname, lName = lastname)
 
                     if (error == ""){
-                        viewModel.signUp(
+                        registerViewModel.signUp(
                             email = email,
                             password = password,
                             firstname = firstname,
@@ -167,27 +167,3 @@ fun RegisterComponent(navController: NavController, viewModel: ViewModel) {
     }
 }
 
-fun verifyInfo(email: String, password: String, password2: String, fName: String, lName: String): String{
-    val emailT = email.trim()
-    val passwordT = password.trim()
-    val fNameT = fName.trim()
-    val lNameT = lName.trim()
-    var error = ""
-    if (fNameT == ""){
-        error = "Firstname cannot be empty "
-    }
-    if (lNameT == ""){
-        error = "Lastname cannot be empty "
-    }
-    if (passwordT == ""){
-        error = "Password cannot be empty"
-    }
-
-    if (password2 != password){
-        error = "Passwords must match"
-    }
-    if (!emailT.contains('@')){
-        error = "Invalid Email address"
-    }
-    return error
-}

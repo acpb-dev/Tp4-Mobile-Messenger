@@ -13,11 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.example.messenger.composable.DefaultAppBar
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.RegisterViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUp(navController: NavController, viewModel: ViewModel) {
+fun SignUp(navController: NavController, registerViewModel: RegisterViewModel) {
     Column(
         Modifier
             .fillMaxSize()
@@ -29,7 +29,7 @@ fun SignUp(navController: NavController, viewModel: ViewModel) {
             ) { navController.popBackStack() }
         },
             content = {
-                RegisterComponent(navController, viewModel)
+                RegisterComponent(navController, registerViewModel)
             })
     }
 }

@@ -13,11 +13,11 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.UpdateProfileViewModel
 
 @Composable
-fun UpdateProfileComponent(navController: NavController, viewModel: ViewModel) {
-    val currentUser by remember { mutableStateOf(viewModel.currentUser) }
+fun UpdateProfileComponent(navController: NavController, updateProfileViewModel: UpdateProfileViewModel) {
+    val currentUser by remember { mutableStateOf(updateProfileViewModel.sharedViewModel.currentUser) }
     var imgLink by remember { mutableStateOf(currentUser.value.profileImgUrl) }
     var firstName by remember { mutableStateOf(currentUser.value.firstname) }
     var lastName by remember { mutableStateOf(currentUser.value.lastname) }
@@ -94,7 +94,7 @@ fun UpdateProfileComponent(navController: NavController, viewModel: ViewModel) {
 
         Button(
             onClick = {
-                viewModel.updateProfile(firstName, lastName, imgLink); navController.popBackStack()
+                updateProfileViewModel.updateProfile(firstName, lastName, imgLink); navController.popBackStack()
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primaryVariant)
         )

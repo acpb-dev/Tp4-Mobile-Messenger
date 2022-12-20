@@ -8,21 +8,21 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.navigation.NavController
 import com.example.messenger.composable.DefaultAppBar
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.FeedViewModel
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FeedScreen(navController: NavController, viewModel: ViewModel) {
+fun FeedScreen(navController: NavController, feedViewModel: FeedViewModel) {
     LaunchedEffect(true) {
         while (true) {
-            viewModel.getFeed()
-            delay(5000)
+            feedViewModel.getFeed()
+            delay(2500)
         }
     }
 
-    val feed by remember { viewModel.feed }
-    val users by remember { viewModel.userList }
+    val feed by remember { feedViewModel.feed }
+    val users by remember { feedViewModel.sharedViewModel.userList }
 
     Scaffold(topBar = {
         DefaultAppBar("Feed", Icons.Filled.ArrowBack) { navController.popBackStack() }
@@ -31,7 +31,7 @@ fun FeedScreen(navController: NavController, viewModel: ViewModel) {
             FeedComponent(
                 feedList = feed,
                 user = users,
-                viewModel = viewModel,
+                feedViewModel = feedViewModel,
                 canType = true
             )
         })

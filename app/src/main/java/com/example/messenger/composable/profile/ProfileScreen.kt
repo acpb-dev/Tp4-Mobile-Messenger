@@ -13,20 +13,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.example.messenger.composable.DefaultAppBar
-import com.example.messenger.viewmodel.ViewModel
+import com.example.messenger.viewmodels.ProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun profileScreen(navController: NavController, viewModel: ViewModel) {
+fun profileScreen(navController: NavController, profileViewModel: ProfileViewModel) {
 
-    val userViewing by remember { viewModel.currentUser }
+    val userViewing by remember { profileViewModel.sharedViewModel.currentUser }
 
-    val currentUser = getCurrentUser(viewModel.userList.value, userViewing)
-    viewModel.getUserPosts(currentUser.id)
-    viewModel.addRecent(currentUser)
+    val currentUser = profileViewModel.getCurrentUser(userViewing)
+    profileViewModel.getUserPosts(currentUser.id)
+    profileViewModel.sharedViewModel.addRecent(currentUser)
 
     fun back() {
-        viewModel.removeRecent()
+        profileViewModel.sharedViewModel.removeRecent()
         navController.popBackStack()
     }
 
@@ -35,7 +35,7 @@ fun profileScreen(navController: NavController, viewModel: ViewModel) {
     },
         content = { padding ->
             Row(Modifier.background(Color.Black)) {
-                ProfileComponent(navController, viewModel, currentUser)
+                ProfileComponent(navController, profileViewModel, currentUser)
             }
         })
 }
