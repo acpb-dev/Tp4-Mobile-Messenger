@@ -1,7 +1,7 @@
 package com.example.messenger.composable.feed
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import android.widget.Toast
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -24,22 +24,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.DarkGray
+import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.messenger.api.data.FeedItem
 import com.example.messenger.api.data.FeedList
 import com.example.messenger.api.data.PostInfo
 import com.example.messenger.api.data.Users
+import com.example.messenger.utils.navToProfile
 import com.example.messenger.viewmodels.FeedViewModel
 import java.time.LocalDateTime
 
 @Composable
-fun FeedComponent(feedList: FeedList, user: Users, feedViewModel: FeedViewModel, canType: Boolean) {
+fun FeedComponent(navController: NavController, feedList: FeedList, user: Users, feedViewModel: FeedViewModel, canType: Boolean) {
     Box(
         Modifier
             .background(Black),
@@ -69,7 +73,7 @@ fun FeedComponent(feedList: FeedList, user: Users, feedViewModel: FeedViewModel,
                     if (index == 0 && canType) {
                         MessageInput(feedViewModel)
                     }
-                    MessageCard1(message, user)
+                    MessageCard1(navController, feedViewModel, message, user)
                 }
             }
         } else {
@@ -97,21 +101,30 @@ fun getName(uid: String, users: Users): String {
     return "Deleted User"
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MessageCard1(feedPost: FeedItem, user: Users) {
+fun MessageCard1(navController: NavController, feedViewModel: FeedViewModel, feedPost: FeedItem, user: Users) {
+    val context = LocalContext.current
     val localDateTime = LocalDateTime.parse(feedPost.createdAt)
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 4.dp),
-        horizontalAlignment = when { // 2
+        horizontalAlignment = when {
             feedPost.isFromCurrentUser -> Alignment.End
             else -> Alignment.Start
         },
     ) {
         Card(
-            modifier = Modifier.widthIn(max = 340.dp),
-            shape = cardShapeFor1(feedPost), // 3
+            modifier = Modifier.widthIn(max = 340.dp).combinedClickable(
+                onClick = { },
+                onLongClick = {
+                    val result = likePost(feedViewModel, feedPost)
+                    if (result != ""){
+                        Toast.makeText(context, result, Toast.LENGTH_SHORT).show()
+                    }
+                }),
+            shape = cardShapeFor1(feedPost),
             backgroundColor = when {
                 feedPost.isFromCurrentUser -> MaterialTheme.colors.primary
                 else -> DarkGray
@@ -126,6 +139,12 @@ fun MessageCard1(feedPost: FeedItem, user: Users) {
                 },
             )
         }
+        Row(Modifier.padding(top = 10.dp)) {
+            Text(text = "Likes: ", color = Red)
+            Text(text = feedPost.likes.count().toString(), color = White)
+
+        }
+
         feedPost.images.forEach {
             Image(
                 painter = rememberAsyncImagePainter(it),
@@ -134,7 +153,6 @@ fun MessageCard1(feedPost: FeedItem, user: Users) {
             )
         }
         Text(
-            // 4
             text = when {
                 feedPost.isFromCurrentUser -> "Me"
                 else -> getName(feedPost.user, user)
@@ -142,14 +160,29 @@ fun MessageCard1(feedPost: FeedItem, user: Users) {
             color = White,
             fontSize = 12.sp,
         )
-        Text(
-            // 4
-            text = formatTime(localDateTime),
-            color = White,
-            fontSize = 8.sp,
-        )
-
+        Row(Modifier.clickable(onClick = { if (!feedPost.isFromCurrentUser){ navToProfile(navController, feedViewModel.sharedViewModel, feedViewModel.getUserById(feedPost.user)) } })) {
+            Text(
+                text = formatTime(localDateTime),
+                color = White,
+                fontSize = 8.sp,
+            )
+        }
     }
+}
+
+
+fun likePost(feedViewModel: FeedViewModel, feedPost: FeedItem): String{
+    val myId = feedViewModel.sharedViewModel.myUser.value.id
+    if(!feedPost.isFromCurrentUser){
+        feedViewModel.likePost(feedPost.id)
+        return if (feedPost.likes.contains(myId)){
+            "UnLiked Post"
+
+        }else{
+            "Liked Post"
+        }
+    }
+    return ""
 }
 
 fun formatTime(time: LocalDateTime): String {
@@ -170,7 +203,7 @@ fun cardShapeFor1(messageItem: FeedItem): Shape {
 
 @Composable
 fun MessageInput(feedViewModel: FeedViewModel) {
-    var inputValue by remember { mutableStateOf("") } // 2
+    var inputValue by remember { mutableStateOf("") }
 
     fun sendMessage() {
         inputValue = inputValue.trim()
@@ -183,7 +216,6 @@ fun MessageInput(feedViewModel: FeedViewModel) {
 
     Row {
         TextField(
-            // 4
             modifier = Modifier.weight(1f),
             value = inputValue,
             colors = TextFieldDefaults.textFieldColors(
@@ -199,7 +231,6 @@ fun MessageInput(feedViewModel: FeedViewModel) {
             keyboardActions = KeyboardActions { sendMessage() },
         )
         Button(
-            // 5
             modifier = Modifier
                 .height(56.dp)
                 .background(DarkGray)
@@ -207,7 +238,7 @@ fun MessageInput(feedViewModel: FeedViewModel) {
             onClick = { sendMessage() },
             enabled = inputValue.isNotBlank(),
         ) {
-            Icon( // 6
+            Icon(
                 imageVector = Icons.Outlined.Send,
                 contentDescription = ""
             )

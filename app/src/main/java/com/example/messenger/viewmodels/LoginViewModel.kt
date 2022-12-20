@@ -15,20 +15,7 @@ class LoginViewModel(private val api: SocialNetworkApi) : ViewModel() {
     var passwordVisible = mutableStateOf(false)
 
     init{
-        println("Started")
         signInAuto()
-//        viewModelScope.launch {
-//            while (true){
-//                try {
-//                    api.ping()
-//                    pingValid.value = true
-//                }catch (e: SocketTimeoutException){
-//                    pingValid.value = false
-//                    println(e)
-//                }
-//                delay(5000)
-//            }
-//        }
     }
 
     fun signIn(email: String, password: String) {
@@ -36,7 +23,6 @@ class LoginViewModel(private val api: SocialNetworkApi) : ViewModel() {
             viewModelScope.launch {
                 val response = api.signIn(email, password)
                 isAuthenticated.value = response
-                // usernameStored.value = api.getStoredEmail()
             }
         }
     }

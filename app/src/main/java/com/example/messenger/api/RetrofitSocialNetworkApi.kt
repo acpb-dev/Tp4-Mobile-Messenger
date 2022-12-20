@@ -7,7 +7,7 @@ import retrofit2.http.*
 
 interface RetrofitSocialNetworkApi {
     @GET("/")
-    suspend fun ping(): Response<Unit>
+    suspend fun ping(): Response<Boolean>
 
     @GET("/signin")
     suspend fun signIn(): Response<Unit>
@@ -32,4 +32,7 @@ interface RetrofitSocialNetworkApi {
 
     @PUT("/user/")
     suspend fun updateProfile(@Body update: UpdateProfile): Response<Unit>
+
+    @POST("/post/{Id}/like")
+    suspend fun likePost(@Path("Id") postId: String): Response<Unit>
 }

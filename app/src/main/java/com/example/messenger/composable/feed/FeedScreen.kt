@@ -17,7 +17,7 @@ fun FeedScreen(navController: NavController, feedViewModel: FeedViewModel) {
     LaunchedEffect(true) {
         while (true) {
             feedViewModel.getFeed()
-            delay(2500)
+            delay(500)
         }
     }
 
@@ -29,6 +29,7 @@ fun FeedScreen(navController: NavController, feedViewModel: FeedViewModel) {
     },
         content = {
             FeedComponent(
+                navController = navController,
                 feedList = feed,
                 user = users,
                 feedViewModel = feedViewModel,

@@ -30,9 +30,7 @@ class SearchViewModel (private val api: SocialNetworkApi, sharedViewModel: Share
         viewModelScope.launch {
             val response = api.getUsers(search)
             if (response != null) {
-                //print("$response\n\n\n\n")
                 searchedUser.value = response
-                println(searchedUser.value)
             }
         }
     }
@@ -40,7 +38,6 @@ class SearchViewModel (private val api: SocialNetworkApi, sharedViewModel: Share
     fun updateSearchTextState(newValue: String) {
         val trimmedValue = newValue.trim()
         if (trimmedValue != "") {
-            println("$trimmedValue\n\n\n")
             getUserByName(trimmedValue)
         } else {
             searchedUser.value = Users()

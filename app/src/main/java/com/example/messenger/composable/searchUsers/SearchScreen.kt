@@ -12,7 +12,6 @@ import com.example.messenger.viewmodels.SearchViewModel
 fun SearchScreen(navController: NavController, searchViewModel: SearchViewModel) {
 
     val usersFound by searchViewModel.searchedUser // IDK why it doesn't require the "remember { xxx }" but it's works...
-
     println("\n\n\n\n\n\n\n\n\n\n\nn$usersFound")
     androidx.compose.material3.Scaffold(topBar = {
         searchTopBar(searchViewModel = searchViewModel, navController)

@@ -88,7 +88,6 @@ fun ProfileComponent(
                     Row {
                         Row(
                             Modifier
-                                .clickable(onClick = {})
                                 .padding(top = 3.dp)
                         ) {
                             Box(
@@ -130,7 +129,9 @@ fun ProfileComponent(
                                             } else {
                                                 Button(
                                                     onClick = {
-                                                        profileViewModel.addFriend(currentUser.id); profileViewModel.sharedViewModel.getAllUsers(false)
+                                                        profileViewModel.addFriend(currentUser.id)
+                                                        profileViewModel.sharedViewModel.getAllUsers(false)
+                                                        navController.navigate(Routes.ProfileScreen.route) { popUpTo(Routes.ProfileScreen.route) { inclusive = true } }
                                                     },
                                                     shape = CutCornerShape(10),
                                                     colors = ButtonDefaults.buttonColors(
@@ -245,7 +246,6 @@ fun ProfileComponent(
                         reverseLayout = false
                     ) {
                         itemsIndexed(friendList) { index, user ->
-                            // here
                             Row(
                                 Modifier
                                     .padding(20.dp)
@@ -255,7 +255,6 @@ fun ProfileComponent(
                                             profileViewModel.sharedViewModel,
                                             user
                                         )
-                                        // TODO HERE
                                     }),
                                 horizontalArrangement = Arrangement.Start,
                                 verticalAlignment = Alignment.CenterVertically

@@ -15,14 +15,13 @@ class RegisterViewModel(private val api: SocialNetworkApi) : ViewModel() {
     var lastname = mutableStateOf("")
     var passwordVisible = mutableStateOf(false)
 
-
-
     var isAuthenticated = mutableStateOf(false)
 
     fun signUp(email: String, password: String, firstname: String, lastname: String){
             viewModelScope.launch {
                 val response = api.signUp(email = email, password = password, firstname = firstname, lastname = lastname)
                 isAuthenticated.value = response
+                println(response)
             }
     }
 

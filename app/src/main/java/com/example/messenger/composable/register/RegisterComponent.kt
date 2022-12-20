@@ -29,7 +29,7 @@ import com.example.messenger.viewmodels.RegisterViewModel
 
 @Composable
 fun RegisterComponent(navController: NavController, registerViewModel: RegisterViewModel) {
-    val isAuthenticated by remember { registerViewModel.isAuthenticated }
+    val isAuthenticated by registerViewModel.isAuthenticated
 
     var email by remember { registerViewModel.email }
     var password by remember { registerViewModel.password }
@@ -42,7 +42,6 @@ fun RegisterComponent(navController: NavController, registerViewModel: RegisterV
 
     LaunchedEffect(isAuthenticated) {
         if (isAuthenticated) {
-//            viewModel.getEmail.value = email
             navController.navigate(Routes.MenuScreen.route)
         }
     }

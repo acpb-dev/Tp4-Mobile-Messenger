@@ -31,6 +31,7 @@ fun UserFeedScreen(navController: NavController, feedViewModel: FeedViewModel) {
         },
             content = { padding ->
                 FeedComponent(
+                    navController = navController,
                     feedList = userFeed,
                     user = users,
                     feedViewModel = feedViewModel,

@@ -55,7 +55,7 @@ fun UpdateProfileComponent(navController: NavController, updateProfileViewModel:
             verticalArrangement = Arrangement.Center
         ) {
             Text(text = "Update First Name:", color = White, textAlign = TextAlign.Center)
-            TextField( // 4,
+            TextField(
                 shape = RoundedCornerShape(8.dp),
                 value = firstName,
                 colors = TextFieldDefaults.textFieldColors(
@@ -76,7 +76,7 @@ fun UpdateProfileComponent(navController: NavController, updateProfileViewModel:
             verticalArrangement = Arrangement.Center
         ) {
             Text(text = "Update Last Name:", color = White, textAlign = TextAlign.Center)
-            TextField( // 4
+            TextField(
                 shape = RoundedCornerShape(8.dp),
                 value = lastName,
                 colors = TextFieldDefaults.textFieldColors(
